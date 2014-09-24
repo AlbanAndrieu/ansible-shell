@@ -1,0 +1,71 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- debug: msg="SHELL is {{ ansible_env.SHELL }} "
+
+- name: Check user
+  user: name={{ shell_owner }} state=present
+
+- name: Check user home directory
+  stat: path={{ shell_owner_home }}
+  register: home_present
+
+- debug: msg="Path exists and is a directory"
+  when: home_present.stat.isdir is defined and home_present.stat.isdir == true
+
+- name: Configure log4j.lcf file
+  template: src=log4j.lcf.j2 dest={{home}}/log4j.lcf
+#  copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
+  when: log4j_enabled
+  tags: log4j
+
+- name: Configure log4j.properties file
+  template: src=log4j.properties.j2 dest={{home}}/log4j.properties
+  when: log4j_enabled
+  tags: log4j
+
+- name: Configure log4j.xml file
+  template: src=log4j.xml.j2 dest={{home}}/log4j.xml
+  when: log4j_enabled
+  tags: log4j
+
+# rlogin
+- name: Uninstall xinetd for rlogin rsh rexec
+  apt: >
+    pkg={{ item }}
+    state=absent
+    purge=yes
+    force=yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and rlogin_enabled == false
+  tags: package
+  with_items:
+    - xinetd
+
+- name: Install xinetd for rlogin rsh rexec (Debian only)
+  apt: pkg={{ item }} state=present
+  when: ansible_distribution == 'Debian' and rlogin_enabled
+  with_items:
+    - xinetd
+  tags: rlogin
+
+- name: Configure rhosts file
+  template: src=.rhosts.j2 dest={{home}}/.rhosts
+  when: rlogin_enabled
+  tags: rlogin
+
+- name: Configure hosts.equiv file
+  template: src=hosts.equiv.j2 dest=/etc/hosts.equiv
+  when: rlogin_enabled
+  tags: rlogin
+
+- name: Configure .bash_profile file
+  copy: src=.bash_profile dest={{home}}/.bash_profile
+  when: shell_bash_enabled
+  tags: bash
+  tags: cygwin  
+
+- name: Configure .login file
+  copy: src=.login dest={{home}}/.login
+  when: shell_bash_enabled
+  tags: bash
+  tags: cygwin

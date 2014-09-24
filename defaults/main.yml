@@ -1,0 +1,19 @@
+---
+shell_enabled: yes                       # Enable module
+shell_bash_enabled: yes                  # Enable bash shell
+shell_csh_enabled: yes                   # Enable csh shell
+shell_ksh_enabled: yes                   # Enable ksh shell
+shell_cygwin_enabled: yes                # Enable cygwin
+
+user                                       : 'albandri' #please override me
+shell_owner                                : "{{ user }}"
+home                                       : '~' #please override me
+shell_owner_home                           : "{{ home }}"
+shell_env_directory                        : "{{ home }}/env/home"
+
+log4j_enabled: yes                 # Enable log4j
+rlogin_enabled: yes                # Enable rsh rlogin rexecd
+
+rhosts_hosts:
+  - "albandri"
+  - "albandri-laptop-misys"

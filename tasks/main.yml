@@ -1,0 +1,19 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- include: shell.yml
+  when: shell_enabled 
+  tags: [shell]
+    
+- include: bash.yml
+  when: bash_enabled 
+  tags: [bash]
+  
+- include: csh.yml
+  when: csh_enabled 
+  tags: [csh]
+  
+- include: ksh.yml
+  when: ksh_enabled 
+  tags: [ksh]
+  

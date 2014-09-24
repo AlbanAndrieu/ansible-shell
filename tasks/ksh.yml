@@ -1,0 +1,9 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: Install ksh shell (Debian only)
+  apt: pkg={{ item }} state=present
+  when: ansible_distribution == 'Debian' 
+  with_items:
+    - ksh
+#    - todo
