@@ -1,7 +1,9 @@
-# ansible-shell
+ansible-shell
+====================
 
 A role for installing shell.
 
+[![Build Status](https://api.travis-ci.org/AlbanAndrieu/ansible-shell.png?branch=master)](https://travis-ci.org/AlbanAndrieu/ansible-shell)
 
 ## Actions
 
