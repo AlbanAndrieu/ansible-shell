@@ -7,18 +7,27 @@ A role for installing shell.
 
 - Ensures that shell is installed (using `apt`)
 
+Usage example
+------------
 
-## Usage:
-```
-  - name: Install shell
-    hosts: shell
-    user: root
-  #  connection: local
+    - name: Install shell
+      hosts: shell
+      user: root
     
-    roles:
-      - shell      
-```
+      roles:
+        - shell      
 
-## License
+Requirements
+------------
+
+none
+
+Dependencies
+------------
+
+none
+
+License
+-------
 
 MIT
