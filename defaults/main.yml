@@ -9,7 +9,7 @@ user                                       : 'albandri' #please override me
 shell_owner                                : "{{ user }}"
 home                                       : '~' #please override me
 shell_owner_home                           : "{{ home }}"
-shell_env_directory                        : "{{ home }}/env/home"
+shell_env_directory                        : "{{ shell_owner_home }}/env/home"
 
 log4j_enabled: yes                 # Enable log4j
 rlogin_enabled: yes                # Enable rsh rlogin rexecd
