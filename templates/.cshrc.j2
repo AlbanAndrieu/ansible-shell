@@ -37,6 +37,14 @@ if ( $status == 0 ) then
         bindkey "\e[6~" history-search-forward
 endif
 
+echo "Mounting Virtual box"
+echo "sudo -s"
+echo "sudo mount -t vboxsf workspace /workspace"
+echo "sudo mount -t vboxsf thirdparty /thirdparty"
+echo "sudo mount -t vboxsf target /target"
+echo "sudo mount -t vboxsf repo /repo"
+echo "sudo mount -t vboxsf jboss /jboss"
+
 ##
 # XXXXXXXXXXXXXXXXXXXXX
 ##
@@ -57,7 +65,7 @@ setenv PATH /usr/local/bin:/usr/sbin:/usr/bin:/bin
 echo SHELL : ${SHELL}
 
 alias 00 'source ${PROJECT_HOME}/${PROJECT_USER}00/env/home/dev.env.csh \!*; test ! -f ~/.cshrc.local || source ~/.cshrc.local \!*'
-alias 10 'source ${WORKSPACE_ENV}/home/dev.env.csh \!*; test ! -f ~/.cshrc.local || source ~/.cshrc.local \!*'
+alias {{DEFAULT_ENV_LOADED}} 'source ${WORKSPACE_ENV}/home/dev.env.csh \!*; test ! -f ~/.cshrc.local || source ~/.cshrc.local \!*'
 
 #echo $PATH wrong after
 if ( -f ${WORKSPACE_ENV}/home/dev.env.csh ) then
@@ -65,4 +73,4 @@ if ( -f ${WORKSPACE_ENV}/home/dev.env.csh ) then
     source ${WORKSPACE_ENV}/home/dev.env.csh
 endif
 
-echo "Set your environment with 10 alias."
+echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."

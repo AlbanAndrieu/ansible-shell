@@ -3,52 +3,57 @@
 ####### ENV PARAMETERS
 ##################################
 
-{{DRIVE_PATH}}:
-{{DATABASE_ARCH}}:x86Linux
-#{{MAVEN_LOCAL_REPO_PATH}}:{{DRIVE_PATH}}/repo
-{{PROJECT_EXTRACTION}}:cpp
+DRIVE_PATH: ""
+DATABASE_ARCH: x86Linux
+#MAVEN_LOCAL_REPO_PATH: "{{DRIVE_PATH}}/repo"
+PROJECT_EXTRACTION: cpp
 
-#{{JAVA_HOME}}:/usr/lib/jvm/java-6-openjdk
-#NOK{{JAVA_HOME}}:/usr/lib/jvm/java-7-openjdk-i386
-#{{JAVA_HOME}}:/usr/lib/jvm/jdk1.7.0/
-{{JAVA_HOME}}:/usr/lib/jvm/java-7-oracle/
-#{{JAVA_HOME}}:/usr/lib/jvm/java-8-oracle
-{{PYTHON_DIR}}:/usr/lib/python
-{{PYTHON_EXE}}:/usr/bin/python
-{{SCONS_DIR}}:/usr/lib/scons/SCons
-#{{SCONS_PATH}}:${SCONS_DIR}/script
-{{SCONS_PATH}}:{{SCONS_DIR}}/Script
-{{SCONS_EXE}}:/usr/bin/scons
-#{{SCONS_ALIAS}}:${SCONS_DIR}/scons/scons.py
-{{CMAKE_HOME}}:/usr/share/cmake-{{CMAKE_MAJOR_VERSION}}
-#{{M2_HOME}}:/usr/local/apache-maven-3.2.1
-{{M2_HOME}}:/usr/share/maven
-{{ANT_HOME}}:/usr/share/ant
-{{CONKY_HOME}}:{{USER_PATH}}/.conky
+#JAVA_HOME: /usr/lib/jvm/java-6-openjdk
+#NOKJAVA_HOME: /usr/lib/jvm/java-7-openjdk-i386
+#JAVA_HOME: /usr/lib/jvm/jdk1.7.0/
+JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
+#JAVA_HOME: "/usr/lib/jvm/java-8-oracle"
+PYTHON_DIR: "/usr/lib/python"
+PYTHON_EXE: "/usr/bin/python"
+SCONS_DIR: "/usr/lib/scons/SCons"
+#SCONS_PATH: "${SCONS_DIR}/script"
+SCONS_PATH: "{{SCONS_DIR}}/Script"
+SCONS_EXE: "/usr/bin/scons"
+#SCONS_ALIAS: "${SCONS_DIR}/scons/scons.py"
+CMAKE_HOME: "/usr/share/cmake-{{CMAKE_MAJOR_VERSION}}"
+#M2_HOME: "/usr/local/apache-maven-3.2.1"
+M2_HOME: "/usr/share/maven"
+ANT_HOME: "/usr/share/ant"
+CONKY_HOME: "{{USER_PATH}}/.conky"
 
 #Overrided
-#{{JBOSS_VERSION}}:4.2.2.GA
-{{JBOSS_HOME}}:${DRIVE_PATH}/workspace/jboss-{{JBOSS_VERSION}}
-{{ECLIPSE_HOME}}:/workspace/eclipse-j2ee
+#JBOSS_VERSION: "4.2.2.GA"
+JBOSS_HOME: "${DRIVE_PATH}/workspace/jboss-{{JBOSS_VERSION}}"
+ECLIPSE_HOME: "/workspace/eclipse-j2ee"
 
 ##################################
 ####### USER PARAMETERS
 ##################################
 
-{{USER_INDEX_ID}}:24
+USER_INDEX_ID: 24
 
-{{WORKSTATION}}:albandri
+WORKSTATION: albandri
 #DO NOT FORCE
-##{{WORKSTATION_REMOTE}}:{{WORKSTATION}}
-{{WORKSTATION_REMOTE}}::0.0
-#{{WORKSTATION_REMOTE}}:localhost:10.0
-{{RUNNING_SERVICES_SERVER}}:{{WORKSTATION}}
-{{UNIX_USERNAME}}:albandri
+##WORKSTATION_REMOTE: "{{WORKSTATION}}"
+WORKSTATION_REMOTE: ":0.0"
+#WORKSTATION_REMOTE: localhost:10.0
+RUNNING_SERVICES_SERVER: "{{WORKSTATION}}"
+UNIX_USERNAME: "{{ lookup('env','USER') }}"
 
-#{{EDITOR}}:nedit
-{{EDITOR}}:geany
-{{COWSAY}}:/usr/games/cowsay -f `ls /usr/share/cowsay/cows/ | rl | tail -n 1 | cut -d'.' -f1` "`/usr/games/fortune -s`"
+#EDITOR: nedit
+EDITOR: geany
+COWSAY: "/usr/games"
 
-{{LOG4J_ROOT_CATEGORY}}:DEBUG, {{LOG4J_ACTIVE_APPENDER}}
-{{LOGGER_ROOT_CATEGORY}}:DEBUG, CONSOLE, SOCKETSERV
-{{APP_SERVER_MODE}}:jboss
+LOG4J_ROOT_CATEGORY: "DEBUG, {{LOG4J_ACTIVE_APPENDER}}"
+LOGGER_ROOT_CATEGORY: "DEBUG, CONSOLE, SOCKETSERV"
+APP_SERVER_MODE: jboss
+
+EC2_KEYPAIR: "albandri # name only, not the file name"
+EC2_URL: "https://ec2.us-west-2.amazonaws.com"
+EC2_PRIVATE_KEY: "$HOME/.ec2/pk-FMQ27HNLF2PVMPVL7MPWHEY5GWDKDOT2.pem"
+EC2_CERT: "$HOME/.ec2/cert-FMQ27HNLF2PVMPVL7MPWHEY5GWDKDOT2.pem"

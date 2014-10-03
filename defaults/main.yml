@@ -1,15 +1,17 @@
 ---
 shell_enabled: yes                       # Enable module
 shell_bash_enabled: yes                  # Enable bash shell
-shell_csh_enabled: yes                   # Enable csh shell
+shell_csh_enabled: no                   # Enable csh shell
 shell_ksh_enabled: yes                   # Enable ksh shell
-shell_cygwin_enabled: yes                # Enable cygwin
+shell_cygwin_enabled: no                # Enable cygwin
 
-user                                       : 'albandri' #please override me
-shell_owner                                : "{{ user }}"
-home                                       : '~' #please override me
-shell_owner_home                           : "{{ home }}"
-shell_env_directory                        : "{{ shell_owner_home }}/env/home"
+#user: 'albandri' #please override me
+user: "{{ lookup('env','USER') }}"
+shell_owner: "{{ user }}"
+#home: '~' #please override me
+home: "{{ lookup('env','HOME') }}"
+shell_owner_home: "{{ home }}"
+shell_env_directory: "{{ shell_owner_home }}/env/home"
 
 log4j_enabled: yes                 # Enable log4j
 rlogin_enabled: yes                # Enable rsh rlogin rexecd
@@ -17,3 +19,9 @@ rlogin_enabled: yes                # Enable rsh rlogin rexecd
 rhosts_hosts:
   - "albandri"
   - "albandri-laptop-misys"
+
+#docker_files_generated_directory: "roles/shell"
+docker_files_enable: yes
+docker_volume_directory: "{{ jenkins_home }}"
+docker_working_directory: "/home/vagrant"
+docker_image_name: "nabla/ansible-shell"

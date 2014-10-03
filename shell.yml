@@ -5,5 +5,5 @@
     - ansible-shell
      
   vars:     
-       user: root
-       home: /root
+       docker_files_generated_directory: ""  
+       

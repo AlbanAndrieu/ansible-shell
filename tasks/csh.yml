@@ -10,7 +10,7 @@
 
 - name: Create env directory
 #  file: path={{ shell_env_directory }} state=directory
-  file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_env_owner }}
+  file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
   
 - name: Configure dev.env.csh file
   template: src=dev.env.csh.j2 dest={{shell_env_directory}}/dev.env.csh
@@ -23,7 +23,7 @@
   tags: configure
   tags: cygwin
 
-- name: Configure .bashrc file
-  template: src=.cshrc.j2 dest={{home}}/.cshrc.j2
-  when: !shell_cygwin_enabled 
+- name: Configure .cshrc file
+  template: src=.cshrc.j2 dest={{home}}/.cshrc
+  when: shell_cygwin_enabled == false
   tags: configure
