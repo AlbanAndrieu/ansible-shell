@@ -10,10 +10,10 @@
     - role: ../
 
   vars_files:
-  - [ "roles/shell/defaults/main.yml" ]  
-  - [ "roles/shell/vars/default.yml" ]
-  - [ "roles/shell/vars/version.yml" ]  
-  - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]  
+  - [ "defaults/main.yml" ]  
+  - [ "vars/default.yml" ]
+  - [ "vars/version.yml" ]  
+  - [ "vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "vars/custom-{{ ansible_distribution }}.yml" ]  
   
   vars:
     docker_files_generated_directory: ""
