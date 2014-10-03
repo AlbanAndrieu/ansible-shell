@@ -11,7 +11,7 @@
 
 - name: Create env directory
 #  file: path={{ shell_env_directory }} state=directory
-  file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_env_owner }}
+  file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
     
 - name: Configure dev.env.sh file
   template: src=dev.env.sh.j2 dest={{shell_env_directory}}/dev.env.sh
@@ -19,12 +19,12 @@
 
 #cygwin
 - name: Configure .bashrc file
-  template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc-cygwin.j2
+  template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
   when: shell_cygwin_enabled  
   tags: configure
   tags: cygwin
 
 - name: Configure .bashrc file
-  template: src=.bashrc.j2 dest={{home}}/.bashrc.j2
-  when: !shell_cygwin_enabled 
+  template: src=.bashrc.j2 dest={{home}}/.bashrc
+  when: shell_cygwin_enabled == false
   tags: configure

@@ -2,18 +2,25 @@
 # This playbook contains common plays that will be run on all nodes.
 
 - include: shell.yml
-  when: shell_enabled 
+  when: shell_enabled
   tags: [shell]
-    
+
 - include: bash.yml
-  when: bash_enabled 
+  when: shell_bash_enabled
   tags: [bash]
-  
+
 - include: csh.yml
-  when: csh_enabled 
+  when: shell_csh_enabled
   tags: [csh]
-  
+
 - include: ksh.yml
-  when: ksh_enabled 
+  when: shell_ksh_enabled
   tags: [ksh]
-  
+
+- name: Copy Dockerfile
+  template: src=Dockerfile.j2 dest={{ docker_files_generated_directory }}/Dockerfile mode=0777
+  when: docker_files_enable
+
+- name: Copy build.sh
+  template: src=build.sh.j2 dest={{ docker_files_generated_directory }}/build.sh mode=0777
+  when: docker_files_enable
