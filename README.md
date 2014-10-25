@@ -1,29 +1,33 @@
-ansible-jenkins-slave
+ansible-shell
 ====================
 
-A role for installing jenkins-slave.
+A role for installing shell.
 
-[![Build Status](https://api.travis-ci.org/AlbanAndrieu/ansible-jenkins-slave.png?branch=master)](https://travis-ci.org/AlbanAndrieu/ansible-jenkins-slave)
+[![Build Status](https://api.travis-ci.org/AlbanAndrieu/ansible-shell.png?branch=master)](https://travis-ci.org/AlbanAndrieu/ansible-shell)
+[![Galaxy](http://img.shields.io/badge/galaxy-shell-blue.svg?style=flat-square)](https://galaxy.ansible.com/list#/roles/0000)
+[![Tag](http://img.shields.io/github/tag/AlbanAndrieu/ansible-shell.svg?style=flat-square)]()
 
 ## Actions
 
-- Ensures that jenkins-slave is installed (using `apt`)
+- Ensures that shell is installed (using `apt`)
 
 Usage example
 ------------
 
 ```
-  - name: Install jenkins-slave
-    hosts: jenkins-slave
-    user: root
+  - name: Install shell
+    hosts: shell
+    remote_user: root
   #  connection: local
 
     vars_files:
-      - [ "roles/jenkins-slave/defaults/main.yml" ]
-      - [ "roles/jenkins-slave/vars/{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/jenkins-slave/vars/{{ ansible_distribution }}.yml" ]
-      
+      - [ "roles/shell/defaults/main.yml" ]  
+      - [ "roles/shell/vars/default.yml" ]
+      - [ "roles/shell/vars/version.yml" ]  
+      - [ "roles/shell/vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "roles/shell/vars/custom-{{ ansible_distribution }}.yml" ]  
+        
     roles:
-      - jenkins-slave      
+      - shell      
       
 ```
 
@@ -35,7 +39,7 @@ none
 Dependencies
 ------------
 
-https://travis-ci.org/Stouts/Stouts.jenkins
+none
 
 License
 -------
@@ -44,4 +48,5 @@ MIT
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/AlbanAndrieu/ansible-jenkins-slave/issues)!
+Are 
+[welcome](https://github.com/AlbanAndrieu/ansible-shell/issues)!

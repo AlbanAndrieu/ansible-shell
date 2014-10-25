@@ -9,7 +9,7 @@ VOLUME      [{{ docker_volume_directory }}]
 MAINTAINER  Alban Andrieu "https://github.com/AlbanAndrieu"
 
 ENV			DEBIAN_FRONTEND noninteractive
-ENV         JENKINS_HOME {{ jenkins_home }}
+ENV         WORKSPACE {{ shell_env_directory }}
 
 # Working dir
 WORKDIR {{ docker_working_directory }}
@@ -35,14 +35,7 @@ ADD playbook.yml $WORKDIR/playbook.yml -vvvv
 # Execute
 RUN         ansible-playbook $WORKDIR/playbook.yml -i $WORKDIR/hosts -c local
 
-#RUN         apt-get update && \
-#            apt-get install -y openssh-server openjdk-7-jre-headless
-#RUN         useradd -m -s /bin/bash jenkins
-#RUN         echo jenkins:jenkins | chpasswd
-#RUN         mkdir -p /var/run/sshd
-            
 EXPOSE      22
-ENTRYPOINT  ["/etc/init.d/jenkins-swarm-client"]
-#ENTRYPOINT ["java", "-jar", "{{ jenkins_home }}/swarm-client-1.9-jar-with-dependencies.jar"]
+#ENTRYPOINT  ["/etc/init.d/jenkins-swarm-client"]
 CMD /usr/sbin/sshd -D
 #CMD ["-g", "deamon off;"]
