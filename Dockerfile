@@ -1,4 +1,4 @@
-# Ansible managed: /workspace/users/albandri10/env/ansible/roles/shell/templates/Dockerfile.j2 modified on 2014-10-25 13:23:28 by albandri on albandri-laptop-misys
+# Ansible managed: /workspace/users/albandri10/env/ansible/roles/shell/templates/Dockerfile.j2 modified on 2014-10-25 13:23:28 by albandri on albandri-laptop-misys.misys.global.ad
 #FROM        debian:jessie
 #FROM        stackbrew/ubuntu:14.04
 FROM        jasongiedymin/ansible-base-ubuntu

@@ -12,6 +12,9 @@ shell_owner: "{{ user }}"
 home: "{{ lookup('env','HOME') }}"
 shell_owner_home: "{{ home }}"
 shell_env_directory: "{{ shell_owner_home }}/env/home"
+shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
+
+shell_nano_color_repository: https://github.com/nanorc/nanorc.git
 
 log4j_enabled: yes                 # Enable log4j
 rlogin_enabled: yes                # Enable rsh rlogin rexecd
