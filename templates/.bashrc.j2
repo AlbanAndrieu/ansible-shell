@@ -8,14 +8,26 @@
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
+#HISTCONTROL=ignoredups
+#HISTCONTROL=ignorespace
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
+HISTSIZE={{ HISTSIZE }}
 HISTFILESIZE=2000
+
+#for setting history format
+HISTTIMEFORMAT="%F %T "
+
+#for setting history ignore list
+HISTIGNORE="cd:cdr:ls:ll:man:exit"
+
+#for history to work the same on each open terminal
+shopt -s histappend
+PROMPT_COMMAND='history -a'
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.

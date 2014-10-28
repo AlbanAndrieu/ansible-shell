@@ -3,7 +3,7 @@
 
 - name: shell | Install bash shell (Debian only)
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian' 
+  when: ansible_distribution == 'Debian'
   with_items:
     - bash
 #    - csh
@@ -12,7 +12,7 @@
 - name: shell | Create env directory
 #  file: path={{ shell_env_directory }} state=directory
   file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
-    
+
 - name: shell | Configure dev.env.sh file
   template: src=dev.env.sh.j2 dest={{shell_env_directory}}/dev.env.sh
   tags: configure
@@ -20,7 +20,7 @@
 #cygwin
 - name: shell | Configure .bashrc file
   template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
-  when: shell_cygwin_enabled  
+  when: shell_cygwin_enabled
   tags: configure
   tags: cygwin
 
@@ -28,3 +28,54 @@
   template: src=.bashrc.j2 dest={{home}}/.bashrc
   when: shell_cygwin_enabled == false
   tags: configure
+
+- name: shell | Create temporary directory
+  shell: mktemp -d
+  register: tempdir
+  sudo: true
+  tags: shell_setup
+  
+- name: nano | Copy the nano code from repository
+  git: repo={{ shell_nano_color_repository }} dest={{home}}/nanorc
+  tags: nano
+  
+- name: nano | Configure nano-configure.sh file
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'  
+  template:
+    src: nano-configure.sh.j2
+    dest: '{{ shell_dir_tmp }}/nano-configure.sh'
+    owner: root
+    group: root
+    mode: 0755
+  when: shell_cygwin_enabled == false
+  tags: nano
+
+- name: shell | Update  ~/.nanorc 
+  action: shell '{{ shell_dir_tmp }}/nano-configure.sh'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags: nano
+
+- name: shell | Configure inputrc-configure.sh file
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'  
+  template:
+    src: inputrc-configure.sh.j2
+    dest: '{{ shell_dir_tmp }}/inputrc-configure.sh'
+    owner: root
+    group: root
+    mode: 0755
+  when: shell_cygwin_enabled == false
+  tags: history
+
+- name: shell | Update  ~/.inputrc 
+  action: shell '{{ shell_dir_tmp }}/inputrc-configure.sh'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags: history
+
+- name: shell | Update locate database
+  action: command updatedb
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags: locate
+
+- name: shell | Cleanup temporary directory
+  file: name={{ tempdir.stdout }} state=absent
+  tags: shell_setup
