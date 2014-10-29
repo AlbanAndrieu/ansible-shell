@@ -5,6 +5,7 @@ shell_csh_enabled: no                    # Enable csh shell
 shell_ksh_enabled: yes                   # Enable ksh shell
 shell_cygwin_enabled: no                 # Enable cygwin
 
+#do not activate locate with docker
 shell_locate_enabled: no                 # Enable locate search feature
 shell_history_enabled: yes               # Enable history bash tweek
 shell_nano_enabled: yes                  # Enable nano syntax color
