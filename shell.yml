@@ -12,7 +12,7 @@
 
   vars:
     docker_files_generated_directory: ""
-    docker_files_enable:
+    docker_files_enable: no
 
 #- include: docker/integration-tests.yml
 
