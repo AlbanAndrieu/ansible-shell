@@ -27,8 +27,8 @@ rhosts_hosts:
   - "albandri"
   - "albandri-laptop-misys"
 
-docker_files_generated_directory: "roles/shell"
-docker_files_enable: yes
+docker_files_generated_directory: "./"
+docker_files_enable: no
 docker_volume_directory: "{{ shell_env_directory }}"
 docker_working_directory: "/home/vagrant"
 docker_image_name: "nabla/ansible-shell"
