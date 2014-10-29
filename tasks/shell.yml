@@ -16,17 +16,17 @@
 - name: shell | Configure log4j.lcf file
   template: src=log4j.lcf.j2 dest={{home}}/log4j.lcf
 #  copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
-  when: log4j_enabled
+  when: shell_log4j_enabled
   tags: log4j
 
 - name: shell | Configure log4j.properties file
   template: src=log4j.properties.j2 dest={{home}}/log4j.properties
-  when: log4j_enabled
+  when: shell_log4j_enabled
   tags: log4j
 
 - name: shell | Configure log4j.xml file
   template: src=log4j.xml.j2 dest={{home}}/log4j.xml
-  when: log4j_enabled
+  when: shell_log4j_enabled
   tags: log4j
 
 # rlogin
@@ -36,26 +36,26 @@
     state=absent
     purge=yes
     force=yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and rlogin_enabled == false
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_rlogin_enabled == false
   tags: package
   with_items:
     - xinetd
 
 - name: shell | Install xinetd for rlogin rsh rexec (Debian only)
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian' and rlogin_enabled
+  when: ansible_distribution == 'Debian' and shell_rlogin_enabled
   with_items:
     - xinetd
   tags: rlogin
 
 - name: shell | Configure rhosts file
   template: src=.rhosts.j2 dest={{home}}/.rhosts
-  when: rlogin_enabled
+  when: shell_rlogin_enabled
   tags: rlogin
 
 - name: shell | Configure hosts.equiv file
   template: src=hosts.equiv.j2 dest=/etc/hosts.equiv
-  when: rlogin_enabled
+  when: shell_rlogin_enabled
   tags: rlogin
 
 - name: shell | Configure .bash_profile file

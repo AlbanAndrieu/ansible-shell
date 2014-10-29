@@ -36,11 +36,12 @@
   tags: shell_setup
   
 - name: nano | Copy the nano code from repository
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled
   git: repo={{ shell_nano_color_repository }} dest={{home}}/nanorc
   tags: nano
   
 - name: nano | Configure nano-configure.sh file
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'  
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled
   template:
     src: nano-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/nano-configure.sh'
@@ -52,11 +53,11 @@
 
 - name: shell | Update  ~/.nanorc 
   action: shell '{{ shell_dir_tmp }}/nano-configure.sh'
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled
   tags: nano
 
 - name: shell | Configure inputrc-configure.sh file
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'  
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_history_enabled
   template:
     src: inputrc-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/inputrc-configure.sh'
@@ -68,19 +69,19 @@
 
 - name: shell | Update  ~/.inputrc 
   action: shell '{{ shell_dir_tmp }}/inputrc-configure.sh'
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_history_enabled
   tags: history
 
 - name: shell | Install locate search tools
   apt: pkg={{ item }} state=present update_cache=yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_locate_enabled
   tags: package
   with_items:
    - locate
    
 - name: shell | Update locate database
   action: command updatedb
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_locate_enabled
   tags: locate
 
 - name: shell | Cleanup temporary directory
