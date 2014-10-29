@@ -23,7 +23,6 @@ shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have 
 
 shell_nano_color_repository: https://github.com/nanorc/nanorc.git
 
-
 rhosts_hosts:
   - "albandri"
   - "albandri-laptop-misys"
