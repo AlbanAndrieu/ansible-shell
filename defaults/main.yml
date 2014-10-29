@@ -1,9 +1,15 @@
 ---
 shell_enabled: yes                       # Enable module
 shell_bash_enabled: yes                  # Enable bash shell
-shell_csh_enabled: no                   # Enable csh shell
+shell_csh_enabled: no                    # Enable csh shell
 shell_ksh_enabled: yes                   # Enable ksh shell
-shell_cygwin_enabled: no                # Enable cygwin
+shell_cygwin_enabled: no                 # Enable cygwin
+
+shell_locate_enabled: no                 # Enable locate search feature
+shell_history_enabled: yes               # Enable history bash tweek
+shell_nano_enabled: yes                  # Enable nano syntax color
+shell_log4j_enabled: yes                 # Enable log4j
+shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
 
 #user: 'albandri' #please override me
 user: "{{ lookup('env','USER') }}"
@@ -16,8 +22,6 @@ shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have 
 
 shell_nano_color_repository: https://github.com/nanorc/nanorc.git
 
-log4j_enabled: yes                 # Enable log4j
-rlogin_enabled: yes                # Enable rsh rlogin rexecd
 
 rhosts_hosts:
   - "albandri"
