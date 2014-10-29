@@ -2,17 +2,14 @@
 - hosts: all
   sudo: true
   roles:
-    - role: ./
-
+    - { role: ./, 
+        docker_files_enable: yes }
+        
   vars_files:
   - [ "defaults/main.yml" ]
   - [ "vars/default.yml" ]
   - [ "vars/version.yml" ]
   - [ "vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "vars/custom-{{ ansible_distribution }}.yml" ]
-
-  vars:
-    docker_files_generated_directory: ""
-    docker_files_enable: no
 
 #- include: docker/integration-tests.yml
 
