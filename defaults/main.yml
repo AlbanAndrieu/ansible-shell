@@ -15,6 +15,7 @@ shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
 #user: 'albandri' #please override me
 user: "{{ lookup('env','USER') }}"
 shell_owner: "{{ user }}"
+shell_group: "{{ shell_owner }}"
 #home: '~' #please override me
 home: "{{ lookup('env','HOME') }}"
 shell_owner_home: "{{ home }}"

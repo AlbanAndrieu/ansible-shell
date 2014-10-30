@@ -45,8 +45,8 @@
   template:
     src: nano-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/nano-configure.sh'
-    owner: root
-    group: root
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
     mode: 0755
   when: shell_cygwin_enabled == false
   tags: nano
@@ -61,8 +61,8 @@
   template:
     src: inputrc-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/inputrc-configure.sh'
-    owner: root
-    group: root
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
     mode: 0755
   when: shell_cygwin_enabled == false
   tags: history
