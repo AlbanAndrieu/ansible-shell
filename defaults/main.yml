@@ -11,6 +11,7 @@ shell_history_enabled: yes               # Enable history bash tweek
 shell_nano_enabled: yes                  # Enable nano syntax color
 shell_log4j_enabled: yes                 # Enable log4j
 shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
+shell_synapse_enabled: no                # Enable synapse config
 
 #user: 'albandri' #please override me
 user: "{{ lookup('env','USER') }}"
@@ -22,7 +23,8 @@ shell_owner_home: "{{ home }}"
 shell_env_directory: "{{ shell_owner_home }}/env/home"
 shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
 
-shell_nano_color_repository: https://github.com/nanorc/nanorc.git
+shell_nano_color_repository: "https://github.com/nanorc/nanorc.git"
+shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
 
 rhosts_hosts:
   - "albandri"

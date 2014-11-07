@@ -41,14 +41,13 @@
   tags: nano
   
 - name: nano | Configure nano-configure.sh file
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled and shell_cygwin_enabled == false
   template:
     src: nano-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/nano-configure.sh'
     owner: '{{ shell_owner }}'
     group: '{{ shell_group }}'
     mode: 0755
-  when: shell_cygwin_enabled == false
   tags: nano
 
 - name: shell | Update  ~/.nanorc 
@@ -57,14 +56,13 @@
   tags: nano
 
 - name: shell | Configure inputrc-configure.sh file
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_history_enabled
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_history_enabled and shell_cygwin_enabled == false
   template:
     src: inputrc-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/inputrc-configure.sh'
     owner: '{{ shell_owner }}'
     group: '{{ shell_group }}'
     mode: 0755
-  when: shell_cygwin_enabled == false
   tags: history
 
 - name: shell | Update  ~/.inputrc 
@@ -79,6 +77,37 @@
   with_items:
    - locate
    
+- name: shell | Install synapse search tools
+  apt: pkg={{ item }} state=present update_cache=yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_synapse_enabled and shell_cygwin_enabled == false
+  tags: package
+  with_items:
+   - synapse
+   
+- name: shell | Create synapse directory
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_synapse_enabled and shell_cygwin_enabled == false
+  file: path={{ shell_synapse_directory }} state=directory mode=0700 owner={{ shell_owner }}
+  
+- name: shell | Copy synapse startpage search into place
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_synapse_enabled and shell_cygwin_enabled == false
+  copy: src=startpage.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
+  tags: synapse
+    
+- name: shell | Copy duckduckgo startpage search into place
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_synapse_enabled and shell_cygwin_enabled == false
+  copy: src=duckduckgo.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
+  tags: synapse
+      
+- name: shell | Configure synapse config.json file
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_synapse_enabled and shell_cygwin_enabled == false
+  template:
+    src: config.json.j2
+    dest: '{{ shell_synapse_directory }}/config.json'
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
+    mode: 0755
+  tags: synapse  
+  
 - name: shell | Update locate database
   action: command updatedb
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_locate_enabled
