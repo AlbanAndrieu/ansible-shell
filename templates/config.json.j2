@@ -1,0 +1,31 @@
+ {
+   "plugins" : {
+     "directory-plugin" : {
+       "home-dir-children-only" : yes
+     },
+     "opensearch" : {
+       "search-engines" : [
+         "{{ shell_owner_home }}.config/synapse/startpage.xml",
+         "{{ shell_owner_home }}.config/synapse/duckduckgo.xml"
+       ]
+     }
+   },
+   "ui" : {
+     "widgets" : {
+       "extended-info-enabled" : false
+     },
+     "global" : {
+       "ui-type" : "virgilio",
+       "show-indicator" : true
+     }
+   },
+   "data-sink" : {
+     "global" : {
+       "disabled-plugins" : [
+         "SynapseBansheeActions",
+         "SynapseDevhelpPlugin",
+         "SynapseDictionaryPlugin"
+       ]
+     }
+   }
+ }
