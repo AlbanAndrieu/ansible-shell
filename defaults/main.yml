@@ -12,6 +12,8 @@ shell_nano_enabled: yes                  # Enable nano syntax color
 shell_log4j_enabled: yes                 # Enable log4j
 shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
 shell_synapse_enabled: no                # Enable synapse config
+shell_git_meld_enabled: yes              # Enable git meld
+shell_git_completion_enabled: yes        # Enable git completion
 
 #user: 'albandri' #please override me
 user: "{{ lookup('env','USER') }}"
