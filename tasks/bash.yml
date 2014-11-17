@@ -35,6 +35,31 @@
   sudo: true
   tags: shell_setup
   
+- name: git | Configure git meld diff
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled and shell_git_meld_enabled == false
+  template:
+    src: git-diff.sh.j2
+    dest: ' /usr/local/bin/git-diff.sh'
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
+    mode: 0755
+  tags: git  
+  
+#TODO  
+#$HOME/.gitconfig
+#[diff]
+#        external = /usr/local/bin/git-diff.sh  
+  
+- name: git | Configure git completion
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled and shell_git_completion_enabled == false
+  template:
+    src: .git-prompt.sh.j2
+    dest: '{{home}}/.git-prompt.sh'
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
+    mode: 0755
+  tags: git  
+    
 - name: nano | Copy the nano code from repository
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_nano_enabled
   git: repo={{ shell_nano_color_repository }} dest={{home}}/nanorc
