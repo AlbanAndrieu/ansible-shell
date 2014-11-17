@@ -55,6 +55,26 @@
     mode: 0664
   tags: git  
   
+- name: vim | Copy the vim code from repository
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
+  git: repo={{ shell_vim_color_repository }} dest={{home}}/.vim
+  tags: vim
+
+- name: vim | Configure vim-configure.sh file
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
+  template:
+    src: vim-configure.sh.j2
+    dest: '{{ shell_dir_tmp }}/vim-configure.sh'
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
+    mode: 0755
+  tags: vim
+
+- name: vim | Update  ~/.vim 
+  action: shell '{{ shell_dir_tmp }}/vim-configure.sh'
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
+  tags: vim
+          
 - name: nano | Copy the nano code from repository
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   git: repo={{ shell_nano_color_repository }} dest={{home}}/nanorc
@@ -70,12 +90,12 @@
     mode: 0755
   tags: nano
 
-- name: shell | Update  ~/.nanorc 
+- name: nano | Update  ~/.nanorc 
   action: shell '{{ shell_dir_tmp }}/nano-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   tags: nano
 
-- name: shell | Configure inputrc-configure.sh file
+- name: inputrc | Configure inputrc-configure.sh file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled and shell_cygwin_enabled == false
   template:
     src: inputrc-configure.sh.j2
@@ -85,40 +105,45 @@
     mode: 0755
   tags: history
 
-- name: shell | Update  ~/.inputrc 
+- name: inputrc | Update  ~/.inputrc 
   action: shell '{{ shell_dir_tmp }}/inputrc-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
 
-- name: shell | Install locate search tools
+- name: locate | Install locate search tools
   apt: pkg={{ item }} state=present update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: package
   with_items:
    - locate
-   
-- name: shell | Install synapse search tools
+  
+- name: locate | Update locate database
+  action: command updatedb
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
+  tags: locate
+     
+- name: synapse | Install synapse search tools
   apt: pkg={{ item }} state=present update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   tags: package
   with_items:
    - synapse
    
-- name: shell | Create synapse directory
+- name: synapse | Create synapse directory
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   file: path={{ shell_synapse_directory }} state=directory mode=0700 owner={{ shell_owner }}
   
-- name: shell | Copy synapse startpage search into place
+- name: synapse | Copy synapse startpage search into place
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   copy: src=startpage.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
   tags: synapse
     
-- name: shell | Copy duckduckgo startpage search into place
+- name: synapse | Copy duckduckgo startpage search into place
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   copy: src=duckduckgo.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
   tags: synapse
       
-- name: shell | Configure synapse config.json file
+- name: synapse | Configure synapse config.json file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   template:
     src: config.json.j2
@@ -127,11 +152,6 @@
     group: '{{ shell_group }}'
     mode: 0755
   tags: synapse  
-  
-- name: shell | Update locate database
-  action: command updatedb
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
-  tags: locate
 
 - name: shell | Cleanup temporary directory
   file: name={{ tempdir.stdout }} state=absent
