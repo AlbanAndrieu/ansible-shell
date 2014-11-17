@@ -40,16 +40,21 @@
   copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755  
   tags: git  
   
-#TODO by hand, add inside
-#$HOME/.gitconfig
-#[diff]
-#        external = /usr/local/bin/git-diff.sh  
-  
 - name: git | Configure git completion
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_completion_enabled
   copy: src=.git-prompt.sh dest={{home}}/.git-prompt.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
   tags: git  
-    
+      
+- name: git | Configure git
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_configure_enabled
+  template:
+    src: .gitconfig.j2
+    dest: '{{home}}/.gitconfig'
+    owner: '{{ shell_owner }}'
+    group: '{{ shell_group }}'
+    mode: 0664
+  tags: git  
+  
 - name: nano | Copy the nano code from repository
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   git: repo={{ shell_nano_color_repository }} dest={{home}}/nanorc
