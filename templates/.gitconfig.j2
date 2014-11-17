@@ -1,0 +1,30 @@
+[user]
+	email = {{ shell_git_email }}
+	name = {{ shell_git_name }}
+[core]
+	autocrlf = input
+	editor = {{ shell_git_editor }}
+[credential]
+	helper = cache --timeout=86400
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+    pl = pull —rebase
+    di = diff --ignore-space-at-eol -b -w 
+    lo = log --graph 
+	unstage = reset HEAD --
+	last = log -1 HEAD
+[help]
+	autocorrect = 1
+[color]
+	ui = auto
+[branch "master"]
+	rebase = true
+[branch]
+	autosetuprebase = always
+{% if shell_git_meld_enabled %}
+[diff]
+    external = /usr/local/bin/git-diff.sh 
+{% endif %}
