@@ -27,6 +27,7 @@ shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have 
 
 shell_nano_color_repository: "https://github.com/nanorc/nanorc.git"
 shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
+shell_git_meld_directory: "/usr/local/bin"
 
 rhosts_hosts:
   - "albandri"
