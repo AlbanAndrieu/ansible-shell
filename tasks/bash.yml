@@ -55,6 +55,19 @@
     mode: 0664
   tags: git  
   
+#- name: Install enhanced vim with command-t plugin
+#  yum: name={{item}} state=present
+#  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
+#  with_items:
+#    - vim-enhanced
+#    - vim-command-t
+#
+#- name: Clone dotvim repo
+#  git: dest={{home}}/.vim repo=git@github.com:sheldonh/dotvim.git update=no
+#
+#- name: Link dotvim config to vimrc
+#  file: path={{home}}/.vimrc src={{home}}/.vim/vimrc state=link
+  
 - name: vim | Copy the vim code from repository
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   git: repo={{ shell_vim_color_repository }} dest={{home}}/.vim
