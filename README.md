@@ -24,9 +24,13 @@ List of default variables available in the inventory:
     shell_locate_enabled: no                 # Enable locate search feature
     shell_history_enabled: yes               # Enable history bash tweek
     shell_nano_enabled: yes                  # Enable nano syntax color
+    shell_vim_enabled: yes                   # Enable vim syntax color
     shell_log4j_enabled: yes                 # Enable log4j
     shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
     shell_synapse_enabled: no                # Enable synapse config
+    shell_git_meld_enabled: yes              # Enable git meld (shell_git_configure_enabled must be enabled too)
+    shell_git_completion_enabled: yes        # Enable git completion
+    shell_git_configure_enabled: yes         # Enable git configuration
     
     #user: 'albandri' #please override me
     user: "{{ lookup('env','USER') }}"
@@ -39,7 +43,12 @@ List of default variables available in the inventory:
     shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
     
     shell_nano_color_repository: "https://github.com/nanorc/nanorc.git"
+    shell_vim_color_repository: "https://github.com/klen/.vim.git"
     shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
+    shell_git_meld_directory: "/usr/local/bin"
+    shell_git_email: "alban.andrieu@mysis.com"
+    shell_git_name: "Alban Andrieu"
+    shell_git_editor: "vim"
     
     rhosts_hosts:
       - "albandri"
