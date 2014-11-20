@@ -17,6 +17,16 @@
   template: src=dev.env.sh.j2 dest={{shell_env_directory}}/dev.env.sh
   tags: configure
 
+- name: shell | Configure .bash_profile file
+  copy: src=.bash_profile dest={{home}}/.bash_profile
+  tags: bash
+  tags: cygwin
+
+- name: shell | Configure .login file
+  copy: src=.login dest={{home}}/.login
+  tags: bash
+  tags: cygwin
+
 #cygwin
 - name: shell | Configure .bashrc file
   template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
@@ -28,33 +38,34 @@
   template: src=.bashrc.j2 dest={{home}}/.bashrc
   when: shell_cygwin_enabled == false
   tags: configure
+  tags: bash
 
 - name: shell | Create temporary directory
   shell: mktemp -d
   register: tempdir
-  sudo: true
   tags: shell_setup
-  
+
 - name: git | Configure git meld diff
+  copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_meld_enabled
-  copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755  
-  tags: git  
-  
+  sudo: true
+  tags: git
+
 - name: git | Configure git completion
+  copy: src=.git-prompt.sh dest={{home}}/.git-prompt.sh owner={{ shell_owner }} mode=755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_completion_enabled
-  copy: src=.git-prompt.sh dest={{home}}/.git-prompt.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
-  tags: git  
-      
+  tags: git
+
 - name: git | Configure git
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_configure_enabled
   template:
     src: .gitconfig.j2
     dest: '{{home}}/.gitconfig'
     owner: '{{ shell_owner }}'
-    group: '{{ shell_group }}'
+#    group: '{{ shell_group }}'
     mode: 0664
-  tags: git  
-  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_configure_enabled    
+  tags: git
+
 #- name: Install enhanced vim with command-t plugin
 #  yum: name={{item}} state=present
 #  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
@@ -67,7 +78,7 @@
 #
 #- name: Link dotvim config to vimrc
 #  file: path={{home}}/.vimrc src={{home}}/.vim/vimrc state=link
-  
+
 - name: vim | Copy the vim code from repository
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   git: repo={{ shell_vim_color_repository }} dest={{home}}/.vim
@@ -79,31 +90,31 @@
     src: vim-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/vim-configure.sh'
     owner: '{{ shell_owner }}'
-    group: '{{ shell_group }}'
+#    group: '{{ shell_group }}'
     mode: 0755
   tags: vim
 
-- name: vim | Update  ~/.vim 
+- name: vim | Update  ~/.vim
   action: shell '{{ shell_dir_tmp }}/vim-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
-          
+
 - name: nano | Copy the nano code from repository
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   git: repo={{ shell_nano_color_repository }} dest={{home}}/nanorc
   tags: nano
-  
+
 - name: nano | Configure nano-configure.sh file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
   template:
     src: nano-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/nano-configure.sh'
     owner: '{{ shell_owner }}'
-    group: '{{ shell_group }}'
+#    group: '{{ shell_group }}'
     mode: 0755
   tags: nano
 
-- name: nano | Update  ~/.nanorc 
+- name: nano | Update  ~/.nanorc
   action: shell '{{ shell_dir_tmp }}/nano-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   tags: nano
@@ -114,48 +125,50 @@
     src: inputrc-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/inputrc-configure.sh'
     owner: '{{ shell_owner }}'
-    group: '{{ shell_group }}'
+#    group: '{{ shell_group }}'
     mode: 0755
   tags: history
 
-- name: inputrc | Update  ~/.inputrc 
+- name: inputrc | Update  ~/.inputrc
   action: shell '{{ shell_dir_tmp }}/inputrc-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
 
 - name: locate | Install locate search tools
   apt: pkg={{ item }} state=present update_cache=yes
+  sudo: true  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: package
   with_items:
    - locate
-  
+
 - name: locate | Update locate database
   action: command updatedb
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: locate
-     
+
 - name: synapse | Install synapse search tools
   apt: pkg={{ item }} state=present update_cache=yes
+  sudo: true  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   tags: package
   with_items:
    - synapse
-   
+
 - name: synapse | Create synapse directory
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   file: path={{ shell_synapse_directory }} state=directory mode=0700 owner={{ shell_owner }}
-  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false  
+
 - name: synapse | Copy synapse startpage search into place
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   copy: src=startpage.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false  
   tags: synapse
-    
+
 - name: synapse | Copy duckduckgo startpage search into place
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   copy: src=duckduckgo.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false  
   tags: synapse
-      
+
 - name: synapse | Configure synapse config.json file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   template:
@@ -164,7 +177,7 @@
     owner: '{{ shell_owner }}'
     group: '{{ shell_group }}'
     mode: 0755
-  tags: synapse  
+  tags: synapse
 
 - name: shell | Cleanup temporary directory
   file: name={{ tempdir.stdout }} state=absent

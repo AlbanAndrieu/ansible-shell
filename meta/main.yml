@@ -44,3 +44,11 @@ ansigenome_info:
     This ``Personal`` role allows you to install and configure [Shell](http://fr.wikipedia.org/wiki/Shell_Unix) 
     which can be used to setup your global environement variables on hosts.
     
+
+  usage: |
+    Run the following command :
+    
+    `ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log`
+
+  #custom: |
+  #  Any custom output you want after the usage section..

@@ -15,17 +15,19 @@
 
 - name: shell | Configure log4j.lcf file
   template: src=log4j.lcf.j2 dest={{home}}/log4j.lcf
-#  copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
+  ignore_errors: true
   when: shell_log4j_enabled
   tags: log4j
 
 - name: shell | Configure log4j.properties file
   template: src=log4j.properties.j2 dest={{home}}/log4j.properties
+  ignore_errors: true  
   when: shell_log4j_enabled
   tags: log4j
 
 - name: shell | Configure log4j.xml file
   template: src=log4j.xml.j2 dest={{home}}/log4j.xml
+  ignore_errors: true
   when: shell_log4j_enabled
   tags: log4j
 
@@ -48,24 +50,12 @@
     - xinetd
   tags: rlogin
 
-- name: shell | Configure rhosts file
+- name: shell | Configure rhosts (rlogin) file
   template: src=.rhosts.j2 dest={{home}}/.rhosts
   when: shell_rlogin_enabled
   tags: rlogin
 
-- name: shell | Configure hosts.equiv file
+- name: shell | Configure hosts.equiv (rlogin) file
   template: src=hosts.equiv.j2 dest=/etc/hosts.equiv
   when: shell_rlogin_enabled
   tags: rlogin
-
-- name: shell | Configure .bash_profile file
-  copy: src=.bash_profile dest={{home}}/.bash_profile
-  when: shell_bash_enabled
-  tags: bash
-  tags: cygwin  
-
-- name: shell | Configure .login file
-  copy: src=.login dest={{home}}/.login
-  when: shell_bash_enabled
-  tags: bash
-  tags: cygwin
