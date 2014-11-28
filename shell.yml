@@ -5,11 +5,11 @@
     - { role: ./, 
         docker_files_enable: yes }
         
-  vars_files:
-  - [ "defaults/main.yml" ]
-  - [ "vars/default.yml" ]
-  - [ "vars/version.yml" ]
-  - [ "vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "vars/custom-{{ ansible_distribution }}.yml" ]
+#  vars_files:
+#  - [ "defaults/main.yml" ]
+#  - [ "vars/default.yml" ]
+#  - [ "vars/version.yml" ]
+#  - [ "vars/custom-{{ ansible_distribution }}-{{ ansible_architecture }}.yml", "vars/custom-{{ ansible_distribution }}.yml" ]
 
 #- include: docker/integration-tests.yml
 
