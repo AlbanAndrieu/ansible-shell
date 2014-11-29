@@ -1,4 +1,4 @@
-## shell
+## alban.andrieu.shell
 
 [![Travis CI](http://img.shields.io/travis/AlbanAndrieu/ansible-shell.svg?style=flat)](http://travis-ci.org/AlbanAndrieu/ansible-shell) [![Branch](http://img.shields.io/github/tag/AlbanAndrieu/ansible-shell.svg?style=flat-square)](https://github.com/AlbanAndrieu/ansible-shell/tree/master) [![Donate](https://img.shields.io/gratipay/AlbanAndrieu.svg?style=flat)](https://www.gratipay.com/AlbanAndrieu)  [![Platforms](http://img.shields.io/badge/platforms-debian%20/%20ubuntu-lightgrey.svg?style=flat)](#)
 
@@ -6,15 +6,16 @@ This ``Personal`` role allows you to install and configure [Shell](http://fr.wik
 which can be used to setup your global environement variables on hosts.
 
 
+### Role dependencies
 
+- `geerlingguy.git`
 
 ### Role variables
 
 List of default variables available in the inventory:
 
 ```yaml
-    ---
-    shell_enabled: yes                       # Enable module
+        shell_enabled: yes                       # Enable module
     shell_bash_enabled: yes                  # Enable bash shell
     shell_csh_enabled: no                    # Enable csh shell
     shell_ksh_enabled: yes                   # Enable ksh shell
@@ -62,11 +63,16 @@ List of default variables available in the inventory:
 ```
 
 
+### Detailed usage guide
+
+Run the following command :
+
+`ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log`
 
 
 ### Authors and license
 
-`shell` role was written by:
+`alban.andrieu.shell` role was written by:
 - [Alban Andrieu](fr.linkedin.com/in/nabla/) | [e-mail](mailto:alban.andrieu@free.fr) | [Twitter](https://twitter.com/AlbanAndrieu) | [GitHub](https://github.com/AlbanAndrieu)
 - License: [GPLv3](https://tldrlegal.com/license/gnu-general-public-license-v3-%28gpl-3%29)
 

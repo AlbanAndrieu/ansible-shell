@@ -1,6 +1,8 @@
 ---
-dependencies: []
-
+#dependencies: []
+dependencies:
+  - { role: geerlingguy.git }
+  
 galaxy_info:
   author: Alban Andrieu
   description: 'Install and configure Mon service'
@@ -27,7 +29,8 @@ ansigenome_info:
 #  github_url: "https://github.com/AlbanAndrieu/ansible-shell"
 #  git_branch: "master"
 #  galaxy_id: "0000"
-  galaxy_user:  'alban.andrieu'
+  galaxy_user: 'alban.andrieu'
+  galaxy_name: 'shell'
   
   travis: True
 

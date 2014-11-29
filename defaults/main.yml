@@ -1,4 +1,3 @@
----
 shell_enabled: yes                       # Enable module
 shell_bash_enabled: yes                  # Enable bash shell
 shell_csh_enabled: no                    # Enable csh shell
