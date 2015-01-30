@@ -41,6 +41,10 @@ NABLA_HOST: "home.nabla.mobi"
 
 ECLIPSE_DEBUG_PORT: "29{{USER_INDEX_ID}}"
 DEBUG_OPTIONS: "-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address={{ECLIPSE_DEBUG_PORT}},server=y,suspend=n"
+JMX_DEFAULT_DEBUG_PORT: "9193"
+JMX_TOMCAT_DEBUG_PORT: "9194"
+JMX_JBOSS_DEBUG_PORT: "9195"
+JMX_JETY_DEBUG_PORT: "9196"
 
 #################################
 
