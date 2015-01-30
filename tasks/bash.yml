@@ -134,6 +134,11 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
 
+- name: maven | Color maven command
+  action: command curl -L https://raw.github.com/builddoctor/maven-antsy-color/master/mvn > ~/.bash_aliases
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
+  tags: locate
+
 - name: locate | Install locate search tools
   apt: pkg={{ item }} state=present update_cache=yes
   sudo: true  
