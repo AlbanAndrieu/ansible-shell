@@ -134,10 +134,20 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
 
-- name: maven | Color maven command
-  action: command curl -L https://raw.github.com/builddoctor/maven-antsy-color/master/mvn > ~/.bash_aliases
+- name: maven | Configure maven-configure.sh file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
-  tags: locate
+  template:
+    src: maven-configure.sh.j2
+    dest: '{{ shell_dir_tmp }}/maven-configure.sh'
+    owner: '{{ shell_owner }}'
+#    group: '{{ shell_group }}'
+    mode: 0755
+  tags: maven
+  
+- name: maven | Color maven command
+  action: shell '{{ shell_dir_tmp }}/maven-configure.sh'
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
+  tags: maven
 
 - name: locate | Install locate search tools
   apt: pkg={{ item }} state=present update_cache=yes
