@@ -26,6 +26,7 @@ List of default variables available in the inventory:
     shell_history_enabled: yes               # Enable history bash tweek
     shell_nano_enabled: yes                  # Enable nano syntax color
     shell_vim_enabled: yes                   # Enable vim syntax color
+    shell_maven_enabled: yes                 # Enable maven syntax color
     shell_log4j_enabled: yes                 # Enable log4j
     shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
     shell_synapse_enabled: no                # Enable synapse config
@@ -47,13 +48,16 @@ List of default variables available in the inventory:
     shell_vim_color_repository: "https://github.com/klen/.vim.git"
     shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
     shell_git_meld_directory: "/usr/local/bin"
-    shell_git_email: "alban.andrieu@mysis.com"
-    shell_git_name: "Alban Andrieu"
+    shell_git_email: "{{ user }}@localhost"
+    shell_git_name: "{{ user }}"
     shell_git_editor: "vim"
     
     rhosts_hosts:
       - "albandri"
       - "albandri-laptop-misys"
+      
+    newrelic_license_key: "de35bf5d191ebb208d359b2cd24a60616a02b1f3"
+    newrelic_app_name: "Nabla Demo"
     
     docker_files_generated_directory: "./"
     docker_files_enable: no
