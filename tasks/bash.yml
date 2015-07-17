@@ -22,8 +22,8 @@
   tags: bash
   tags: cygwin
 
-- name: shell | Configure .bash_alias file
-  copy: src=.bash_alias dest={{home}}/.bash_alias
+- name: shell | Configure .bash_aliases file
+  copy: src=.bash_aliases dest={{home}}/.bash_aliases
   tags: bash
   tags: cygwin
 
