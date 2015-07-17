@@ -51,7 +51,7 @@ JMX_JETY_DEBUG_PORT: "9196"
 PROMPT: "'$P$G'"
 EDITOR: vi
 TERM: xterm
-COWSAY: 
+COWSAY:
 #LANG: "fr_FR.UTF-8"
 LANG: "en_US.UTF-8"
 PAGER: "most"
@@ -106,6 +106,7 @@ TOMCAT_HOME: "${DRIVE_PATH}/var/lib/tomcat7"
 CATALINA_HOME: "${DRIVE_PATH}/usr/share/tomcat7"
 CATALINA_BASE: "{{TOMCAT_HOME}}"
 ECLIPSE_HOME: "${DRIVE_PATH}/usr/local/eclipse/eclipse-4"
+ZAPROXY_HOME: "${DRIVE_PATH}/workspace/divers/zaproxy-read-only/build/zap"
 HUDSON_HOME: "${DRIVE_PATH}/workspace/hudson"
 JENKINS_HOME: "${DRIVE_PATH}/jenkins"
 SONAR_HOME: "${DRIVE_PATH}/workspace/sonar"
