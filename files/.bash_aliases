@@ -20,6 +20,19 @@ export BACKGROUND_CYAN=`tput setab 6`
 export BACKGROUND_WHITE=`tput setab 7`
 export RESET_FORMATTING=`tput sgr0`
 
+#esc="\033["
+#line="${esc}31;40mIn Color${esc}0m"
+#echo -e "$line"
+
+#To be able to print this, you have to press CTRL+V and then the ESC key.
+#The Color Code: <ESC>[{attr};{fg};{bg}m
+#echo "^[[0;31;40mIn Color"
+
+# The "sed -r" trick does not work on every Linux, I still dunno why:
+export DECOLORIZE='eval sed "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
+#howto use
+#<commands that type colored output> | ${DECOLORIZE}
+
 # Wrapper function for Maven's mvn command.
 mvn-color()
 {
@@ -36,4 +49,4 @@ mvn-color()
 }
 
 # Override the mvn command with the colorized one.
-alias mvn="mvn-color"
+alias mvnc="mvn-color"
