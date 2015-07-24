@@ -1,4 +1,5 @@
 #!/bin/bash
+#see http://doc.ubuntu-fr.org/ls_couleur
 esc="\033["
 echo -n "      40      41      42      43"
 echo "      44      45      46      47   "
