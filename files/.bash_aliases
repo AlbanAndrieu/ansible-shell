@@ -23,6 +23,7 @@ export RESET_FORMATTING=`tput sgr0`
 #esc="\033["
 #line="${esc}31;40mIn Color${esc}0m"
 #echo -e "$line"
+#echo -e "${esc}1;34mBLUE TEXT${esc}0m"
 
 #To be able to print this, you have to press CTRL+V and then the ESC key.
 #The Color Code: <ESC>[{attr};{fg};{bg}m
