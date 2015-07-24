@@ -86,7 +86,7 @@
 
 - name: vim | Copy the vim code from repository
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
-  git: repo={{ shell_vim_color_repository }} dest={{home}}/.vim
+  git: repo={{ shell_vim_color_repository }} dest={{home}}/.vim accept_hostkey=yes
   tags: vim
 
 - name: vim | Configure vim-configure.sh file
