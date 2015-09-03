@@ -4,12 +4,12 @@
 FROM        jasongiedymin/ansible-base-ubuntu
 
 # Volume can be accessed outside of container
-VOLUME      [/workspace/users/albandri10//env/home]
+VOLUME      [/workspace/users/albandri30/nabla/env/home]
 
 MAINTAINER  Alban Andrieu "https://github.com/AlbanAndrieu"
 
 ENV			DEBIAN_FRONTEND noninteractive
-ENV         WORKSPACE /workspace/users/albandri10//env/home
+ENV         WORKSPACE /workspace/users/albandri30/nabla/env/home
 
 # Working dir
 WORKDIR /home/vagrant
