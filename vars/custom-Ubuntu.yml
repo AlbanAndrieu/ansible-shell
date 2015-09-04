@@ -11,8 +11,8 @@ PROJECT_EXTRACTION: cpp
 #JAVA_HOME: /usr/lib/jvm/java-6-openjdk
 #NOKJAVA_HOME: /usr/lib/jvm/java-7-openjdk-i386
 #JAVA_HOME: /usr/lib/jvm/jdk1.7.0/
-JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
-#JAVA_HOME: "/usr/lib/jvm/java-8-oracle"
+#JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
+JAVA_HOME: "/usr/lib/jvm/java-8-oracle/"
 PYTHON_DIR: "/usr/lib/python"
 PYTHON_EXE: "/usr/bin/python"
 SCONS_DIR: "/usr/lib/scons/SCons"
@@ -21,7 +21,9 @@ SCONS_PATH: "{{SCONS_DIR}}/Script"
 SCONS_EXE: "/usr/bin/scons"
 #SCONS_ALIAS: "${SCONS_DIR}/scons/scons.py"
 CMAKE_HOME: "/usr/share/cmake-{{CMAKE_MAJOR_VERSION}}"
-M2_HOME: "/usr/local/apache-maven-3.2.1"
+M2_HOME: "/usr/local/apache-maven-{{MAVEN_MAJOR_VERSION}}"
+#MAVEN_OPTS: "-Xms256m -Xmx1024m -XX:PermSize=80M -XX:MaxPermSize=256M -XX:+UseConcMarkSweepGC -Dcom.sun.management.jmxremote"
+MAVEN_OPTS: "-Xms256m -Xmx512m -Dcom.sun.management.jmxremote"
 #M2_HOME: "/usr/share/maven"
 ANT_HOME: "/usr/share/ant"
 CONKY_HOME: "{{USER_PATH}}/.conky"
