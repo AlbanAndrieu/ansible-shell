@@ -114,6 +114,8 @@ SONAR_RUNNER_HOME: "${DRIVE_PATH}/workspace/sonar-runner"
 CHROME_BIN: "${DRIVE_PATH}/usr/bin/google-chrome"
 TIBCO_HOME: "${DRIVE_PATH}/TODO"
 CONKY_HOME: "${DRIVE_PATH}/TODO"
+JREBEL_HOME: "${DRIVE_PATH}/TODO"
+YOURKIT_HOME: "${DRIVE_PATH}/TODO"
 JMETER_HOME: "${DRIVE_PATH}/usr/share/jmeter"
 
 CROWD_INSTALL: "${DRIVE_PATH}/workspace/crowd"
