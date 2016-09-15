@@ -57,15 +57,14 @@
   tags: git
 
 - name: git | Configure git completion
-  copy: src=.git-prompt.sh dest={{home}}/.git-prompt.sh owner={{ shell_owner }} mode=755
+  copy: src=.git-prompt.sh dest={{ home }}/.git-prompt.sh owner={{ shell_owner }} mode=755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_completion_enabled
   tags: git
 
 - name: git | Copy the .netrc script for git credentials
-  template: src=.netrc.j2 dest={{ jenkins_home }}/.netrc mode=0600 owner={{ shell_owner }}
-  # group={{ shell_group }}
+  template: src=.netrc.j2 dest={{ home }}/.netrc mode=0600 owner={{ shell_owner }}
   when: shell_git_configure_enabled
-  changed_when: False
+  changed_when: false
   tags: git
 
 - name: git | Configure git
@@ -73,10 +72,9 @@
     src: .gitconfig.j2
     dest: '{{ home }}/.gitconfig'
     owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
-    mode: 0664
+    mode: 0700
   when: shell_git_configure_enabled
-  changed_when: False
+  changed_when: false
   tags: git
 
 #- name: git | Update git configuration (user.email)
