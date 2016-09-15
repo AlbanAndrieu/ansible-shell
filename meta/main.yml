@@ -2,7 +2,7 @@
 #dependencies: []
 dependencies:
   - { role: geerlingguy.git }
-  
+
 galaxy_info:
   author: Alban Andrieu
   description: 'Install and configure Mon service'
@@ -24,34 +24,3 @@ galaxy_info:
   categories:
   - development
   - system
-
-ansigenome_info:
-#  github_url: "https://github.com/AlbanAndrieu/ansible-shell"
-#  git_branch: "master"
-#  galaxy_id: "0000"
-  galaxy_user: 'alban.andrieu'
-  galaxy_name: 'shell'
-  
-  travis: True
-
-#  license_url: 'https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)'
-
-  authors:
-    - name:  'Alban Andrieu'
-      url: 'fr.linkedin.com/in/nabla/'
-      email: 'alban.andrieu@free.fr'
-      twitter: 'AlbanAndrieu'
-      github: 'AlbanAndrieu'
-
-  synopsis: |
-    This ``Personal`` role allows you to install and configure [Shell](http://fr.wikipedia.org/wiki/Shell_Unix) 
-    which can be used to setup your global environement variables on hosts.
-    
-
-  usage: |
-    Run the following command :
-    
-    `ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log`
-
-  #custom: |
-  #  Any custom output you want after the usage section..

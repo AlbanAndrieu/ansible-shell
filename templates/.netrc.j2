@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{# Set up machine #}
+{% for machine in shell_git %}
+machine {{ machine.shell_git_machine }}
+{% if machine.shell_git_login is defined %}
+    login {{ machine.shell_git_login }}
+{% endif %}
+{% if machine.shell_git_password is defined %}
+    password {{ machine.shell_git_password }}
+{% endif %}
+{% endfor %}

@@ -1,9 +1,19 @@
+# {{ ansible_managed }}
+
+{# Set up machine #}
+{% for machine in shell_git[0] %}
 [user]
-	email = {{ shell_git_email }}
-	name = {{ shell_git_name }}
+{% if machine.shell_git_email is defined %}
+	email = {{ machine.shell_git_email }}
+{% endif %}
+{% if machine.shell_git_name is defined %}
+	name = {{ machine.shell_git_name }}
+{% endif %}
 [core]
 	autocrlf = input
-	editor = {{ shell_git_editor }}
+{% if machine.shell_git_editor is defined %}
+	editor = {{ machine.shell_git_editor }}
+{% endif %}
 [credential]
 	helper = cache --timeout=86400
 [alias]
@@ -11,22 +21,21 @@
 	br = branch
 	ci = commit
 	st = status
-    pl = pull —rebase
-    di = diff --ignore-space-at-eol -b -w 
-    lo = log --graph 
+	pl = pull —rebase
+	di = diff --ignore-space-at-eol -b -w
+	lo = log --graph
 	unstage = reset HEAD --
 	last = log -1 HEAD
 [help]
 	autocorrect = 1
 [color]
 	ui = auto
-[branch "master"]
-	rebase = true
-[branch]
-	autosetuprebase = always
-{% if shell_git_meld_enabled %}
+#[branch "master"]
+#	rebase = true
+#[branch]
+#	autosetuprebase = always
+{% if machine.shell_git_meld_enabled %}
 [diff]
-    external = /usr/local/bin/git-diff.sh 
+	external = /usr/local/bin/git-diff.sh
 {% endif %}
-[push]
-	default = simple
+{% endfor %}

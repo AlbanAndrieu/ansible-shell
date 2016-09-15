@@ -61,15 +61,50 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_completion_enabled
   tags: git
 
+- name: git | Copy the .netrc script for git credentials
+  template: src=.netrc.j2 dest={{ jenkins_home }}/.netrc mode=0600 owner={{ shell_owner }}
+  # group={{ shell_group }}
+  when: shell_git_configure_enabled
+  changed_when: False
+  tags: git
+
 - name: git | Configure git
   template:
     src: .gitconfig.j2
-    dest: '{{home}}/.gitconfig'
+    dest: '{{ home }}/.gitconfig'
     owner: '{{ shell_owner }}'
 #    group: '{{ shell_group }}'
     mode: 0664
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_configure_enabled
+  when: shell_git_configure_enabled
+  changed_when: False
   tags: git
+
+#- name: git | Update git configuration (user.email)
+#  action: command git config --global user.email "{{ shell_git_email }}"
+##  sudo_user: "{{ shell_owner }}"
+#  become_user: "{{ shell_owner }}"
+#  become: true
+##  become_method: '{{ shell_become_method }}'
+#  changed_when: False
+#  tags: git
+#
+#- name: git | Update git configuration (user.name)
+#  action: command git config --global user.name "{{ shell_git_name }}"
+##  sudo_user: "{{ shell_owner }}"
+#  become_user: "{{ shell_owner }}"
+#  become: true
+##  become_method: '{{ shell_become_method }}'
+#  changed_when: False
+#  tags: git
+#
+#- name: git | Update git configuration (http.sslVerify)
+#  action: command git config --global http.sslVerify {{ shell_git_ssl }}
+##  sudo_user: "{{ shell_owner }}"
+#  become_user: "{{ shell_owner }}"
+#  become: true
+##  become_method: '{{ shell_become_method }}'
+#  changed_when: False
+#  tags: git
 
 #- name: Install enhanced vim with command-t plugin
 #  yum: name={{item}} state=present
