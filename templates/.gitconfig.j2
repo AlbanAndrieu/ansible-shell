@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 {# Set up machine #}
-{% for machine in shell_git[0] %}
+{% for machine in shell_git %}
 [user]
 {% if machine.shell_git_email is defined %}
 	email = {{ machine.shell_git_email }}
@@ -10,7 +10,7 @@
 	name = {{ machine.shell_git_name }}
 {% endif %}
 [core]
-	autocrlf = input
+#	autocrlf = input
 {% if machine.shell_git_editor is defined %}
 	editor = {{ machine.shell_git_editor }}
 {% endif %}
