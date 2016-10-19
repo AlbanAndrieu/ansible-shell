@@ -38,13 +38,13 @@ if ( $status == 0 ) then
         bindkey "\e[6~" history-search-forward
 endif
 
-echo "Mounting Virtual box"
-echo "sudo -s"
-echo "sudo mount -t vboxsf workspace /workspace"
-echo "sudo mount -t vboxsf thirdparty /thirdparty"
-echo "sudo mount -t vboxsf target /target"
-echo "sudo mount -t vboxsf repo /repo"
-echo "sudo mount -t vboxsf jboss /jboss"
+#echo "Mounting Virtual box"
+#echo "sudo -s"
+#echo "sudo mount -t vboxsf workspace /workspace"
+#echo "sudo mount -t vboxsf thirdparty /thirdparty"
+#echo "sudo mount -t vboxsf target /target"
+#echo "sudo mount -t vboxsf repo /repo"
+#echo "sudo mount -t vboxsf jboss /jboss"
 
 ##
 # XXXXXXXXXXXXXXXXXXXXX
@@ -55,7 +55,7 @@ setenv MACHINE x86Linux
 
 setenv PROJECT_USER albandri
 setenv PROJECT_VERSION 10
-setenv DRIVE_PATH 
+setenv DRIVE_PATH
 setenv PROJECT_HOME ${DRIVE_PATH}/workspace/users
 
 setenv WORKSPACE_ENV ${PROJECT_HOME}/${PROJECT_USER}${PROJECT_VERSION}/env

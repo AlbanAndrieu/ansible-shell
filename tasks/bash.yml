@@ -15,40 +15,44 @@
 
 - name: shell | Configure dev.env.sh file
   template: src=dev.env.sh.j2 dest={{shell_env_directory}}/dev.env.sh
-  tags: configure
+  tags: bash
 
 - name: shell | Configure .bash_profile file
   copy: src=.bash_profile dest={{home}}/.bash_profile
   tags: bash
-  tags: cygwin
+#  tags: cygwin
 
 - name: shell | Configure .bash_aliases file
   copy: src=.bash_aliases dest={{home}}/.bash_aliases
   tags: bash
-  tags: cygwin
+#  tags: cygwin
 
 - name: shell | Configure .login file
   copy: src=.login dest={{home}}/.login
   tags: bash
-  tags: cygwin
+#  tags: cygwin
 
 #cygwin
 - name: shell | Configure .bashrc file
   template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
   when: shell_cygwin_enabled
   tags: configure
-  tags: cygwin
+#  tags: cygwin
 
 - name: shell | Configure .bashrc file
   template: src=.bashrc.j2 dest={{home}}/.bashrc
   when: shell_cygwin_enabled == false
-  tags: configure
   tags: bash
 
 - name: shell | Create temporary directory
   shell: mktemp -d
   register: tempdir
   tags: shell_setup
+
+- name: git | Copy the .novarc script for openstack
+  template: src=.novarc.j2 dest={{ home }}/.novarc mode=0600 owner={{ shell_owner }}
+  changed_when: false
+  tags: openstack
 
 - name: git | Configure git meld diff
   copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
