@@ -3,7 +3,7 @@
 
 - name: shell | Install csh shell (Debian only)
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian'    
+  when: ansible_distribution == 'Debian'
   with_items:
     - csh
 #    - todo
@@ -11,7 +11,7 @@
 - name: shell | Create env directory
 #  file: path={{ shell_env_directory }} state=directory
   file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
-  
+
 - name: shell | Configure dev.env.csh file
   template: src=dev.env.csh.j2 dest={{shell_env_directory}}/dev.env.csh
   tags: configure
@@ -19,9 +19,9 @@
 #Cygwin
 - name: shell | Configure .cshrc file
   template: src=.cshrc-cygwin.j2 dest={{home}}/.cshrc
-  when: shell_cygwin_enabled  
+  when: shell_cygwin_enabled
   tags: configure
-  tags: cygwin
+#  tags: cygwin
 
 - name: shell | Configure .cshrc file
   template: src=.cshrc.j2 dest={{home}}/.cshrc

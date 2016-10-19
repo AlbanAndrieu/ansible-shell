@@ -1,10 +1,11 @@
 ---
 - hosts: all
-  sudo: true
+  become: true
+
   roles:
-    - { role: ./, 
+    - { role: ./,
         docker_files_enable: yes }
-        
+
 #  vars_files:
 #  - [ "defaults/main.yml" ]
 #  - [ "vars/default.yml" ]
