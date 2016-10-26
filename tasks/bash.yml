@@ -49,7 +49,7 @@
   register: tempdir
   tags: shell_setup
 
-- name: git | Copy the .novarc script for openstack
+- name: shell | Copy the .novarc script for openstack
   template: src=.novarc.j2 dest={{ home }}/.novarc mode=0600 owner={{ shell_owner }}
   changed_when: false
   tags: openstack
@@ -57,7 +57,7 @@
 - name: git | Configure git meld diff
   copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_meld_enabled
-  sudo: true
+  become: true
   tags: git
 
 - name: git | Configure git completion
@@ -81,32 +81,19 @@
   changed_when: false
   tags: git
 
-#- name: git | Update git configuration (user.email)
-#  action: command git config --global user.email "{{ shell_git_email }}"
-##  sudo_user: "{{ shell_owner }}"
-#  become_user: "{{ shell_owner }}"
-#  become: true
-##  become_method: '{{ shell_become_method }}'
-#  changed_when: False
-#  tags: git
-#
-#- name: git | Update git configuration (user.name)
-#  action: command git config --global user.name "{{ shell_git_name }}"
-##  sudo_user: "{{ shell_owner }}"
-#  become_user: "{{ shell_owner }}"
-#  become: true
-##  become_method: '{{ shell_become_method }}'
-#  changed_when: False
-#  tags: git
-#
-#- name: git | Update git configuration (http.sslVerify)
-#  action: command git config --global http.sslVerify {{ shell_git_ssl }}
-##  sudo_user: "{{ shell_owner }}"
-#  become_user: "{{ shell_owner }}"
-#  become: true
-##  become_method: '{{ shell_become_method }}'
-#  changed_when: False
-#  tags: git
+- git_config: name=user.email scope=global value="{{ shell_git[0].shell_git_email }}"
+- git_config: name=user.name scope=global value="{{ shell_git[0].shell_git_name }}"
+- git_config: name=http.sslVerify scope=global value="{{ shell_git[0].shell_git_ssl }}"
+- git_config: name=maven-scm.maildomain scope=global value="misys.com"
+- git_config: name=maven-scm.forceUsername scope=global value="true"
+
+- git_config: name=alias.ci scope=global value=commit
+- git_config: name=alias.st scope=global value=status
+- git_config: name=color.ui scope=global value=auto
+
+#See https://docs.ansible.com/ansible/git_config_module.html
+- name: git | Read all values from git config
+  git_config: list_all=yes scope=global
 
 #- name: Install enhanced vim with command-t plugin
 #  yum: name={{item}} state=present
@@ -137,7 +124,7 @@
   tags: vim
 
 - name: vim | Update  ~/.vim
-  action: shell '{{ shell_dir_tmp }}/vim-configure.sh'
+  shell: '{{ shell_dir_tmp }}/vim-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 
@@ -157,7 +144,10 @@
   tags: nano
 
 - name: nano | Update  ~/.nanorc
-  action: shell '{{ shell_dir_tmp }}/nano-configure.sh'
+  shell: '{{ shell_dir_tmp }}/nano-configure.sh'
+  args:
+    chdir: ~
+    creates: .nanorc
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   tags: nano
 
@@ -172,7 +162,10 @@
   tags: history
 
 - name: inputrc | Update  ~/.inputrc
-  action: shell '{{ shell_dir_tmp }}/inputrc-configure.sh'
+  shell: '{{ shell_dir_tmp }}/inputrc-configure.sh > .inputrc'
+  args:
+    chdir: ~
+    creates: .inputrc
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
 
@@ -187,26 +180,29 @@
   tags: maven
 
 - name: maven | Color maven command
-  action: shell '{{ shell_dir_tmp }}/maven-configure.sh'
+  shell: '{{ shell_dir_tmp }}/maven-configure.sh > .bash_aliases'
+  args:
+    chdir: ~
+    creates: .bash_aliases
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
   tags: maven
 
 - name: locate | Install locate search tools
   apt: pkg={{ item }} state=present update_cache=yes
-  sudo: true
+  become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: package
   with_items:
    - locate
 
 - name: locate | Update locate database
-  action: command updatedb
+  command: updatedb
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: locate
 
 - name: synapse | Install synapse search tools
   apt: pkg={{ item }} state=present update_cache=yes
-  sudo: true
+  become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   tags: package
   with_items:
