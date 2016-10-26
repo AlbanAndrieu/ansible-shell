@@ -81,10 +81,10 @@
   changed_when: false
   tags: git
 
-- git_config: name=user.email scope=global value="{{ shell_git[0].shell_git_email }}"
-- git_config: name=user.name scope=global value="{{ shell_git[0].shell_git_name }}"
-- git_config: name=http.sslVerify scope=global value="{{ shell_git[0].shell_git_ssl }}"
-- git_config: name=maven-scm.maildomain scope=global value="misys.com"
+#- git_config: name=user.email scope=global value="{{ shell_git[0].shell_git_email }}"
+#- git_config: name=user.name scope=global value="{{ shell_git[0].shell_git_name }}"
+#- git_config: name=http.sslVerify scope=global value="{{ shell_git[0].shell_git_ssl }}"
+- git_config: name=maven-scm.maildomain scope=global value="nabla.mobi"
 - git_config: name=maven-scm.forceUsername scope=global value="true"
 
 - git_config: name=alias.ci scope=global value=commit
