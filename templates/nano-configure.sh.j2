@@ -1,3 +1,5 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
 cd {{home}}/nanorc && make install && cd -
-echo 'include ~/.nano/syntax/ALL.nanorc' >> ~/.nanorc
-cat ~/.nanorc
+echo 'include ~/.nano/syntax/ALL.nanorc' >> .nanorc
