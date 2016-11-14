@@ -32,6 +32,40 @@
   tags: bash
 #  tags: cygwin
 
+- name: shell | Install git prompt git-radar requirements
+  apt: pkg={{ item }} state=present
+  when: ansible_distribution == 'Debian'
+  with_items:
+    - build-essential
+    - curl
+    - git
+    - m4
+    - ruby
+    - texinfo
+    - libbz2-dev
+    - libcurl4-openssl-dev
+    - libexpat-dev
+    - libncurses-dev
+    - zlib1g-dev
+    - linuxbrew-wrapper
+
+- name: shell | Install git prompt git-radar
+  shell: brew install michaeldfallen/formula/git-radar
+  when: ansible_distribution == 'Debian'
+  become: yes
+
+- name: shell | Install docker prompt
+  shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
+  when: ansible_distribution == 'Debian'
+
+- name: shell | Install docker wrapper
+  shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash -O /etc/bash_completion.d/docker-machine-wrapper.bash
+  when: ansible_distribution == 'Debian'
+
+- name: shell | Install docker bash
+  shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash -O /etc/bash_completion.d/docker-machine.bash
+  when: ansible_distribution == 'Debian'
+
 #cygwin
 - name: shell | Configure .bashrc file
   template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
