@@ -27,7 +27,7 @@ MAVEN_OPTS: "-Xms256m -Xmx1024m"
 #M2_HOME: "/usr/share/maven"
 ANT_HOME: "/usr/share/ant"
 TIBCO_HOME: "${DRIVE_PATH}/home/{{UNIX_USERNAME}}/tibco"
-TIBRV_HOME: "{{TIBCO_HOME}}/tibrv/8.4"
+TIBRV_HOME: "{{TIBCO_HOME}}/tibrv/{{TIBRV_VERSION}}"
 CONKY_HOME: "{{USER_PATH}}/.conky"
 
 #Overrided
