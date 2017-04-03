@@ -158,7 +158,7 @@ export PROJECT_HOME={{PROJECT_HOME}}
 export WORKSPACE_ENV={{WORKSPACE_ENV}}
 
 export PROJECT_THIRDPARTY_PATH={{PROJECT_THIRDPARTY_PATH}}
-echo PROJECT_THIRDPARTY_PATH ${PROJECT_THIRDPARTY_PATH}
+echo PROJECT_THIRDPARTY_PATH : ${PROJECT_THIRDPARTY_PATH}
 
 if [ "${ARCH}" = cygwin ]
 then
@@ -201,7 +201,7 @@ PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/gam
 #    PATH="$HOME/bin:$PATH"
 #fi
 
-echo ${SHELL}
+echo "SHELL : ${SHELL}"
 
 alias 00='. ${PROJECT_HOME}/${KPLUSTP_USER}00/env/home/dev.env.sh'
 alias {{DEFAULT_ENV_LOADED}}='. ${WORKSPACE_ENV}/home/dev.env.sh'
