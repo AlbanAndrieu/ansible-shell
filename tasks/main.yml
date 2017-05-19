@@ -38,6 +38,11 @@
     mode: 0755
   tags: newrelic
 
+- name: Change whole home folder ownership
+  file: path={{ home }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }} 
+  become: yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+
 - name: Copy Dockerfile
   template: src=Dockerfile.j2 dest={{ docker_files_generated_directory }}/Dockerfile mode=0777
   when: docker_files_enable
