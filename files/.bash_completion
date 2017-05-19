@@ -1,0 +1,6 @@
+for file in bash_completion.d/*
+do
+    [[ ${file##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
+        [ \( -f $file -o -h $file \) -a -r $file ] &&
+        . $file
+done
