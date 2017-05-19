@@ -26,7 +26,7 @@
   tags: log4j
 
 - name: shell | Configure log4j.xml file
-  template: src=log4j.xml.j2 dest={{home}}/log4j.xml
+  template: src=log4j.xml.j2 dest={{ home }}/log4j.xml
   ignore_errors: true
   when: shell_log4j_enabled
   tags: log4j
