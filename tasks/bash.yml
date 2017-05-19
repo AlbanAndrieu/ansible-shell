@@ -27,10 +27,21 @@
   tags: bash
 #  tags: cygwin
 
+- name: shell | Configure .bash_completion file
+  copy: src=.bash_completion dest={{home}}/.bash_completion
+  tags: bash
+#  tags: cygwin
+
 - name: shell | Configure .login file
   copy: src=.login dest={{home}}/.login
   tags: bash
 #  tags: cygwin
+
+- name: shell | Install bash completion
+  apt: pkg={{ item }} state=present
+  when: ansible_distribution == 'Debian'
+  with_items:
+    - bash-completion
 
 - name: shell | Install git prompt git-radar requirements
   apt: pkg={{ item }} state=present
@@ -78,6 +89,10 @@
   become: yes  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
+- name: shell | Install scons bash
+  copy: src=scons_completion dest=/etc/bash_completion.d/scons_completion
+  when: ansible_distribution == 'Debian'
+  
 #cygwin
 - name: shell | Configure .bashrc file
   template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
