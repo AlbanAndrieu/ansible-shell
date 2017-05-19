@@ -38,14 +38,14 @@
     state=absent
     purge=yes
     force=yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and shell_rlogin_enabled == false
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_rlogin_enabled == false
   tags: package
   with_items:
     - xinetd
 
 - name: shell | Install xinetd for rlogin rsh rexec (Debian only)
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian' and shell_rlogin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_rlogin_enabled
   with_items:
     - xinetd
   tags: rlogin
