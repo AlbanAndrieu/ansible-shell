@@ -3,7 +3,7 @@
 
 - name: shell | Install ksh shell (Debian only)
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian' 
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
     - ksh
 #    - todo
