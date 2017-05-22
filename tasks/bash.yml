@@ -3,7 +3,7 @@
 
 - name: shell | Install bash shell (Debian only)
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian'
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
     - bash
 #    - csh
@@ -45,7 +45,7 @@
 
 - name: shell | Install git prompt git-radar requirements
   apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian'
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
     - build-essential
     - curl
@@ -61,21 +61,33 @@
     - linuxbrew-wrapper
 
 - name: shell | Install git prompt git-radar
-  shell: brew install michaeldfallen/formula/git-radar
-  when: ansible_distribution == 'Debian'
-  become: yes
+  shell: brew install randomize-lines
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  #become: yes
+  
+- name: shell | Install git prompt git-radar
+  shell: cd ~ && git clone https://github.com/michaeldfallen/git-radar .git-radar
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+
+#- name: shell | Install git prompt git-radar
+#  shell: brew install michaeldfallen/formula/git-radar </dev/null
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#  #become: yes
 
 - name: shell | Install docker prompt
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
-  when: ansible_distribution == 'Debian'
+  become: yes  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: shell | Install docker wrapper
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash -O /etc/bash_completion.d/docker-machine-wrapper.bash
-  when: ansible_distribution == 'Debian'
+  become: yes  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: shell | Install docker bash
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash -O /etc/bash_completion.d/docker-machine.bash
-  when: ansible_distribution == 'Debian'
+  become: yes  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: shell | Install scons bash
   copy: src=scons_completion dest=/etc/bash_completion.d/scons_completion
