@@ -45,7 +45,7 @@
 
 - name: shell | Install git prompt git-radar requirements
   apt: pkg={{ item }} state=present
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04']  
   with_items:
     - build-essential
     - curl
@@ -62,16 +62,16 @@
 
 - name: shell | Install git prompt git-radar
   shell: brew install randomize-lines
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04']  
   #become: yes
   
 - name: shell | Install git prompt git-radar
   shell: cd ~ && git clone https://github.com/michaeldfallen/git-radar .git-radar
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04']  
 
 #- name: shell | Install git prompt git-radar
 #  shell: brew install michaeldfallen/formula/git-radar </dev/null
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04']  
 #  #become: yes
 
 - name: shell | Install docker prompt
