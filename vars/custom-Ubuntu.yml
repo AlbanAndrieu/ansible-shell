@@ -10,9 +10,9 @@ PROJECT_EXTRACTION: cpp
 
 #JAVA_HOME: /usr/lib/jvm/java-6-openjdk
 #NOKJAVA_HOME: /usr/lib/jvm/java-7-openjdk-i386
-#JAVA_HOME: /usr/lib/jvm/jdk1.7.0/
+JAVA_HOME: /usr/lib/jvm/default-java/
 #JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
-JAVA_HOME: "/usr/lib/jvm/java-9-oracle/"
+#JAVA_HOME: "/usr/lib/jvm/java-9-oracle/"
 PYTHON_DIR: "/usr/lib/python"
 PYTHON_EXE: "/usr/bin/python"
 SCONS_DIR: "/usr/lib/scons/SCons"
