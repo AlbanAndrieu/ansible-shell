@@ -84,7 +84,8 @@ LOG4J_SERVER_PATTERN: "{{LOG4J_SERVER_NAME}} - %d{yyyy/MM/dd HH:mm:ss}  %-5p [%t
 MAVEN_LOCAL_REPO_PATH: "${env.WORKSPACE}/.m2/repository"
 #M2_SETTINGS: ${WORKSPACE_ENV}/home/.m2/settings.xml
 M2_SETTINGS: "${PROJECT_DEV}/.m2/settings.xml"
-
+MAVEN_OPTS: "-Xms1G -Xmx2G -Dmaven.color.hide.level=false"
+JAVA_OPTS: "-Xms1G -Xmx2G"
 JAVA_HOME: "${DRIVE_PATH}/usr/lib/jvm/jdk{{JAVA_MAJOR_VERSION}}"
 PYTHON_DIR: "${DRIVE_PATH}/usr/lib/python"
 PYTHON_EXE: "${DRIVE_PATH}/usr/bin/python"
