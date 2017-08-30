@@ -295,12 +295,7 @@
 
 - name: banner | Configure banner welcome file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_cygwin_enabled == false
-  template:
-    src: 11-welcome.j2
-    dest: '/etc/update-motd.d/11-welcome'
-    owner: '{{ shell_owner }}'
-    group: '{{ shell_group }}'
-    mode: 0755
+  copy: src=11-welcome dest=/etc/update-motd.d/11-welcome owner={{ shell_owner }} group={{ shell_group }} mode=0755 
   tags: banner
   
 - name: shell | Cleanup temporary directory
