@@ -6,7 +6,7 @@
 DRIVE_PATH: ""
 DATABASE_ARCH: x86Linux
 #MAVEN_LOCAL_REPO_PATH: "{{DRIVE_PATH}}/repo"
-PROJECT_EXTRACTION: cpp
+#PROJECT_EXTRACTION: nabla-cpp
 
 #JAVA_HOME: /usr/lib/jvm/java-6-openjdk
 #NOKJAVA_HOME: /usr/lib/jvm/java-7-openjdk-i386
