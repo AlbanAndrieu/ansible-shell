@@ -13,8 +13,8 @@ DATABASE_ARCH: x86Linux
 JAVA_HOME: /usr/lib/jvm/default-java/
 #JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
 #JAVA_HOME: "/usr/lib/jvm/java-9-oracle/"
-PYTHON_DIR: "/usr/lib/python"
-PYTHON_EXE: "/usr/bin/python"
+PYTHON_DIR: "${DRIVE_PATH}/usr/lib/python{{PYTHON_MAJOR_VERSION}}"
+PYTHON_EXE: "/usr/bin/python{{PYTHON_MAJOR_VERSION}}"
 SCONS_DIR: "/usr/lib/scons/SCons"
 #SCONS_PATH: "${SCONS_DIR}/script"
 SCONS_PATH: "{{SCONS_DIR}}/Script"

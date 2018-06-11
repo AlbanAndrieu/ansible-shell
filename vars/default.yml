@@ -87,8 +87,8 @@ M2_SETTINGS: "${PROJECT_DEV}/.m2/settings.xml"
 MAVEN_OPTS: "-Xms1G -Xmx2G -Dmaven.color.hide.level=false"
 JAVA_OPTS: "-Xms1G -Xmx2G"
 JAVA_HOME: "${DRIVE_PATH}/usr/lib/jvm/jdk{{JAVA_MAJOR_VERSION}}"
-PYTHON_DIR: "${DRIVE_PATH}/usr/lib/python"
-PYTHON_EXE: "${DRIVE_PATH}/usr/bin/python"
+PYTHON_DIR: "${DRIVE_PATH}/usr/lib/python{{PYTHON_MAJOR_VERSION}}"
+PYTHON_EXE: "${DRIVE_PATH}/usr/bin/python{{PYTHON_MAJOR_VERSION}}"
 #setenv SCONS_DIR ${PYTHON_DIR}
 #setenv SCONS_DIR ${PYTHON_DIR}/Lib/site-packages/scons-{{SCONS_MAJOR_VERSION}}
 SCONS_DIR: "${DRIVE_PATH}/usr/lib/scons"
