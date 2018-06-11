@@ -35,8 +35,19 @@
 #[branch]
 #	autosetuprebase = always
 {% if machine.shell_git_meld_enabled %}
+[merge]
+    tool = meld
+[mergetool "meld"]
+    # Choose one of these 2 lines (not both!) explained below.
+    #cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
 [diff]
-	external = /usr/local/bin/git-diff.sh
+#	external = /usr/local/bin/git-diff.sh    
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"	
 {% endif %}
 [maven-scm]
     maildomain = free.fr
