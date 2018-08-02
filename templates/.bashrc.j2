@@ -245,7 +245,8 @@ then
 fi
 
 #If you want to use new GCC by default, make sure that your PATH contains /usr/local/bin before /bin and /usr/bin.
-PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+#ADD ${HOME}/.git-radar/ for when we are inside docker conainters
+PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games::${HOME}/.git-radar/
 # set PATH so it includes user's private bin if it exists
 #if [ -d "$HOME/bin" ] ; then
 #    PATH="$HOME/bin:$PATH"
@@ -253,7 +254,7 @@ PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/gam
 
 echo "SHELL : ${SHELL}"
 
-alias 00='. ${PROJECT_HOME}/${KPLUSTP_USER}00/env/home/dev.env.sh'
+alias 00='. ${PROJECT_HOME}/${PROJECT_USER}00/env/home/dev.env.sh'
 alias {{DEFAULT_ENV_LOADED}}='. ${WORKSPACE_ENV}/home/dev.env.sh'
 
 if [ -f ${WORKSPACE_ENV}/home/dev.env.sh ]; then
