@@ -34,13 +34,34 @@
 #	rebase = true
 #[branch]
 #	autosetuprebase = always
+[diff "xls"]
+    binary = true
+    textconv = /usr/bin/py_xls2txt
+#    textconv = /usr/bin/xls2csv
+[diff "pdf"]
+    binary = true
+    textconv = /usr/bin/pdf2txt
+[diff "doc"]
+    binary = true
+    textconv = /usr/bin/catdoc
+[diff "docx"]
+    binary = true
+    textconv = /usr/bin/docx2txt
+[diff "odt"]
+    binary = true    
+    textconv = odt2txt
+[diff "ppt"]
+    binary = true    
+    textconv = /usr/bin/catppt
+[diff "zip"]
+    textconv = unzip -c -a
 {% if machine.shell_git_meld_enabled %}
 [merge]
     tool = meld
 [mergetool "meld"]
     # Choose one of these 2 lines (not both!) explained below.
     #cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
-    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"    
 [diff]
 #	external = /usr/local/bin/git-diff.sh    
     tool = meld
