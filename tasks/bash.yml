@@ -37,6 +37,11 @@
   tags: bash
 #  tags: cygwin
 
+- name: shell | Configure step-0-color.sh file
+  copy: src=step-0-color.sh dest={{home}}/step-0-color.sh
+  tags: bash
+#  tags: cygwin
+
 - name: shell | Install bash completion
   apt: pkg={{ item }} state=present
   when: ansible_distribution == 'Debian'
