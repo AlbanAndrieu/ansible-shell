@@ -183,6 +183,11 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+# Add hand made color for better display
+if [ -f ~/step-0-color.sh ]; then
+    . ~/step-0-color.sh
+fi
+
 #echo "Mounting Virtual box"
 #echo "sudo -s"
 #echo "sudo mount -t vboxsf workspace /workspace"
