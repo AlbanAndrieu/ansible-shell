@@ -64,3 +64,9 @@ EC2_KEYPAIR: "albandri # name only, not the file name"
 EC2_URL: "https://ec2.us-west-2.amazonaws.com"
 EC2_PRIVATE_KEY: "$HOME/.ec2/pk-FMQ27HNLF2PVMPVL7MPWHEY5GWDKDOT2.pem"
 EC2_CERT: "$HOME/.ec2/cert-FMQ27HNLF2PVMPVL7MPWHEY5GWDKDOT2.pem"
+
+DOCKER_REGISTRY_USER: nabla
+DOCKER_REGISTRY_PASS: todo
+
+GITHUB_TOKEN: todo
+GITHUB_ORGANIZATION: Banbou
