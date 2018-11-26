@@ -268,3 +268,12 @@ if [ -f ${WORKSPACE_ENV}/home/dev.env.sh ]; then
 fi
 
 echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."
+#export SCONS=/usr/bin/scons
+#export TAR=/bin/gtar
+export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+
+# added by travis gem
+[ -f ${HOME}/.travis/travis.sh ] && source ${HOME}/.travis/travis.sh
+
+#alias apb='docker run --rm --privileged -v $PWD:/mnt -v $HOME/.kube:/.kube -v /var/run/docker.sock:/var/run/docker.sock -u $UID docker.io/ansibleplaybookbundle/apb-tools'
+

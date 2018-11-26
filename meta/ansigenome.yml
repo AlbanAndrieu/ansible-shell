@@ -1,43 +1,15 @@
 ---
-#dependencies: []
-dependencies:
-  - { role: geerlingguy.git }
-
-galaxy_info:
-  author: Alban Andrieu
-  description: 'Install and configure Mon service'
-  company: Nabla
-  license: Apache
-  min_ansible_version: '2.3.1.0'
-  platforms:
-  - name: Ubuntu
-    versions:
-    - precise
-    - quantal
-    - raring
-    - saucy
-    - trusty
-  - name: Debian
-    versions:
-    - wheezy
-    - jessie
-  categories:
-  - development
-  - system
-
 ansigenome_info:
-#  github_url: "https://github.com/AlbanAndrieu/ansible-shell"
-#  git_branch: "master"
-#  galaxy_id: "0000"
+  galaxy_id: ''
+  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/shell/'
   galaxy_user: 'alban.andrieu'
   galaxy_name: 'shell'
+  galaxy_docker_name: 'ansible-shell'
 
-  travis: True
-
-#  license_url: 'https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)'
+  travis: true
 
   authors:
-    - name:  'Alban Andrieu'
+    - name: 'Alban Andrieu'
       url: 'fr.linkedin.com/in/nabla/'
       email: 'alban.andrieu@free.fr'
       twitter: 'AlbanAndrieu'
@@ -53,5 +25,5 @@ ansigenome_info:
 
     `ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log`
 
-  #custom: |
-  #  Any custom output you want after the usage section..
+  # custom: |
+  #   Any custom output you want after the usage section..
