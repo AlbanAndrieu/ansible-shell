@@ -8,19 +8,21 @@ galaxy_info:
   description: 'Install and configure Mon service'
   company: Nabla
   license: GPLv3
-  min_ansible_version: '2.3.1.0'
+  min_ansible_version: '2.6.0'
   platforms:
-  - name: Ubuntu
-    versions:
-    - precise
-    - quantal
-    - raring
-    - saucy
-    - trusty
-  - name: Debian
-    versions:
-    - wheezy
-    - jessie
-  categories:
-  - development
-  - system
+    - name: Ubuntu
+      versions:
+        - all
+        - precise
+        - quantal
+        - raring
+        - saucy
+        - trusty
+    - name: Debian
+      versions:
+        - all    
+        - wheezy
+        - jessie
+  galaxy_tags:
+    - development
+    - system
