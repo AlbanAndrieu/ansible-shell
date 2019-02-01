@@ -8,7 +8,7 @@ homebrew_check_path: "{{ homebrew_home_check_path }}/bin/brew"
 
 DRIVE_PATH: ""
 DATABASE_ARCH: x86Linux
-#MAVEN_LOCAL_REPO_PATH: "{{DRIVE_PATH}}/repo"
+MAVEN_LOCAL_REPO_PATH: "${env.WORKSPACE}/.m2/repository"
 #PROJECT_EXTRACTION: nabla-cpp
 
 #JAVA_HOME: /usr/lib/jvm/java-6-openjdk
