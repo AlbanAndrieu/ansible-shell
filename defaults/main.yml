@@ -3,6 +3,7 @@ shell_bash_enabled: yes                  # Enable bash shell
 shell_csh_enabled: no                    # Enable csh shell
 shell_ksh_enabled: yes                   # Enable ksh shell
 shell_cygwin_enabled: no                 # Enable cygwin
+shell_brew_enabled: yes                  # Enable brew install
 
 #do not activate locate with docker
 shell_locate_enabled: no                 # Enable locate search feature
@@ -32,6 +33,7 @@ shell_env_directory: "{{ shell_workspace_env }}/home"
 #shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
 shell_dir_tmp: "{{ tempdir.stdout }}"
 
+shell_git_radar_repository: "https://github.com/michaeldfallen/git-radar.git"
 shell_nano_color_repository: "https://github.com/nanorc/nanorc.git"
 shell_vim_color_repository: "https://github.com/klen/.vim.git"
 shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
@@ -59,6 +61,47 @@ newrelic_app_name: "Nabla Demo"
 
 webpagetest_api_key: "A.01ea5a02081b6d10415d7b0e7c844e73"
 
+brew_packages:
+  - 'randomize-lines' # for git-radar
+#  - 'autoconf'
+#  - 'bash-completion'
+#  - 'boot2docker'
+#  - 'consul'
+#  - 'docker-compose'
+#  - 'docker-machine'
+#  - 'doxygen'
+#  - 'git'
+#  - 'git-lfs'
+#  - 'go'
+#  - 'jq'
+#  - 'nmap'
+#  - 'nomad'
+#  - 'openssl'
+#  - 'packer'
+#  - 'pyenv'
+#  - 'python'
+#  - 'rancher-compose'
+#  - 'rbenv'
+#  - 'ruby-build'
+#  - 'ssh-copy-id'
+#  - 'terraform'
+#  - 'terraform-inventory'
+#  - 'terraform-provisioner-ansible'
+#  - 'tmux'
+#  - 'tree'
+#  - 'vault'
+#  - 'wget'
+#  - 'zsh'
+#  - 'zsh-syntax-highlighting'
+install_homebrew_if_missing: true
+# python_modules:
+#   - 'configparser'
+#   - 'pylint'
+#   - 'virtualenv'
+upgrade_homebrew_packages: false
+
+homebrew_repository: "https://github.com/Homebrew/brew"
+    
 docker_files_generated_directory: "./"
 docker_files_enable: no
 docker_volume_directory: "{{ shell_env_directory }}"

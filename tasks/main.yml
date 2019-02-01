@@ -12,19 +12,19 @@
   include_vars: "custom-{{ ansible_distribution }}.yml"
   #include_vars: "{{ ansible_distribution }}.yml"
 
-- include: shell.yml
+- import_tasks: shell.yml
   when: shell_enabled
   tags: [shell]
 
-- include: bash.yml
+- import_tasks: bash.yml
   when: shell_bash_enabled
   tags: [bash]
 
-- include: csh.yml
+- import_tasks: csh.yml
   when: shell_csh_enabled
   tags: [csh]
 
-- include: ksh.yml
+- import_tasks: ksh.yml
   when: shell_ksh_enabled
   tags: [ksh]
 
@@ -40,8 +40,8 @@
 
 - name: Change whole home folder ownership
   file: path={{ home }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }} 
-  become: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  become: true  
 
 - name: Copy Dockerfile
   template: src=Dockerfile.j2 dest={{ docker_files_generated_directory }}/Dockerfile mode=0777

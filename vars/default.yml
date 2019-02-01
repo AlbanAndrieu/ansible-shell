@@ -3,6 +3,12 @@
 ####### ENV GLOBAL PARAMETERS
 ##################################
 
+#homebrew_home_check_path: "/home/linuxbrew/.linuxbrew"
+homebrew_home_check_path: "{{ lookup('env','HOME') }}/.linuxbrew"
+#homebrew_check_path: "/usr/bin/brew"
+#homebrew_check_path: "/usr/local/bin/brew"
+homebrew_check_path: "{{ homebrew_home_check_path }}/bin/brew"
+
 DEV_VERSION: "{{shell_default_version}}"
 
 DEV_MODE: 1
