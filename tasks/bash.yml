@@ -20,7 +20,7 @@
 - name: shell | Configure run-python.sh file
   copy: src=run-python.sh dest={{ home }}/run-python.sh mode=755
   tags: bash
-  
+
 - name: shell | Configure run-ansible.sh file
   copy: src=run-ansible.sh dest={{ home }}/run-ansible.sh mode=755
   tags: bash
@@ -32,7 +32,7 @@
 - name: shell | Configure .bash_profile file
   copy: src=.bash_profile dest={{ home }}/.bash_profile
   tags: bash
- 
+
 #No more needed for maven color
 #- name: shell | Configure .bash_aliases file
 #  copy: src=.bash_aliases dest={{ home }}/.bash_aliases
@@ -56,7 +56,7 @@
 - import_tasks: brew.yml
   when: shell_brew_enabled
   tags: [brew]
-  
+
 - name: shell | Install git prompt git-radar requirements
   apt: pkg={{ item }} state=present
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
@@ -86,7 +86,7 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: yes
 #  ignore_errors: true # when already exist
-  
+
 #- name: shell | Install git prompt git-radar
 #  shell: brew install michaeldfallen/formula/git-radar </dev/null
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
@@ -188,8 +188,8 @@
 #  file: path={{home}}/.vimrc src={{home}}/.vim/vimrc state=link
 
 - name: vim | Copy the vim code from repository
-  git: repo={{ shell_vim_color_repository }} dest={{ home }}/.vim accept_hostkey=yes update=no 
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled  
+  git: repo={{ shell_vim_color_repository }} dest={{ home }}/.vim accept_hostkey=yes update=no
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 
 - name: vim | Configure vim-configure.sh file
@@ -204,26 +204,28 @@
 
 - name: vim | Update  ~/.vim
   shell: '{{ shell_dir_tmp }}/vim-configure.sh'
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
   become: yes
-  
-- name: nano | Copy the nano code from repository
-  git: repo={{ shell_nano_color_repository }} dest={{ home }}/nanorc accept_hostkey=yes update=no
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
-  tags: nano
-#  become_user: "{{ shell_owner }}"
-  become: yes
 
-- name: nano | Configure nano-configure.sh file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
-  template:
-    src: nano-configure.sh.j2
-    dest: '{{ shell_dir_tmp }}/nano-configure.sh'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
-    mode: 0755
-  tags: nano
+#TODO Fix it, it is getting stuck
+#- name: nano | Copy the nano code from repository
+#  git: repo={{ shell_nano_color_repository }} dest={{ home }}/nanorc accept_hostkey=yes update=no
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
+#  tags: nano
+##  become_user: "{{ shell_owner }}"
+#  become: yes
+
+#TODO Fix it, it is getting stuck
+#- name: nano | Configure nano-configure.sh file
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
+#  template:
+#    src: nano-configure.sh.j2
+#    dest: '{{ shell_dir_tmp }}/nano-configure.sh'
+#    owner: '{{ shell_owner }}'
+##    group: '{{ shell_group }}'
+#    mode: 0755
+#  tags: nano
 
 - name: nano | Update  ~/.nanorc
   shell: '{{ shell_dir_tmp }}/nano-configure.sh'
@@ -231,7 +233,7 @@
     chdir: ~
     creates: .nanorc
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
-  become: yes  
+  become: yes
   tags: nano
 
 - name: inputrc | Configure inputrc-configure.sh file
@@ -260,7 +262,7 @@
     owner: '{{ shell_owner }}'
 #    group: '{{ shell_group }}'
     mode: 0755
-  become: yes      
+  become: yes
   tags: maven
 
 #- name: maven | Color maven command
@@ -278,13 +280,13 @@
   with_items:
    - locate
   become: yes
-  
+
 - name: locate | Update locate database
   command: updatedb
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: locate
   become: yes
-  
+
 - name: synapse | Install synapse search tools
   apt: pkg={{ item }} state=present update_cache=yes
   become: yes

@@ -1,25 +1,9 @@
 #!/bin/bash
 #set -xve
 
-#export bold="\033[01m"
-#export underline="\033[04m"
-#export blink="\033[05m"
+#WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-#export black="\033[30m"
-export red="\033[31m"
-export green="\033[32m"
-#export yellow="\033[33m"
-#export blue="\033[34m"
-export magenta="\033[35m"
-export cyan="\033[36m"
-#export ltgray="\033[37m"
-
-export NC="\033[0m"
-
-double_arrow='\xC2\xBB'
-export head_skull='\xE2\x98\xA0'
-export happy_smiley='\xE2\x98\xBA'
-export reverse_exclamation='\u00A1'
+source ${HOME}/step-0-color.sh
 
 case "$OSTYPE" in
   linux*)   SYSTEM=LINUX;;
@@ -82,7 +66,7 @@ if [ -n "${PYTHON_MAJOR_VERSION}" ]; then
   echo -e "${green} PYTHON_MAJOR_VERSION is defined ${happy_smiley} : ${PYTHON_MAJOR_VERSION} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : PYTHON_MAJOR_VERSION, use the default one ${NC}"
-  export PYTHON_MAJOR_VERSION=3.5
+  export PYTHON_MAJOR_VERSION=3.6
   echo -e "${magenta} PYTHON_MAJOR_VERSION : ${PYTHON_MAJOR_VERSION} ${NC}"
 fi
 
@@ -199,7 +183,7 @@ docker version || true
 ##sudo pip2.7 -H install -r requirements-current-2.7.txt
 #sudo -H pip2.7 freeze > requirements-2.7.txt
 
-echo -e "${green} Checking python 3.5 version ${NC}"
+echo -e "${green} Checking python 3 version ${NC}"
 
 python3 --version || true
 pip3 --version || true
