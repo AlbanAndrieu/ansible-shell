@@ -72,40 +72,40 @@
     - libexpat-dev
     - libncurses-dev
     - zlib1g-dev
-  become: yes
+  become: true
 
 #- name: shell | Install git prompt git-radar
 #  shell: brew install randomize-lines
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
 #  become_user: "{{ shell_owner }}"
-#  become: yes
+#  become: true
 
 - name: shell | Install git prompt git-radar
   git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
 #  shell: git clone {{ shell_git_radar_repository }} {{ home }}/.git-radar
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-  become: yes
+  become: true
 #  ignore_errors: true # when already exist
 
 #- name: shell | Install git prompt git-radar
 #  shell: brew install michaeldfallen/formula/git-radar </dev/null
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-#  #become: yes
+#  #become: true
 
 - name: shell | Install docker prompt
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
+  become: true
 
 - name: shell | Install docker wrapper
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash -O /etc/bash_completion.d/docker-machine-wrapper.bash
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
+  become: true
 
 - name: shell | Install docker bash
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash -O /etc/bash_completion.d/docker-machine.bash
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
+  become: true
 
 - name: shell | Install scons bash
   copy: src=scons_completion dest=/etc/bash_completion.d/scons_completion
@@ -136,7 +136,7 @@
 - name: git | Configure git meld diff
   copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_meld_enabled
-  become: yes
+  become: true
   tags: git
 
 - name: git | Configure git completion
@@ -206,7 +206,7 @@
   shell: '{{ shell_dir_tmp }}/vim-configure.sh'
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
-  become: yes
+  become: true
 
 #TODO Fix it, it is getting stuck
 #- name: nano | Copy the nano code from repository
@@ -214,7 +214,7 @@
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
 #  tags: nano
 ##  become_user: "{{ shell_owner }}"
-#  become: yes
+#  become: true
 
 #TODO Fix it, it is getting stuck
 #- name: nano | Configure nano-configure.sh file
@@ -233,7 +233,7 @@
     chdir: ~
     creates: .nanorc
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
-  become: yes
+  become: true
   tags: nano
 
 - name: inputrc | Configure inputrc-configure.sh file
@@ -262,7 +262,7 @@
     owner: '{{ shell_owner }}'
 #    group: '{{ shell_group }}'
     mode: 0755
-  become: yes
+  become: true
   tags: maven
 
 #- name: maven | Color maven command
@@ -279,17 +279,17 @@
   tags: package
   with_items:
    - locate
-  become: yes
+  become: true
 
 - name: locate | Update locate database
   command: updatedb
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: locate
-  become: yes
+  become: true
 
 - name: synapse | Install synapse search tools
   apt: pkg={{ item }} state=present update_cache=yes
-  become: yes
+  become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   tags: package
   with_items:
@@ -329,5 +329,5 @@
   tags: shell_setup
   changed_when: false
   ignore_errors: "{{ ansible_check_mode }}"
-  become: yes
+  become: true
 
