@@ -10,15 +10,15 @@
   stat:
     path: "{{ homebrew_check_path }}"
   register: "homebrew_check"
-  
+
 - name: brew | Fail if homebrew is not installed and install_homebrew_if_missing is false
   fail:
     msg: "Homebrew is missing...Install from http://brew.sh/"
   when: >
         not homebrew_check.stat.exists and
         not install_homebrew_if_missing
-        
-- name: brew | Installing homebrew to custom directory 
+
+- name: brew | Installing homebrew to custom directory
   git: repo={{ homebrew_repository }} dest="{{ home }}/.linuxbrew" accept_hostkey=yes update=no
 #  shell: "git clone {{ homebrew_repository }} {{ home }}/.linuxbrew"
   when: >
@@ -38,7 +38,7 @@
   stat:
     path: "{{ homebrew_check_path }}"
   register: "homebrew_check_path"
-    
+
 #test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
 #test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
@@ -47,19 +47,19 @@
     msg: "Homebrew bin is missing... {{ homebrew_check_path }}"
   when: >
         not homebrew_check_path.stat.exists
-          
+
 #- name: brew | Check Homebrew
 #  shell: "{{ homebrew_check_path }} list"
 #  when: >
 #        homebrew_check_path.stat.exists
 ##  become_user: "{{ shell_owner }}"
 #  become: yes
-  
+
 #export PATH=$HOME/homebrew/bin:$PATH
 - name: Change whole home folder ownership
-  file: path={{ homebrew_home_check_path }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }} 
-  become: true  
-  
+  file: path={{ homebrew_home_check_path }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }}
+  become: true
+
 - name: brew | Installing Homebrew Packages
   shell: "{{ homebrew_check_path }} install {{ item }}"
 #  homebrew:
@@ -72,7 +72,7 @@
 #  become_user: "{{ shell_owner }}"
   become: yes
   ignore_errors: true
-  
+
 #brew update && brew upgrade; brew cleanup
 - name: brew | Homebrew Cleaning
   shell: "{{ homebrew_check_path }} cleanup"
