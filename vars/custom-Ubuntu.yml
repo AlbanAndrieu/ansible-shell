@@ -3,6 +3,9 @@
 ####### ENV PARAMETERS
 ##################################
 
+homebrew_home_check_path: "{{ lookup('env','HOME') }}/.linuxbrew"
+homebrew_check_path: "{{ homebrew_home_check_path }}/bin/brew"
+
 DRIVE_PATH: ""
 DATABASE_ARCH: x86Linux
 #MAVEN_LOCAL_REPO_PATH: "{{DRIVE_PATH}}/repo"

@@ -17,12 +17,9 @@ export ltgray="\033[37m"
 export NC="\033[0m"
 
 if [ "$(uname -s)" == "Linux" ]; then
-	#double_arrow='\u00BB'
-	export double_arrow='\xC2\xBB'
-	#head_skull='\u2620'
-	export head_skull='\xE2\x98\xA0'
-	#happy_smiley='\u263A'
-	export happy_smiley='\xE2\x98\xBA'
+    export double_arrow='\xC2\xBB'
+    export head_skull='\xE2\x98\xA0'
+    export happy_smiley='\xE2\x98\xBA'
+    # shellcheck disable=SC2034
+    export reverse_exclamation='\u00A1'
 fi
-
-#exit 0
