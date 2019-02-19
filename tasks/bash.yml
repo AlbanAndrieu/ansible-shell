@@ -42,10 +42,13 @@
   copy: src=.bash_completion dest={{ home }}/.bash_completion
   tags: bash
 
-- name: shell | Configure .login file
-  copy: src=.login dest={{home}}/.login
+- name: shell | Configure pip_completion file
+  command: pip completion --bash >> ~/.bash_completion
   tags: bash
 
+- name: shell | Configure .login file
+  copy: src=.login dest={{ home }}/.login
+  tags: bash
 
 - name: shell | Install bash completion
   apt: pkg={{ item }} state=present
@@ -124,9 +127,14 @@
   tags: bash
 
 - name: shell | Create temporary directory
-  shell: mktemp -d
+  tempfile:
+    state: directory
+    suffix: staging
+#    path: "{{ lookup('env', 'HOME') }}"
   register: tempdir
-  tags: shell_setup
+  connection: local    
+  changed_when: false
+  become: true
 
 - name: shell | Copy the .novarc script for openstack
   template: src=.novarc.j2 dest={{ home }}/.novarc mode=0600 owner={{ shell_owner }}
