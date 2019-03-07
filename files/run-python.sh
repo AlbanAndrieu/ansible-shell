@@ -3,8 +3,10 @@
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
+# shellcheck source=./scripts/step-0-color.sh
 source ${WORKING_DIR}/step-0-color.sh
 
+# shellcheck source=./scripts/step-1-os.sh
 source ${WORKING_DIR}/step-1-os.sh
 
 if [ -n "${USE_SUDO}" ]; then
@@ -90,9 +92,9 @@ echo -e "${green} Fix permission rights ${NC}"
 echo -e "${green} chown -R jenkins:docker /opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g') ${NC}"
 
 echo -e "${cyan} =========== ${NC}"
-echo -e "${green} Install virtual env requirements : pip install -r ./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-#"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
-pip install -r "./roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+echo -e "${green} Install virtual env requirements : pip install -r ${WORKING_DIR}/../roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+#"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+pip install -r "${WORKING_DIR}/../roles/alban.andrieu.jenkins-slave/files/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
