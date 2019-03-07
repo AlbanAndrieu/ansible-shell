@@ -3,15 +3,17 @@
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-source ${WORKING_DIR}/step-0-color.sh
+# shellcheck source=./scripts/step-0-color.sh
+source "${WORKING_DIR}/step-0-color.sh"
 
-source ${WORKING_DIR}/step-1-os.sh
+# shellcheck source=./scripts/step-1-os.sh
+source "${WORKING_DIR}/step-1-os.sh"
 
 if [ -n "${TARGET_SLAVE}" ]; then
   echo -e "${green} TARGET_SLAVE is defined ${happy_smiley} : ${TARGET_SLAVE} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : TARGET_SLAVE, use the default one ${NC}"
-  export TARGET_SLAVE=albandri-test.misys.global.ad
+  export TARGET_SLAVE=albandri
   echo -e "${magenta} TARGET_SLAVE : ${TARGET_SLAVE} ${NC}"
 fi
 
@@ -179,7 +181,7 @@ echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible vault password. ${NC}"
 if [ -n "${ANSIBLE_VAULT_PASS}" ]; then
   echo -e "${green} ANSIBLE_VAULT_PASS is defined ${happy_smiley} : *** ${NC}"
-  echo "${ANSIBLE_VAULT_PASS}" > vault.passwd || true
+  echo "${ANSIBLE_VAULT_PASS}" > ${WORKING_DIR}/../vault.passwd || true
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : ANSIBLE_VAULT_PASS, use the default one ${NC}"
   exit 1
@@ -212,24 +214,24 @@ ${ANSIBLE_GALAXY_CMD} --version || true
 echo -e "${red} Configure workstation ${NC}"
 
 if [ -d "${WORKSPACE}/ansible" ]; then
-  cd "${WORKSPACE}/ansible"
+  cd "${WORKSPACE}/ansible" || return
   #Below workaround for ansible plugins in jenkins (vault not found)
   cp ansible.cfg vault.passwd ${WORKSPACE} || true
 fi
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Installing roles version ${NC}"
-echo -e "${magenta} ${ANSIBLE_GALAXY_CMD} install -r requirements.yml -p ./roles/ --ignore-errors --force ${NC}"
-${ANSIBLE_GALAXY_CMD} install -r requirements.yml -p ./roles/ --ignore-errors --force
+echo -e "${magenta} ${ANSIBLE_GALAXY_CMD} install -r ${WORKING_DIR}/../requirements.yml -p ${WORKING_DIR}/../roles/ --ignore-errors --force ${NC}"
+${ANSIBLE_GALAXY_CMD} install -r ${WORKING_DIR}/../requirements.yml -p ${WORKING_DIR}/../roles/ --ignore-errors --force
 
-export ANSIBLE_CONFIG=${WORKING_DIR}/ansible.cfg
+export ANSIBLE_CONFIG=${WORKING_DIR}/../ansible.cfg
 export PROFILE_TASKS_SORT_ORDER=none
 export PROFILE_TASKS_TASK_OUTPUT_LIMIT=all
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Display setup ${NC}"
-echo -e "${magenta} ${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i inventory/${ANSIBLE_INVENTORY} -vvvv ${NC}"
-${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i inventory/${ANSIBLE_INVENTORY} -vvvv
+echo -e "${magenta} ${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -vvvv ${NC}"
+${ANSIBLE_CMD} -m setup ${TARGET_SLAVE} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -vvvv
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
