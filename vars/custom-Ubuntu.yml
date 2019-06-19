@@ -13,9 +13,10 @@ MAVEN_LOCAL_REPO_PATH: "${env.WORKSPACE}/.m2/repository"
 
 #JAVA_HOME: /usr/lib/jvm/java-6-openjdk
 #NOKJAVA_HOME: /usr/lib/jvm/java-7-openjdk-i386
-JAVA_HOME: /usr/lib/jvm/default-java/
+#JAVA_HOME: /usr/lib/jvm/default-java/
 #JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
 #JAVA_HOME: "/usr/lib/jvm/java-9-oracle/"
+JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk-amd64/
 PYTHON_DIR: "${DRIVE_PATH}/usr/lib/python{{PYTHON_MAJOR_VERSION}}"
 PYTHON_EXE: "/usr/bin/python{{PYTHON_MAJOR_VERSION}}"
 SCONS_DIR: "/usr/lib/scons/SCons"

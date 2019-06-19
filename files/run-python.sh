@@ -36,6 +36,7 @@ if [ -n "${VIRTUALENV_PATH}" ]; then
   echo -e "${green} VIRTUALENV_PATH is defined ${happy_smiley} : ${VIRTUALENV_PATH} ${NC}"
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : VIRTUALENV_PATH, use the default one ${NC}"
+  # shellcheck disable=SC2001
   VIRTUALENV_PATH=/opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g')
   export VIRTUALENV_PATH
   echo -e "${magenta} VIRTUALENV_PATH : ${VIRTUALENV_PATH} ${NC}"
@@ -66,6 +67,7 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/activate ${NC}"
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
 echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
 echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
+# shellcheck disable=SC1090
 source "${VIRTUALENV_PATH}/bin/activate" || exit 2
 
 #export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"
@@ -89,6 +91,7 @@ echo -e "${green} brew install cairo libxml2 libffi ${NC}"
 #pip3 install CairoSVG==2.0.3
 
 echo -e "${green} Fix permission rights ${NC}"
+# shellcheck disable=SC2001
 echo -e "${green} chown -R jenkins:docker /opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g') ${NC}"
 
 echo -e "${cyan} =========== ${NC}"
