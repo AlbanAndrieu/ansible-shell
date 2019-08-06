@@ -26,6 +26,7 @@ if [ "${NO_COLOR}" == "false" ]; then
         export happy_smiley='\xE2\x98\xBA'
         # shellcheck disable=SC2034
         export reverse_exclamation='\u00A1'
+        export circle='\xD2\x89'
     fi
 
 fi
