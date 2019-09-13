@@ -23,7 +23,7 @@ SCONS_DIR: "/usr/lib/scons/SCons"
 #SCONS_PATH: "${SCONS_DIR}/script"
 SCONS_PATH: "{{SCONS_DIR}}/Script"
 SCONS_EXE: "/usr/bin/scons"
-#SCONS_ALIAS: "${SCONS_DIR}/scons/scons.py"
+SCONS_ALIAS: "/usr/bin/python2.7 /opt/ansible/env/bin/scons" # for virtualenv
 CMAKE_HOME: "/usr/share/cmake-{{CMAKE_MAJOR_VERSION}}"
 #M2_HOME: "/usr/share/maven"
 #M2_HOME: "/usr/local/apache-maven-{{MAVEN_MAJOR_VERSION}}"
