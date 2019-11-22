@@ -3,13 +3,14 @@
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-# shellcheck source=./scripts/step-0-color.sh
-source "${WORKING_DIR}/step-0-color.sh"
+# source only if terminal supports color, otherwise use unset color vars
+# shellcheck source=/dev/null
+tput colors && source "${WORKING_DIR}/step-0-color.sh"
 
-# shellcheck source=./scripts/step-1-os.sh
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/step-1-os.sh"
 
-# shellcheck source=./scripts/ansible-env.sh
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/ansible-env.sh"
 
 echo -e "${cyan} =========== ${NC}"
@@ -51,7 +52,7 @@ ansible --version | grep python || true
 ${ANSIBLE_CMD} --version || true
 ${ANSIBLE_GALAXY_CMD} --version || true
 
-# shellcheck source=./scripts/run-ansible-setup.sh
+# shellcheck source=/dev/null
 source "${WORKING_DIR}/run-ansible-setup.sh"
 
 #exit 0

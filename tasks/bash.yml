@@ -38,23 +38,37 @@
 #  copy: src=.bash_aliases dest={{ home }}/.bash_aliases
 #  tags: bash
 
-- name: shell | Configure .bash_completion file
-  copy: src=.bash_completion dest={{ home }}/.bash_completion
-  tags: bash
-
-- name: shell | Configure pip_completion file
-  command: pip completion --bash >> ~/.bash_completion
-  tags: bash
-
-- name: shell | Configure .login file
-  copy: src=.login dest={{ home }}/.login
-  tags: bash
-
 - name: shell | Install bash completion
   apt: pkg={{ item }} state=present
   when: ansible_distribution == 'Debian'
   with_items:
     - bash-completion
+
+- name: shell | Configure .bash_completion file
+  copy: src=.bash_completion dest={{ home }}/.bash_completion
+  tags: bash
+
+- name: shell | Configure pip completion file
+  command: pip completion --bash >> ~/.bash_completion
+  tags: bash
+
+- name: shell | Configure kubernetes completion file
+  command: kubectl completion bash >/etc/bash_completion.d/kubectl
+  become: true
+  tags: bash
+
+- name: shell | Fix kubernetes ownership $HOME/.kube/
+  file: path={{ shell_owner_home }}/.kube/ owner={{ shell_owner }} group={{ shell_group }} recurse=yes
+#  become_user: "{{ shell_owner }}"
+  become: true
+
+#TODO
+#sudo chown -R albandri:docker .dbus/
+#chmod 700 .config/
+
+- name: shell | Configure .login file
+  copy: src=.login dest={{ home }}/.login
+  tags: bash
 
 - import_tasks: brew.yml
   when: shell_brew_enabled
@@ -132,7 +146,7 @@
     suffix: staging
 #    path: "{{ lookup('env', 'HOME') }}"
   register: tempdir
-  connection: local    
+  connection: local
   changed_when: false
   become: true
 
