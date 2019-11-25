@@ -20,7 +20,7 @@ galaxy_info:
         - trusty
     - name: Debian
       versions:
-        - all    
+        - all
         - wheezy
         - jessie
   galaxy_tags:

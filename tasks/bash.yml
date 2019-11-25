@@ -130,13 +130,13 @@
 
 #cygwin
 - name: shell | Configure .bashrc file
-  template: src=.bashrc-cygwin.j2 dest={{home}}/.bashrc
+  template: src=.bashrc-cygwin.j2 dest={{ home }}/.bashrc
   when: shell_cygwin_enabled
   tags: configure
 #  tags: cygwin
 
 - name: shell | Configure .bashrc file
-  template: src=.bashrc.j2 dest={{home}}/.bashrc
+  template: src=.bashrc.j2 dest={{ home }}/.bashrc
   when: shell_cygwin_enabled == false
   tags: bash
 
@@ -204,10 +204,10 @@
 #    - vim-command-t
 #
 #- name: Clone dotvim repo
-#  git: dest={{home}}/.vim repo=git@github.com:sheldonh/dotvim.git update=no
+#  git: dest={{ home }}/.vim repo=git@github.com:sheldonh/dotvim.git update=no
 #
 #- name: Link dotvim config to vimrc
-#  file: path={{home}}/.vimrc src={{home}}/.vim/vimrc state=link
+#  file: path={{ home }}/.vimrc src={{ home }}/.vim/vimrc state=link
 
 - name: vim | Copy the vim code from repository
   git: repo={{ shell_vim_color_repository }} dest={{ home }}/.vim accept_hostkey=yes update=no
