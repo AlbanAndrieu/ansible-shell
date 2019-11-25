@@ -14,14 +14,14 @@
   when: home_present.stat.isdir is defined and home_present.stat.isdir == true
 
 - name: shell | Configure log4j.lcf file
-  template: src=log4j.lcf.j2 dest={{home}}/log4j.lcf
+  template: src=log4j.lcf.j2 dest={{ home }}/log4j.lcf
   ignore_errors: true
   when: shell_log4j_enabled
   tags: log4j
 
 - name: shell | Configure log4j.properties file
-  template: src=log4j.properties.j2 dest={{home}}/log4j.properties
-  ignore_errors: true  
+  template: src=log4j.properties.j2 dest={{ home }}/log4j.properties
+  ignore_errors: true
   when: shell_log4j_enabled
   tags: log4j
 
@@ -51,7 +51,7 @@
   tags: rlogin
 
 - name: shell | Configure rhosts (rlogin) file
-  template: src=.rhosts.j2 dest={{home}}/.rhosts
+  template: src=.rhosts.j2 dest={{ home }}/.rhosts
   when: shell_rlogin_enabled
   tags: rlogin
 

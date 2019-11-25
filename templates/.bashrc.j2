@@ -81,6 +81,7 @@ if [ -d "${HOME}/.linuxbrew/bin" -o -d "${HOME}/.git-radar" ]; then
 else
     PS1=$PS1'$(__git_ps1 "(%s)")'
 fi
+
 if [ "$color_prompt" = yes ]; then
 #    PS1="$PS1 \$ \[\e[1;37m\]"
      PS1="$PS1 $(__docker_machine_ps1 " [%s]")\$ \[\e[1;37m\]"
