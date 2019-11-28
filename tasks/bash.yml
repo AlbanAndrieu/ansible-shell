@@ -91,23 +91,28 @@
     - zlib1g-dev
   become: true
 
-#- name: shell | Install git prompt git-radar
-#  shell: brew install randomize-lines
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-#  become_user: "{{ shell_owner }}"
-#  become: true
-
+- name: shell | Install git prompt git-radar
+  homebrew:
+    name: ['randomize-lines']
+    state: present
+    update_homebrew: yes  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+  become_user: "{{ shell_owner }}"
+  become: true
+    
 - name: shell | Install git prompt git-radar
   git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
-#  shell: git clone {{ shell_git_radar_repository }} {{ home }}/.git-radar
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: true
-#  ignore_errors: true # when already exist
 
-#- name: shell | Install git prompt git-radar
-#  shell: brew install michaeldfallen/formula/git-radar </dev/null
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-#  #become: true
+- name: shell | Install git prompt git-radar
+  homebrew:
+    name: ['michaeldfallen/formula/git-radar']
+    state: present
+    update_homebrew: yes  
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+  become_user: "{{ shell_owner }}"
+  become: true
 
 - name: shell | Install docker prompt
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
