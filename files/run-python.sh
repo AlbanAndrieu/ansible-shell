@@ -71,13 +71,13 @@ echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
 if [ -f ${VIRTUALENV_PATH}/bin/activate ]; then
   # shellcheck disable=SC1090
   source "${VIRTUALENV_PATH}/bin/activate" || exit 2
-  
+
   #export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"
   export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
   echo -e "${cyan} PATH : ${PATH} ${NC}"
   export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
   echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
-else 
+else
   echo -e "${red} Please install virtualenv first ${NC}"
 fi
 
@@ -114,7 +114,7 @@ if [ -f ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_M
   else
     echo -e "${green} The python requirements installation completed successfully. ${NC}"
   fi
-else 
+else
   echo -e "${red} Please get requirements-current-${PYTHON_MAJOR_VERSION}.txt first ${NC}"
 fi
 
@@ -165,21 +165,23 @@ echo -e "${green} Checking python ${PYTHON_MAJOR_VERSION} version ${NC}"
 
 python3 --version || true
 pip3 --version || true
-echo -e "${magenta} ${PYTHON_CMD} --version ${NC}"
-${PYTHON_CMD} --version || true
-if [ -f ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} ]; then
-  echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} --version ${NC}"
-  "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" --version || true
-  
-  "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" list --format=freeze | grep docker || true
-  
-  echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} freeze > requirements-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-  "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze > requirements-${PYTHON_MAJOR_VERSION}.txt
-else 
-  echo -e "${red} Please install VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} first ${NC}"
-fi
+if [ -n "${PYTHON_CMD}" ]; then
+  echo -e "${magenta} ${PYTHON_CMD} --version ${NC}"
+  ${PYTHON_CMD} --version || true
+  if [ -f ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} ]; then
+    echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} --version ${NC}"
+    "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" --version || true
 
-echo -e "${magenta} ${PYTHON_CMD} -m ara.setup.path ${NC}"
-${PYTHON_CMD} -m ara.setup.path || true
-${PYTHON_CMD} -m ara.setup.action_plugins || true
-${PYTHON_CMD} -m ara.setup.callback_plugins || true
+    "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" list --format=freeze | grep docker || true
+
+    echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} freeze > requirements-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+    #"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze > requirements-${PYTHON_MAJOR_VERSION}.txt
+  else
+    echo -e "${red} Please install VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} first ${NC}"
+  fi
+
+  echo -e "${magenta} ${PYTHON_CMD} -m ara.setup.path ${NC}"
+  ${PYTHON_CMD} -m ara.setup.path || true
+  ${PYTHON_CMD} -m ara.setup.action_plugins || true
+  ${PYTHON_CMD} -m ara.setup.callback_plugins || true
+fi
