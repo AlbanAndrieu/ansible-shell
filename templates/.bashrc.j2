@@ -84,8 +84,8 @@ else
 fi
 
 if [ "$color_prompt" = yes ]; then
-#    PS1="$PS1 \$ \[\e[1;37m\]"
-     PS1="$PS1 $(__docker_machine_ps1 " [%s]")\$ \[\e[1;37m\]"
+    PS1="$PS1 \$ \[\e[1;37m\]"
+#     PS1="$PS1 $(__docker_machine_ps1 " [%s]")\$ \[\e[1;37m\]"
 fi
 unset color_prompt force_color_prompt
 
@@ -277,6 +277,7 @@ export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 # added by travis gem
 [ -f ${HOME}/.travis/travis.sh ] && source ${HOME}/.travis/travis.sh
 
-#alias apb='docker run --rm --privileged -v $PWD:/mnt -v $HOME/.kube:/.kube -v /var/run/docker.sock:/var/run/docker.sock -u $UID docker.io/ansibleplaybookbundle/apb-tools'
+#export PATH=$PATH:~/.fabric8/bin
+#export PATH=$PATH:${HOME}/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/bin/
 
 unset ARCH
