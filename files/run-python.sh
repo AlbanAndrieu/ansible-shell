@@ -4,11 +4,11 @@
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 # source only if terminal supports color, otherwise use unset color vars
-# shellcheck source=/dev/null
-tput colors && source "${WORKING_DIR}/step-0-color.sh"
+# shellcheck source=scripts/step-0-color.sh
+source "${WORKING_DIR}/step-0-color.sh"
 
 # shellcheck source=/dev/null
-source ${WORKING_DIR}/step-1-os.sh
+source "${WORKING_DIR}/step-1-os.sh"
 
 if [ -n "${USE_SUDO}" ]; then
   echo -e "${green} USE_SUDO is defined ${happy_smiley} : ${USE_SUDO} ${NC}"
@@ -68,7 +68,7 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/bin/activate ${NC}"
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
 echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
 echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
-if [ -f ${VIRTUALENV_PATH}/bin/activate ]; then
+if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
   # shellcheck disable=SC1090
   source "${VIRTUALENV_PATH}/bin/activate" || exit 2
 
@@ -83,6 +83,7 @@ fi
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Display virtual env ${NC}"
+virtualenv --version || true
 pip -V || true
 pip freeze | grep ansible || true
 
@@ -99,11 +100,10 @@ echo -e "${green} Fix permission rights ${NC}"
 # shellcheck disable=SC2001
 echo -e "${green} chown -R jenkins:docker /opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g') ${NC}"
 
-if [ -f ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt ]; then
+if [ -f "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt" ]; then
   echo -e "${cyan} =========== ${NC}"
-  echo -e "${green} Install virtual env requirements : pip install -r ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-  #"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
-  pip install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+  echo -e "${green} Install virtual env requirements : pip${PYTHON_MAJOR_VERSION} install -r ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+  "pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
   RC=$?
   if [ ${RC} -ne 0 ]; then
     echo ""
@@ -126,15 +126,14 @@ RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
   echo -e "${red} ${head_skull} Sorry, docker-compose failed ${NC}"
-  "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze | grep docker
-
-  "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" show docker-py
+  "pip${PYTHON_MAJOR_VERSION}" freeze | grep docker
+  "pip${PYTHON_MAJOR_VERSION}" show docker-py
   RC=$?
   if [ ${RC} -ne 1 ]; then
     echo -e "${red} ${head_skull} Please remove docker-py ${NC}"
   fi
-  echo -e "${red} ${head_skull} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
-  echo -e "${red} ${head_skull} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.12.0 ${NC}"
+  echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
+  echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.25.3 ${NC}"
   exit 1
 else
   echo -e "${green} The docker-compose check completed successfully. ${NC}"
@@ -144,8 +143,7 @@ echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Checking python version ${NC}"
 
 python --version || true
-pip --version || true
-virtualenv --version || true
+pip -V || true
 
 #vagrant --version
 docker version || true
@@ -163,19 +161,23 @@ docker version || true
 
 echo -e "${green} Checking python ${PYTHON_MAJOR_VERSION} version ${NC}"
 
+"python${PYTHON_MAJOR_VERSION}" --version || true
+"pip${PYTHON_MAJOR_VERSION}" -V || true
+
 python3 --version || true
 pip3 --version || true
+
 if [ -n "${PYTHON_CMD}" ]; then
   echo -e "${magenta} ${PYTHON_CMD} --version ${NC}"
   ${PYTHON_CMD} --version || true
-  if [ -f ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} ]; then
-    echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} --version ${NC}"
-    "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" --version || true
+  if [ -f "pip${PYTHON_MAJOR_VERSION}" ]; then
+    echo -e "${magenta} pip${PYTHON_MAJOR_VERSION} --version ${NC}"
+    "pip${PYTHON_MAJOR_VERSION}" --version || true
 
-    "${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" list --format=freeze | grep docker || true
+    "pip${PYTHON_MAJOR_VERSION}" list --format=freeze | grep docker || true
 
-    echo -e "${magenta} ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} freeze > requirements-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-    #"${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION}" freeze > requirements-${PYTHON_MAJOR_VERSION}.txt
+    echo -e "${magenta} pip${PYTHON_MAJOR_VERSION} freeze > requirements-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+    #"pip${PYTHON_MAJOR_VERSION}" freeze > requirements-${PYTHON_MAJOR_VERSION}.txt
   else
     echo -e "${red} Please install VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} first ${NC}"
   fi
