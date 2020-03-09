@@ -53,7 +53,7 @@
   tags: bash
 
 - name: shell | Configure kubernetes completion file
-  command: kubectl completion bash >/etc/bash_completion.d/kubectl
+  shell: kubectl completion bash > /etc/bash_completion.d/kubectl
   become: true
   tags: bash
 
@@ -97,8 +97,9 @@
     state: present
     update_homebrew: yes  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-  become_user: "{{ shell_owner }}"
   become: true
+  become_user: "{{ shell_owner }}"
+  ignore_errors: true
     
 - name: shell | Install git prompt git-radar
   git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
@@ -111,8 +112,9 @@
     state: present
     update_homebrew: yes  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-  become_user: "{{ shell_owner }}"
   become: true
+  become_user: "{{ shell_owner }}"
+  ignore_errors: true
 
 - name: shell | Install docker prompt
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
@@ -220,13 +222,13 @@
   tags: vim
 
 - name: vim | Configure vim-configure.sh file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   template:
     src: vim-configure.sh.j2
     dest: '{{ shell_dir_tmp }}/vim-configure.sh'
     owner: '{{ shell_owner }}'
 #    group: '{{ shell_group }}'
     mode: 0755
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled    
   tags: vim
 
 - name: vim | Update  ~/.vim
@@ -235,24 +237,22 @@
   tags: vim
   become: true
 
-#TODO Fix it, it is getting stuck
-#- name: nano | Copy the nano code from repository
-#  git: repo={{ shell_nano_color_repository }} dest={{ home }}/nanorc accept_hostkey=yes update=no
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
-#  tags: nano
-##  become_user: "{{ shell_owner }}"
-#  become: true
+- name: nano | Copy the nano code from repository
+  git: repo={{ shell_nano_color_repository }} dest={{ home }}/nanorc accept_hostkey=yes update=no
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
+  tags: nano
+#  become_user: "{{ shell_owner }}"
+  become: true
 
-#TODO Fix it, it is getting stuck
-#- name: nano | Configure nano-configure.sh file
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
-#  template:
-#    src: nano-configure.sh.j2
-#    dest: '{{ shell_dir_tmp }}/nano-configure.sh'
-#    owner: '{{ shell_owner }}'
-##    group: '{{ shell_group }}'
-#    mode: 0755
-#  tags: nano
+- name: nano | Configure nano-configure.sh file
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
+  template:
+    src: nano-configure.sh.j2
+    dest: '{{ shell_dir_tmp }}/nano-configure.sh'
+    owner: '{{ shell_owner }}'
+#    group: '{{ shell_group }}'
+    mode: 0755
+  tags: nano
 
 - name: nano | Update  ~/.nanorc
   shell: '{{ shell_dir_tmp }}/nano-configure.sh'

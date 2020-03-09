@@ -89,7 +89,7 @@
 
 - name: brew | Install brew requirements
   homebrew:
-    name: ['cairo', 'libxml2', 'libffi']
+    name: ['cairo', 'libxml2', 'libffi', 'randomize-lines']
     state: present
     update_homebrew: yes
   become: true
