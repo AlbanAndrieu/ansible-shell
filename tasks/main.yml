@@ -39,7 +39,8 @@
   tags: newrelic
 
 - name: Change whole home folder ownership
-  file: path={{ home }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }} 
+  file: path={{ home }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }}
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: true  
+  become: true
   ignore_errors: true
+

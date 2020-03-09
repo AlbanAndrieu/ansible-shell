@@ -5,7 +5,7 @@ WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 # source only if terminal supports color, otherwise use unset color vars
 # shellcheck source=/dev/null
-tput colors && source "${WORKING_DIR}/step-0-color.sh"
+source "${WORKING_DIR}/step-0-color.sh"
 
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/step-1-os.sh"
@@ -21,10 +21,10 @@ if [ -c "${WORKING_DIR}/../vault.passwd" ]; then
 else
   if [ -n "${ANSIBLE_VAULT_PASS}" ]; then
     echo -e "${green} ANSIBLE_VAULT_PASS is defined ${happy_smiley} : *** ${NC}"
-    echo "${ANSIBLE_VAULT_PASS}" > ${WORKING_DIR}/../vault.passwd || true
+    #echo "${ANSIBLE_VAULT_PASS}" > ${WORKING_DIR}/../vault.passwd || true
   else
     echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : ANSIBLE_VAULT_PASS, use the default one ${NC}"
-    exit 1
+    #exit 1
   fi
 fi
 
