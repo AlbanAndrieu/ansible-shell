@@ -17,6 +17,10 @@
   copy: src=step-0-color.sh dest={{ home }}/step-0-color.sh mode=755
   tags: bash
 
+- name: shell | Configure step-1-os.sh file
+  copy: src=step-1-os.sh dest={{ home }}/step-1-os.sh mode=755
+  tags: bash
+
 - name: shell | Configure run-python.sh file
   copy: src=run-python.sh dest={{ home }}/run-python.sh mode=755
   tags: bash
