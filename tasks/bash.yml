@@ -25,8 +25,16 @@
   copy: src=run-python.sh dest={{ home }}/run-python.sh mode=755
   tags: bash
 
+- name: shell | Configure run-ansible-setup.sh.sh file
+  copy: src=run-ansible-setup.sh.sh dest={{ home }}/run-ansible-setup.sh.sh mode=755
+  tags: bash
+
 - name: shell | Configure run-ansible.sh file
   copy: src=run-ansible.sh dest={{ home }}/run-ansible.sh mode=755
+  tags: bash
+  
+- name: shell | Configure ansible-env.sh file
+  copy: src=ansible-env.sh dest={{ home }}/ansible-env.sh mode=755
   tags: bash
 
 - name: shell | Configure dev.env.sh file
@@ -99,12 +107,12 @@
   homebrew:
     name: ['randomize-lines']
     state: present
-    update_homebrew: yes  
+    update_homebrew: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: true
   become_user: "{{ shell_owner }}"
   ignore_errors: true
-    
+
 - name: shell | Install git prompt git-radar
   git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
@@ -114,7 +122,7 @@
   homebrew:
     name: ['michaeldfallen/formula/git-radar']
     state: present
-    update_homebrew: yes  
+    update_homebrew: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: true
   become_user: "{{ shell_owner }}"
@@ -232,7 +240,7 @@
     owner: '{{ shell_owner }}'
 #    group: '{{ shell_group }}'
     mode: 0755
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled    
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 
 - name: vim | Update  ~/.vim
