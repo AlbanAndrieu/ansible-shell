@@ -217,40 +217,6 @@ export WORKSPACE_ENV={{WORKSPACE_ENV}}
 export PROJECT_THIRDPARTY_PATH={{PROJECT_THIRDPARTY_PATH}}
 echo PROJECT_THIRDPARTY_PATH : ${PROJECT_THIRDPARTY_PATH}
 
-if [ "${ARCH}" = cygwin ]
-then
-  export CORBA_ROOT=${PROJECT_THIRDPARTY_PATH}/tao
-  export ACE_ROOT=${CORBA_ROOT}/ACE_wrappers
-
-  echo ${ACE_ROOT}
-
-  TAO_ROOT=${ACE_ROOT}/TAO
-  export TAO_ROOT
-
-  echo ${TAO_ROOT}
-
-  MPC_ROOT=${ACE_ROOT}/MPC
-  export MPC_ROOT
-
-  echo ${MPC_ROOT}
-
-  CIAO_ROOT=${TAO_ROOT}/CIAO
-  export CIAO_ROOT
-  DANCE_ROOT=${CIAO_ROOT}/DANCE
-  export DANCE_ROOT
-
-  DDS_ROOT=${CIO_ROOT}/connectors/dds4ccm
-  export DDS_ROOT
-
-  echo "make and make static_libs=1 in"
-  echo "cd ${ACE_ROOT}/ace"
-  echo "cd ${ACE_ROOT}/apps/gperf"
-  echo "cd ${TAO_ROOT}/tao"
-  echo "cd ${TAO_ROOT}/TAO_IDL"
-  echo "cd ${TAO_ROOT}/orbsvcs/orbsvcs"
-
-fi
-
 #If you want to use new GCC by default, make sure that your PATH contains /usr/local/bin before /bin and /usr/bin.
 #ADD ${HOME}/.git-radar/ for when we are inside docker conainters
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games::${HOME}/.git-radar/

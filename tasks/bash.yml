@@ -37,6 +37,10 @@
   copy: src=ansible-env.sh dest={{ home }}/ansible-env.sh mode=755
   tags: bash
 
+- name: shell | Configure docker-env.sh file
+  copy: src=docker-env.sh dest={{ home }}/docker-env.sh mode=755
+  tags: bash
+  
 - name: shell | Configure dev.env.sh file
   template: src=dev.env.sh.j2 dest={{ shell_env_directory }}/dev.env.sh
   tags: bash
@@ -145,7 +149,7 @@
 
 - name: shell | Install scons bash
   copy: src=scons_completion dest=/etc/bash_completion.d/scons_completion
-  when: ansible_distribution == 'Debian'
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 #cygwin
 - name: shell | Configure .bashrc file
@@ -204,7 +208,7 @@
 #- git_config: name=user.email scope=global value="{{ shell_git[0].shell_git_email }}"
 #- git_config: name=user.name scope=global value="{{ shell_git[0].shell_git_name }}"
 #- git_config: name=http.sslVerify scope=global value="{{ shell_git[0].shell_git_ssl }}"
-- git_config: name=maven-scm.maildomain scope=global value="nabla.mobi"
+- git_config: name=maven-scm.maildomain scope=global value="albandrieu.com"
 - git_config: name=maven-scm.forceUsername scope=global value="true"
 
 - git_config: name=alias.ci scope=global value=commit
@@ -286,7 +290,7 @@
   tags: history
 
 - name: inputrc | Update  ~/.inputrc
-  shell: '{{ shell_dir_tmp }}/inputrc-configure.sh > .inputrc'
+  shell: '{{ shell_dir_tmp }}/inputrc-configure.sh > {{ home }}/.inputrc'
   args:
     chdir: ~
     creates: .inputrc
@@ -343,10 +347,10 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   tags: synapse
 
-- name: synapse | Copy duckduckgo startpage search into place
-  copy: src=duckduckgo.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
-  tags: synapse
+#- name: synapse | Copy duckduckgo startpage search into place
+#  copy: src=duckduckgo.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
+#  tags: synapse
 
 - name: synapse | Configure synapse config.json file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
