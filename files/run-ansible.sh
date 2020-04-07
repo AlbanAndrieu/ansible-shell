@@ -11,7 +11,7 @@ source "${WORKING_DIR}/step-0-color.sh"
 source "${WORKING_DIR}/step-1-os.sh"
 
 # shellcheck source=/dev/null
-source "${WORKING_DIR}/ansible-env.sh"
+source "${HOME}/ansible-env.sh"
 
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible vault password. ${NC}"

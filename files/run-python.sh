@@ -29,7 +29,7 @@ if [ -n "${PYTHON_MAJOR_VERSION}" ]; then
   unset PYTHON_CMD
 else
   echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : PYTHON_MAJOR_VERSION, use the default one ${NC}"
-  export PYTHON_MAJOR_VERSION=3.7
+  export PYTHON_MAJOR_VERSION=3.8
   echo -e "${magenta} PYTHON_MAJOR_VERSION : ${PYTHON_MAJOR_VERSION} ${NC}"
 fi
 
@@ -66,14 +66,24 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/bin/activate ${NC}"
 #source /opt/rh/python27/enable
 
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
-echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
+echo -e "${green} virtualenv ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
 echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
 if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
-  # shellcheck disable=SC1090
-  source "${VIRTUALENV_PATH}/bin/activate" || exit 2
 
-  #export PYTHONPATH="/usr/local/lib/python${PYTHON_MAJOR_VERSION}/dist-packages/"
-  export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
+  #PYTHON_ENV=$(python${PYTHON_MAJOR_VERSION} -c "import sys; sys.stdout.write('1') if hasattr(sys, 'real_prefix') else sys.stdout.write('0')")
+  #echo -e "${cyan} PYTHON_ENV : ${PYTHON_ENV} ${NC}"
+
+  VIRTUALENV_ENABLE=$(pip3 -V | grep "/opt/ansible/env")
+  echo -e "${cyan} VIRTUALENV_ENABLE : ${VIRTUALENV_ENABLE} ${NC}"
+
+  if [ -n "${VIRTUALENV_ENABLE}" ]; then
+    echo -e "${green} VIRTUALENV_ENABLE is defined ${happy_smiley} : ${VIRTUALENV_ENABLE}, we are already in a known virtualenv ${NC}"
+  else
+    # shellcheck disable=SC1090
+    source "${VIRTUALENV_PATH}/bin/activate" || exit 2
+  fi
+
+  #export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
   echo -e "${cyan} PATH : ${PATH} ${NC}"
   export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
   echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
@@ -134,7 +144,7 @@ if [ ${RC} -ne 0 ]; then
   fi
   echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
   echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.25.3 ${NC}"
-  exit 1
+  #exit 1
 else
   echo -e "${green} The docker-compose check completed successfully. ${NC}"
 fi
