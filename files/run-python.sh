@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -xve
+#set -xv
 
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
@@ -43,22 +43,6 @@ else
   echo -e "${magenta} VIRTUALENV_PATH : ${VIRTUALENV_PATH} ${NC}"
 fi
 
-if [ -n "${PYTHON_CMD}" ]; then
-  echo -e "${green} PYTHON_CMD is defined ${happy_smiley} : ${PYTHON_CMD} ${NC}"
-else
-  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : PYTHON_CMD, use the default one ${NC}"
-  #/usr/local/bin/python3.5 for RedHat
-  #/usr/bin/python3.5 for Ubuntu
-  if [ "${OS}" == "Red Hat Enterprise Linux Server" ]; then
-    PYTHON_CMD="/usr/local/bin/python${PYTHON_MAJOR_VERSION}"
-  else
-    PYTHON_CMD="${VIRTUALENV_PATH}/bin/python${PYTHON_MAJOR_VERSION}"
-    #PYTHON_CMD="/usr/bin/python3.5"
-  fi
-  export PYTHON_CMD
-  echo -e "${magenta} PYTHON_CMD : ${PYTHON_CMD} ${NC}"
-fi
-
 echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/bin/activate ${NC}"
 #echo "Switch to python 2.7 and ansible 2.1.1"
 #scl enable python27 bash
@@ -73,17 +57,17 @@ if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
   #PYTHON_ENV=$(python${PYTHON_MAJOR_VERSION} -c "import sys; sys.stdout.write('1') if hasattr(sys, 'real_prefix') else sys.stdout.write('0')")
   #echo -e "${cyan} PYTHON_ENV : ${PYTHON_ENV} ${NC}"
 
-  VIRTUALENV_ENABLE=$(pip3 -V | grep "/opt/ansible/env")
-  echo -e "${cyan} VIRTUALENV_ENABLE : ${VIRTUALENV_ENABLE} ${NC}"
+  #VIRTUALENV_ENABLE="$(pip${PYTHON_MAJOR_VERSION} -V | true | grep "/opt/ansible/env")"
+  #echo -e "${cyan} VIRTUALENV_ENABLE : ${VIRTUALENV_ENABLE} ${NC}"
 
-  if [ -n "${VIRTUALENV_ENABLE}" ]; then
-    echo -e "${green} VIRTUALENV_ENABLE is defined ${happy_smiley} : ${VIRTUALENV_ENABLE}, we are already in a known virtualenv ${NC}"
-  else
-    # shellcheck disable=SC1090
-    source "${VIRTUALENV_PATH}/bin/activate" || exit 2
-  fi
+  #if [ -n "${VIRTUALENV_ENABLE}" ]; then
+  #  echo -e "${green} VIRTUALENV_ENABLE is defined ${happy_smiley} : ${VIRTUALENV_ENABLE}, we are already in a known virtualenv ${NC}"
+  #else
+  #  # shellcheck disable=SC1090
+  #  source "${VIRTUALENV_PATH}/bin/activate" || exit 2
+  #fi
 
-  #export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
+  export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
   echo -e "${cyan} PATH : ${PATH} ${NC}"
   export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
   echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
@@ -144,7 +128,7 @@ if [ ${RC} -ne 0 ]; then
   fi
   echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
   echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.25.3 ${NC}"
-  #exit 1
+  exit 1
 else
   echo -e "${green} The docker-compose check completed successfully. ${NC}"
 fi
@@ -178,6 +162,8 @@ python3 --version || true
 pip3 --version || true
 
 if [ -n "${PYTHON_CMD}" ]; then
+  echo -e "${green} PYTHON_CMD is defined ${happy_smiley} : ${PYTHON_CMD} ${NC}"
+
   echo -e "${magenta} ${PYTHON_CMD} --version ${NC}"
   ${PYTHON_CMD} --version || true
   if [ -f "pip${PYTHON_MAJOR_VERSION}" ]; then
@@ -196,4 +182,21 @@ if [ -n "${PYTHON_CMD}" ]; then
   ${PYTHON_CMD} -m ara.setup.path || true
   ${PYTHON_CMD} -m ara.setup.action_plugins || true
   ${PYTHON_CMD} -m ara.setup.callback_plugins || true
+else
+  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : PYTHON_CMD, use the default one ${NC}"
+  #/usr/local/bin/python3.5 for RedHat
+  #/usr/bin/python3.5 for Ubuntu
+  PYTHON_CMD="python${PYTHON_MAJOR_VERSION}"
+  if [[ -z $VIRTUAL_ENV ]]; then
+    if [ "${OS}" == "Ubuntu" ]; then
+      PYTHON_CMD="/usr/bin/python${PYTHON_MAJOR_VERSION}"
+    fi
+    if [ "${OS}" == "Red Hat Enterprise Linux Server" ]; then
+      PYTHON_CMD="/usr/local/bin/python${PYTHON_MAJOR_VERSION}"
+    fi
+  #else
+  #  PYTHON_CMD="${VIRTUALENV_PATH}/bin/python${PYTHON_MAJOR_VERSION}"
+  fi
+  export PYTHON_CMD
+  echo -e "${magenta} PYTHON_CMD : ${PYTHON_CMD} ${NC}"
 fi

@@ -38,7 +38,8 @@ CONKY_HOME: "{{USER_PATH}}/.conky"
 
 #Overrided
 #JBOSS_VERSION: "4.2.2.GA"
-JBOSS_HOME: "${DRIVE_PATH}/workspace/jboss-{{JBOSS_VERSION}}"
+#JBOSS_HOME: "${DRIVE_PATH}/workspace/jboss-{{JBOSS_VERSION}}"
+JBOSS_HOME: "${PROJECT_THIRDPARTY_PATH}/jboss-{{JBOSS_VERSION}}"
 
 ##################################
 ####### USER PARAMETERS
