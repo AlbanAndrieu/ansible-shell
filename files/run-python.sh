@@ -10,6 +10,10 @@ source "${WORKING_DIR}/step-0-color.sh"
 # shellcheck source=/dev/null
 source "${WORKING_DIR}/step-1-os.sh"
 
+function float_gt() {
+    perl -e "{if($1>$2){print 1} else {print 0}}"
+}
+
 if [ -n "${USE_SUDO}" ]; then
   echo -e "${green} USE_SUDO is defined ${happy_smiley} : ${USE_SUDO} ${NC}"
 else
@@ -97,7 +101,17 @@ echo -e "${green} chown -R jenkins:docker /opt/ansible/env$(echo $PYTHON_MAJOR_V
 if [ -f "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt" ]; then
   echo -e "${cyan} =========== ${NC}"
   echo -e "${green} Install virtual env requirements : pip${PYTHON_MAJOR_VERSION} install -r ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
-  "pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+  if [ "${OS}" == "Ubuntu" ]; then
+    if [ $(float_gt ${VER} 20) == 1 ]; then
+      echo " VER : $VER gt"
+      #exit 1
+    else
+      echo " VER : $VER lt"
+      "pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+    fi
+  else
+    "pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+  fi
   RC=$?
   if [ ${RC} -ne 0 ]; then
     echo ""

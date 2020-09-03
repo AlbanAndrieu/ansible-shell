@@ -12,7 +12,7 @@ fi
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Installing roles version ${NC}"
 echo -e "${magenta} ${ANSIBLE_GALAXY_CMD} install -r ${WORKING_DIR}/../requirements.yml -p ${WORKING_DIR}/../roles/ --ignore-errors --force ${NC}"
-${ANSIBLE_GALAXY_CMD} install -r ${WORKING_DIR}/../requirements.yml -p ${WORKING_DIR}/../roles/ --ignore-errors --force
+#${ANSIBLE_GALAXY_CMD} install -r ${WORKING_DIR}/../requirements.yml -p ${WORKING_DIR}/../roles/ --ignore-errors --force
 
 export ANSIBLE_CONFIG=${WORKING_DIR}/../ansible.cfg
 export PROFILE_TASKS_SORT_ORDER=none
