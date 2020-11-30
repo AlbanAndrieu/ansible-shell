@@ -1,6 +1,11 @@
 #!/bin/bash
 #set -xv
 
+if [ "$0" = "${BAHS_SOURCE[0]}" ]; then
+    echo "This script has to be sourced and not executed..."
+    exit 1
+fi
+
 WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
 # source only if terminal supports color, otherwise use unset color vars
@@ -55,7 +60,7 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/bin/activate ${NC}"
 
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
 echo -e "${green} virtualenv ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
-echo -e "${green} source ${VIRTUALENV_PATH}/bin/activate ${NC}"
+echo -e "${green} . ${VIRTUALENV_PATH}/bin/activate ${NC}"
 if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
 
   #PYTHON_ENV=$(python${PYTHON_MAJOR_VERSION} -c "import sys; sys.stdout.write('1') if hasattr(sys, 'real_prefix') else sys.stdout.write('0')")
@@ -64,16 +69,16 @@ if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
   #VIRTUALENV_ENABLE="$(pip${PYTHON_MAJOR_VERSION} -V | true | grep "/opt/ansible/env")"
   #echo -e "${cyan} VIRTUALENV_ENABLE : ${VIRTUALENV_ENABLE} ${NC}"
 
-  #if [ -n "${VIRTUALENV_ENABLE}" ]; then
-  #  echo -e "${green} VIRTUALENV_ENABLE is defined ${happy_smiley} : ${VIRTUALENV_ENABLE}, we are already in a known virtualenv ${NC}"
-  #else
-  #  # shellcheck disable=SC1090
-  #  source "${VIRTUALENV_PATH}/bin/activate" || exit 2
-  #fi
+  if [ -n "${VIRTUALENV_ENABLE}" ]; then
+    echo -e "${green} VIRTUALENV_ENABLE is defined ${happy_smiley} : ${VIRTUALENV_ENABLE}, we are already in a known virtualenv ${NC}"
+  else
+   # shellcheck disable=SC1090
+   . "${VIRTUALENV_PATH}/bin/activate" || exit 2
+  fi
 
   export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
   echo -e "${cyan} PATH : ${PATH} ${NC}"
-  export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
+  #export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
   echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
 else
   echo -e "${red} Please install virtualenv first ${NC}"

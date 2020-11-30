@@ -1,5 +1,12 @@
 #!/bin/bash
 # {{ ansible_managed }}
 
+echo '# aucun, visible ou audible'
+echo 'set bell-style none'
+
 echo '"\e[A": history-search-backward'
 echo '"\e[B": history-search-forward'
+
+echo '# Ajouter "sudo" au début de la ligne'
+echo '"\es": "\C-asudo \C-e"'
+
