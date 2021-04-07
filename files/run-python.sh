@@ -79,6 +79,8 @@ if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
   export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
   echo -e "${cyan} PATH : ${PATH} ${NC}"
   #export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
+  #Needed for pytest when using (visual studio) code
+  #export PYTHONPATH=hooks:$PYTHONPATH
   echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
 else
   echo -e "${red} Please install virtualenv first ${NC}"
