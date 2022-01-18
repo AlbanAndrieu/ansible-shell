@@ -10,7 +10,12 @@
 	name = {{ machine.shell_git_name }}
 {% endif %}
 [core]
-#	autocrlf = input
+{% if shell_git_autocrlf is defined %}
+    autocrlf = "{{ shell_git_autocrlf }}"
+{% endif %}
+{% if shell_git_longpaths is defined %}
+    longpaths = "{{ shell_git_longpaths }}"
+{% endif %}
 {% if machine.shell_git_editor is defined %}
 	editor = {{ machine.shell_git_editor }}
 {% endif %}
@@ -70,9 +75,13 @@
 [difftool "meld"]
     cmd = meld "$LOCAL" "$REMOTE"	
 {% endif %}
+{% if shell_git_maildomain is defined %}
 [maven-scm]
-    maildomain = free.fr
-    forceUsername = true	
+  maildomain = "{{ shell_git_maildomain }}"
+  forceUsername = true
+{% endif %}
 [http]
-    sslverify = false
+{% if shell_git_ssl is defined %}
+    sslverify = "{{ shell_git_ssl }}"
+{% endif %}
 {% endfor %}

@@ -1,3 +1,8 @@
+
+###
+# Alias
+###
+
 # Formatting constants
 export BOLD=`tput bold`
 export UNDERLINE_ON=`tput smul`
@@ -51,3 +56,106 @@ mvn-color()
 
 # Override the mvn command with the colorized one.
 alias mvnc="mvn-color"
+
+# See https://www.cyberciti.biz/tips/bash-aliases-mac-centos-linux-unix.html
+
+#alias ls='/bin/ls -F --color=auto'
+#alias lt='l -t'
+#alias lrt='l -rt'
+#alias l~='l ~'
+#alias ll='l -ah'
+#alias la='l -ahl'
+#alias llt='ll -t'
+#alias llrt='ll -rt'
+#alias ll~='ll ~'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    ## Colorize the ls output ##
+    #alias ls='ls --color=auto'
+
+    # some more ls aliases
+
+    ## Use a long listing format ##
+    #alias ll='ls -alF'
+
+    ## Show hidden files ##
+    #alias l.='ls -d .* --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+alias l='exa'
+alias la='exa -a'
+alias ll='exa -lah'
+alias ls='exa --color=auto'
+
+## replace mac with your actual server mac address #
+alias wakeupnas01='/usr/bin/wakeonlan 7C:05:07:0E:D9:88'
+
+# Stop after sending count ECHO_REQUEST packets #
+alias ping='ping -c 5'
+# Do not wait interval 1 second, go fast #
+alias fastping='ping -c 100 -s.2'
+
+# handy short cuts #
+alias h='history'
+alias j='jobs -l'
+
+alias mount='mount | column -t'
+
+alias sha1='openssl sha1'
+
+alias c='clear'
+
+# get web server headers #
+# find out if remote server supports gzip / mod_deflate or not #
+alias header='curl -I'
+alias headerc='curl -I --compress'
+
+## pass options to free ##
+alias meminfo='free -m -l -t'
+
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+
+## Get server cpu info ##
+alias cpuinfo='lscpu'
+
+## older system use /proc/cpuinfo ##
+##alias cpuinfo='less /proc/cpuinfo' ##
+
+## get GPU ram on desktop / laptop##
+alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+#alias status="svn status -u"
+# See https://www.howtoforge.com/tutorial/linux-grep-command/
+# use grep -r instead
+#alias Grep="find . -name '*.[jch]*' -exec grep -n \!* {} + -o -name '.svn' -prune -type f"
+#alias hGrep="find . -name '*.h' -exec grep -n \!* {} + -o -name '.svn' -prune -type f"
+#alias myGrep="find . -name '*.*' -exec grep -n \!* {} + -o -name '.svn' -prune -type f"
+#echo "find . -type d -name ".svn"  -print | xargs rm -Rf"
+#echo "find . -name 'pom.xml' | xargs grep SNAPSHOT"
+
+#alias scons="${SCONS}"
+
+alias eclipse='${ECLIPSE_HOME}/eclipse'
+alias lumbermill='java -jar ${LUMBERMILL_HOME}/dist/lib/lumbermill.jar'
+
+alias mkctl="microk8s kubectl"
+
+#mkdir /home/albandrieu/.k9s
+alias k9s='k9s --kubeconfig /home/albandrieu/.kube/config'
+alias dockviz="docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
