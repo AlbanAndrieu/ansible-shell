@@ -5,24 +5,25 @@ dependencies:
 
 galaxy_info:
   author: Alban Andrieu
-  description: 'Install and configure Mon service'
+  description: Install and configure shell
+  role_name: shell
+  namespace: albanandrieu
   company: Nabla
   license: GPLv3
-  min_ansible_version: '2.6.0'
+  min_ansible_version: 2.7.8
   platforms:
     - name: Ubuntu
       versions:
         - all
-        - precise
-        - quantal
-        - raring
-        - saucy
-        - trusty
     - name: Debian
       versions:
         - all
-        - wheezy
-        - jessie
+    - name: EL
+      versions:
+        - all
+    - name: MacOSX
+      versions:
+        - all
   galaxy_tags:
     - development
     - system
