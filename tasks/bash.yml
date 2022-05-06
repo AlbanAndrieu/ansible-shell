@@ -191,7 +191,7 @@
 
 - name: git | Copy the .netrc script for git credentials
   template: src=.netrc.j2 dest={{ home }}/.netrc mode=0600 owner={{ shell_owner }}
-  when: shell_git_configure_enabled
+  when: shell_git_netrc_enabled
   changed_when: false
   tags: git
 
