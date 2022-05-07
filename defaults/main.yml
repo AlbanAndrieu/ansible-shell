@@ -13,11 +13,17 @@ shell_vim_enabled: yes                   # Enable vim syntax color
 shell_maven_enabled: no                  # Enable maven syntax color
 shell_log4j_enabled: yes                 # Enable log4j
 shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
+shell_gpg_enabled: yes                   # Enable gpg tweak
+shell_ssh_enabled: yes                   # Enable ssh tweak
 shell_synapse_enabled: no                # Enable synapse config
-shell_git_meld_enabled: yes              # Enable git meld (shell_git_configure_enabled must be enabled too)
-shell_git_completion_enabled: yes        # Enable git completion
+shell_git_meld_enabled: no               # Enable git meld (shell_git_configure_enabled must be enabled too)
 shell_git_configure_enabled: yes         # Enable git configuration
 shell_git_netrc_enabled: no              # Enable git netrc configuration
+shell_bash_completion_enabled: yes
+shell_bash_completion_extra_enabled: no
+shell_bash_completion_kubectl_enabled: yes
+shell_bash_completion_git_enabled: no        # Enable git completion
+shell_openstack_enabled: yes
 
 #user: 'albandri' #please override me
 user: "{{ lookup('env','USER') }}"
@@ -51,7 +57,9 @@ shell_git: []
   #   shell_git_path: '/usr/bin',
   #   shell_git_ssl: false,
   #   shell_git_meld_enabled: yes,
-  #   shell_git_editor: "vim",
+  #   shell_git_autocrlf: input
+  #   shell_git_editor: "nano",
+  #   shell_git_signingkey: "B12DECD437E9E1C8"
 
 rhosts_hosts:
   - "albandrieu"
@@ -60,8 +68,6 @@ rhosts_hosts:
 
 newrelic_license_key: "de35bf5d191ebb208d359b2cd24a60616a02b1f3"
 newrelic_app_name: "Nabla Demo"
-
-webpagetest_api_key: "A.01ea5a02081b6d10415d7b0e7c844e73"
 
 brew_packages:
   - 'randomize-lines' # for git-radar
@@ -103,7 +109,7 @@ install_homebrew_if_missing: true
 upgrade_homebrew_packages: false
 
 homebrew_repository: "https://github.com/Homebrew/brew"
-    
+
 docker_files_generated_directory: "./"
 docker_files_enable: no
 docker_volume_directory: "{{ shell_env_directory }}"

@@ -5,7 +5,7 @@ exclude_paths:
   - ./.travis.yml
   - ./playbooks/group_vars/all/vault.yml
   - ./docker/
-  - ./roles/Stouts.python/
+  - ./roles/
 # parseable: true
 # quiet: true
 # rulesdir:

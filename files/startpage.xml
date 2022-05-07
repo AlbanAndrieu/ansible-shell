@@ -4,7 +4,7 @@
   <Description>Search with Start Page</Description>
   <InputEncoding>UTF-8</InputEncoding>
   <<Image height="16" width="16" type="image/x-icon">https://startpage.com/favicon.ico</Image>
-  
+
   <Url type="text/html" method="POST" template="https://startpage.com/do/search">
     <Param name="q" value="{searchTerms}"/>
   </Url>

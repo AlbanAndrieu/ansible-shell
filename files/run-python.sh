@@ -1,12 +1,12 @@
 #!/bin/bash
-#set -xv
+#set -xve
 
-if [ "$0" = "${BAHS_SOURCE[0]}" ]; then
-    echo "This script has to be sourced and not executed..."
-    exit 1
+if [ "$0" = "${BASH_SOURCE[0]}" ]; then
+  echo "This script has to be sourced and not executed..."
+  exit 1
 fi
 
-WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+WORKING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # source only if terminal supports color, otherwise use unset color vars
 # shellcheck source=/dev/null
@@ -16,13 +16,13 @@ source "${WORKING_DIR}/step-0-color.sh"
 source "${WORKING_DIR}/step-1-os.sh"
 
 function float_gt() {
-    perl -e "{if($1>$2){print 1} else {print 0}}"
+  perl -e "{if($1>$2){print 1} else {print 0}}"
 }
 
 if [ -n "${USE_SUDO}" ]; then
   echo -e "${green} USE_SUDO is defined ${happy_smiley} : ${USE_SUDO} ${NC}"
 else
-  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : USE_SUDO, use the default one ${NC}"
+  echo -e "${yellow} ${double_arrow} Undefined parameter ${head_skull} : USE_SUDO, use the default one ${NC}"
   if [ "${OS}" == "Ubuntu" ]; then
     USE_SUDO="sudo -H"
   else
@@ -37,7 +37,7 @@ if [ -n "${PYTHON_MAJOR_VERSION}" ]; then
   unset VIRTUALENV_PATH
   unset PYTHON_CMD
 else
-  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : PYTHON_MAJOR_VERSION, use the default one ${NC}"
+  echo -e "${yellow} ${double_arrow} Undefined parameter ${head_skull} : PYTHON_MAJOR_VERSION, use the default one ${NC}"
   export PYTHON_MAJOR_VERSION=3.8
   echo -e "${magenta} PYTHON_MAJOR_VERSION : ${PYTHON_MAJOR_VERSION} ${NC}"
 fi
@@ -45,11 +45,28 @@ fi
 if [ -n "${VIRTUALENV_PATH}" ]; then
   echo -e "${green} VIRTUALENV_PATH is defined ${happy_smiley} : ${VIRTUALENV_PATH} ${NC}"
 else
-  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : VIRTUALENV_PATH, use the default one ${NC}"
+  echo -e "${yellow} ${double_arrow} Undefined parameter ${head_skull} : VIRTUALENV_PATH, use the default one ${NC}"
   # shellcheck disable=SC2001
   VIRTUALENV_PATH=/opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g')
   export VIRTUALENV_PATH
   echo -e "${magenta} VIRTUALENV_PATH : ${VIRTUALENV_PATH} ${NC}"
+fi
+
+if [ -n "${PYTHON_CMD}" ]; then
+  echo -e "${green} PYTHON_CMD is defined ${happy_smiley} : ${PYTHON_CMD} ${NC}"
+else
+  echo -e "${yellow} ${double_arrow} Undefined parameter ${head_skull} : PYTHON_CMD, use the default one ${NC}"
+  #/usr/local/bin/python3.5 for RedHat
+  #/usr/bin/python3.5 for Ubuntu
+  if [ "${OS}" == "Red Hat Enterprise Linux Server" ]; then
+    PYTHON_CMD="/usr/local/bin/python${PYTHON_MAJOR_VERSION}"
+  else
+    PYTHON_CMD="python${PYTHON_MAJOR_VERSION}"
+    #PYTHON_CMD="${VIRTUALENV_PATH}/bin/python${PYTHON_MAJOR_VERSION}"
+    #PYTHON_CMD="/usr/bin/python${PYTHON_MAJOR_VERSION}"
+  fi
+  export PYTHON_CMD
+  echo -e "${magenta} PYTHON_CMD : ${PYTHON_CMD} ${NC}"
 fi
 
 echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/bin/activate ${NC}"
@@ -59,7 +76,7 @@ echo -e "${cyan} Use virtual env ${VIRTUALENV_PATH}/bin/activate ${NC}"
 #source /opt/rh/python27/enable
 
 #sudo virtualenv -p /usr/bin/python3.5 /opt/ansible/env35
-echo -e "${green} virtualenv ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
+echo -e "${green} virtualenv --no-site-packages ${VIRTUALENV_PATH} -p python${PYTHON_MAJOR_VERSION} ${NC}"
 echo -e "${green} . ${VIRTUALENV_PATH}/bin/activate ${NC}"
 if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
 
@@ -72,15 +89,13 @@ if [ -f "${VIRTUALENV_PATH}/bin/activate" ]; then
   if [ -n "${VIRTUALENV_ENABLE}" ]; then
     echo -e "${green} VIRTUALENV_ENABLE is defined ${happy_smiley} : ${VIRTUALENV_ENABLE}, we are already in a known virtualenv ${NC}"
   else
-   # shellcheck disable=SC1090
-   . "${VIRTUALENV_PATH}/bin/activate" || exit 2
+    # shellcheck disable=SC1090
+    . "${VIRTUALENV_PATH}/bin/activate" || exit 2
   fi
 
-  export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
+  #export PATH="${VIRTUALENV_PATH}/bin:${PATH}"
   echo -e "${cyan} PATH : ${PATH} ${NC}"
   #export PYTHONPATH="${VIRTUALENV_PATH}/lib/python${PYTHON_MAJOR_VERSION}/site-packages/"
-  #Needed for pytest when using (visual studio) code
-  #export PYTHONPATH=hooks:$PYTHONPATH
   echo -e "${cyan} PYTHONPATH : ${PYTHONPATH} ${NC}"
 else
   echo -e "${red} Please install virtualenv first ${NC}"
@@ -107,14 +122,17 @@ echo -e "${green} chown -R jenkins:docker /opt/ansible/env$(echo $PYTHON_MAJOR_V
 
 if [ -f "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt" ]; then
   echo -e "${cyan} =========== ${NC}"
-  echo -e "${green} Install virtual env requirements : pip${PYTHON_MAJOR_VERSION} install -r ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt ${NC}"
+  echo -e "${green} Install virtual env requirements : pip${PYTHON_MAJOR_VERSION} install -r ${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt --use-feature=2020-resolver ${NC}"
   if [ "${OS}" == "Ubuntu" ]; then
     if [ $(float_gt ${VER} 20) == 1 ]; then
       echo " VER : $VER gt"
       #exit 1
     else
       echo " VER : $VER lt"
+      "pip${PYTHON_MAJOR_VERSION}" uninstall -y ansible || true
+      "pip${PYTHON_MAJOR_VERSION}" uninstall -y ansible-base || true
       "pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
+      #--use-deprecated=legacy-resolver
     fi
   else
     "pip${PYTHON_MAJOR_VERSION}" install -r "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt"
@@ -148,7 +166,7 @@ if [ ${RC} -ne 0 ]; then
     echo -e "${red} ${head_skull} Please remove docker-py ${NC}"
   fi
   echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} uninstall docker-py; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker; sudo pip${PYTHON_MAJOR_VERSION} uninstall docker-compose; ${NC}"
-  echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.25.3 ${NC}"
+  echo -e "${red} ${head_skull} pip${PYTHON_MAJOR_VERSION} install --upgrade --force-reinstall --no-cache-dir docker-compose==1.25.5 ${NC}"
   exit 1
 else
   echo -e "${green} The docker-compose check completed successfully. ${NC}"
@@ -199,12 +217,12 @@ if [ -n "${PYTHON_CMD}" ]; then
     echo -e "${red} Please install ${VIRTUALENV_PATH}/bin/pip${PYTHON_MAJOR_VERSION} first ${NC}"
   fi
 
-  echo -e "${magenta} ${PYTHON_CMD} -m ara.setup.path ${NC}"
-  ${PYTHON_CMD} -m ara.setup.path || true
-  ${PYTHON_CMD} -m ara.setup.action_plugins || true
-  ${PYTHON_CMD} -m ara.setup.callback_plugins || true
+  #echo -e "${magenta} ${PYTHON_CMD} -m ara.setup.path ${NC}"
+  #${PYTHON_CMD} -m ara.setup.path || true
+  #${PYTHON_CMD} -m ara.setup.action_plugins || true
+  #${PYTHON_CMD} -m ara.setup.callback_plugins || true
 else
-  echo -e "${red} ${double_arrow} Undefined build parameter ${head_skull} : PYTHON_CMD, use the default one ${NC}"
+  echo -e "${yellow} ${double_arrow} Undefined parameter ${head_skull} : PYTHON_CMD, use the default one ${NC}"
   #/usr/local/bin/python3.5 for RedHat
   #/usr/bin/python3.5 for Ubuntu
   PYTHON_CMD="python${PYTHON_MAJOR_VERSION}"

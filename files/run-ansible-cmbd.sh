@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -xve
 
-WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+WORKING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Forcing ansible cmd to use python3.6
 export PYTHON_MAJOR_VERSION=3.6
@@ -31,7 +31,7 @@ mkdir ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR}
 echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server setup ${NC}"
 echo -e "${magenta} ${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all ${NC}"
-${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all > inventory-setup.log 2>&1
+${ANSIBLE_CMD} -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} -m setup -vvvv --tree ${WORKING_DIR}/../${JUNIT_OUTPUT_DIR} all >inventory-setup.log 2>&1
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""
@@ -46,7 +46,7 @@ echo -e "${cyan} =========== ${NC}"
 echo -e "${green} Ansible server inventory HTML generation ${NC}"
 ${ANSIBLE_CMBD_CMD} --version
 echo -e "${magenta} ${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html ${NC}"
-${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} > overview.html
+${ANSIBLE_CMBD_CMD} -d -i ${WORKING_DIR}/../inventory/${ANSIBLE_INVENTORY} ${WORKING_DIR}/../${ANSIBLE_INVENTORY_OUTPUT_DIR} >overview.html
 RC=$?
 if [ ${RC} -ne 0 ]; then
   echo ""

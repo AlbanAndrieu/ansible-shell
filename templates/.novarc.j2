@@ -1,7 +1,23 @@
+#!/bin/bash
+
 export OS_NO_CACHE=1
-export OS_TENANT_NAME=admin 
-export OS_USERNAME=admin 
-export OS_PASSWORD=microsoft 
+# With the addition of Keystone we have standardized on the term **tenant**
+# as the entity that owns the resources.
+export OS_TENANT_ID=b669e825f80344c0baabb441958a6cd6
+export OS_TENANT_NAME="3144102460081843"
+
+export OS_USERNAME="EQRyyudjH9gM"
+#export OS_PASSWORD=""
+
 export OS_SERVICE_TOKEN=ADMIN
-export OS_AUTH_URL="http://localhost:5000/v2.0/"
-export SERVICE_ENDPOINT="http://localhost:35357/v2.0"
+#export OS_AUTH_URL="http://localhost:5000/v2.0/"
+export OS_AUTH_URL=https://auth.cloud.ovh.net/v3/
+export OS_IDENTITY_API_VERSION=3
+
+#export SERVICE_ENDPOINT="http://localhost:35357/v2.0"
+
+export OS_USER_DOMAIN_NAME=${OS_USER_DOMAIN_NAME:-"Default"}
+export OS_PROJECT_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
+export OS_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
+
+export OS_REGION_NAME="GRA1"

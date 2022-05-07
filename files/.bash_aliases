@@ -90,7 +90,7 @@ fi
 
 alias l='exa'
 alias la='exa -a'
-alias ll='exa -lah'
+alias ll='exa -lahg'
 alias ls='exa --color=auto'
 
 ## replace mac with your actual server mac address #
@@ -141,6 +141,9 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 #alias status="svn status -u"
+#alias replace="${WORKSPACE_ENV}/scripts/replace.pl"
+#alias svndi="svn di --diff-cmd=svndiff"
+#alias svnst="svn st | grep -v ^?"
 # See https://www.howtoforge.com/tutorial/linux-grep-command/
 # use grep -r instead
 #alias Grep="find . -name '*.[jch]*' -exec grep -n \!* {} + -o -name '.svn' -prune -type f"
@@ -159,3 +162,80 @@ alias mkctl="microk8s kubectl"
 #mkdir /home/albandrieu/.k9s
 alias k9s='k9s --kubeconfig /home/albandrieu/.kube/config'
 alias dockviz="docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
+
+#rm ~/.gitconfig.lock
+#git config --global alias.co checkout
+#git config --global alias.br branch
+#git config --global alias.ci commit
+#git config --global alias.st status
+#git config --global alias.unstage 'reset HEAD --'
+#git config --global alias.last 'log -1 HEAD'
+
+alias ..="cd .."
+alias cls="clear"
+
+if [ "${ARCH}" = sun4sol -o "${ARCH}" = solaris ]
+then
+  alias l='/bin/ls -Fl'
+  alias pp='/usr/ucb/ps -auxwww'
+  alias m='/usr/ucb/more'
+else
+  if [ "${ARCH}" = sun4 ]
+  then
+    alias l='/bin/ls -Flg'
+    alias pp='/usr/bin/ps -auxwww'
+  else
+    if [ "${ARCH}" = rs6000 ]
+    then
+      alias l='/bin/ls -Fl'
+      alias pp='/usr/bin/ps auxwww'
+      alias m='/usr/bin/more'
+    else
+      if [ "${ARCH}" = hprisc ]
+      then
+        alias l='/bin/ls -Fl'
+        alias pp='/bin/ps -edf'
+      else
+        if [ "${ARCH}" = linux -o "${ARCH}" = cygwin ]
+        then
+          alias l='/bin/ls -Fl --color'
+          alias pp='/bin/ps -auxwww'
+        fi
+      fi
+    fi
+  fi
+fi
+
+#to get man in french
+#alias man='man -L en'
+#alias man='man -L fr'
+alias man='tldr'
+
+alias psg="pp | egrep -i \!* |& grep -v 'egrep -i \!*'"
+alias psuser="pp | cut -d' ' -f1 | sort | grep -v USER | uniq -c | sort -r"
+
+alias cat='bat --paging=never'
+
+#ln -s "${PROJECT_DEV}" ~/w || true
+alias cdr="cd ~/w"
+alias cdj="cd ~/w/jm"
+alias cde="cd ${PROJECT_DEV}/${PROJECT_EXTRACTION}"
+alias cdw="cd ${PROJECT_DEV}"
+alias cdc="cd ${PROJECT_DEV}/env/config"
+#alias cdinc="cd ${PROJECT_TARGET_PATH}/include/${ARCH}"
+#alias cdobj="cd ${PROJECT_TARGET_PATH}"
+#alias cdbin="cd ${PROJECT_TARGET_PATH}/bin"
+
+#alias cdrl="cd ${PROJECT_RELEASE}/latest"
+#alias cdri="cd ${PROJECT_RELEASE}/installed"
+#alias cdcu="cd ${PROJECT_RELEASE}/current"
+
+alias cdcore="cd ${PROJECT_TARGET_PATH}/corefiles"
+alias setEnvFiles="${WORKSPACE_ENV}/config/setEnvFiles.sh ${PROJECT_USER_PROFILE} \!* --userdev"
+alias setEnvFilesAll="${WORKSPACE_ENV}/config/setEnvFiles.allUserDev.sh ${PROJECT_USER_PROFILE}"
+alias setWorkspace="source ${WORKSPACE_ENV}/scripts/setWorkspace.sh"
+
+#alias kubectl=kubectlxx
+#alias k=kubectlxx
+
+alias bssh="ssh -t gra1bastion --"

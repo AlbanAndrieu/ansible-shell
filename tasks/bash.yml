@@ -32,7 +32,7 @@
 - name: shell | Configure run-ansible.sh file
   copy: src=run-ansible.sh dest={{ home }}/run-ansible.sh mode=755
   tags: bash
-  
+
 - name: shell | Configure ansible-env.sh file
   copy: src=ansible-env.sh dest={{ home }}/ansible-env.sh mode=755
   tags: bash
@@ -40,7 +40,7 @@
 - name: shell | Configure docker-env.sh file
   copy: src=docker-env.sh dest={{ home }}/docker-env.sh mode=755
   tags: bash
-  
+
 - name: shell | Configure dev.env.sh file
   template: src=dev.env.sh.j2 dest={{ shell_env_directory }}/dev.env.sh
   tags: bash
@@ -53,30 +53,6 @@
 #- name: shell | Configure .bash_aliases file
 #  copy: src=.bash_aliases dest={{ home }}/.bash_aliases
 #  tags: bash
-
-- name: shell | Install bash completion
-  apt: pkg={{ item }} state=present
-  when: ansible_distribution == 'Debian'
-  with_items:
-    - bash-completion
-
-- name: shell | Configure .bash_completion file
-  copy: src=.bash_completion dest={{ home }}/.bash_completion
-  tags: bash
-
-- name: shell | Configure pip completion file
-  command: pip completion --bash >> ~/.bash_completion
-  tags: bash
-
-- name: shell | Configure kubernetes completion file
-  shell: kubectl completion bash > /etc/bash_completion.d/kubectl
-  become: true
-  tags: bash
-
-- name: shell | Fix kubernetes ownership $HOME/.kube/
-  file: path={{ shell_owner_home }}/.kube/ owner={{ shell_owner }} group={{ shell_group }} recurse=yes
-#  become_user: "{{ shell_owner }}"
-  become: true
 
 #TODO
 #sudo chown -R albandri:docker .dbus/
@@ -132,24 +108,75 @@
   become_user: "{{ shell_owner }}"
   ignore_errors: true
 
-- name: shell | Install docker prompt
+- name: shell | Install bash completion
+  apt: pkg={{ item }} state=present
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
+  with_items:
+    - bash-completion
+
+- name: shell | Configure .bash_completion file
+  copy: src=.bash_completion dest={{ home }}/.bash_completion
+  when: shell_bash_completion_enabled and shell_bash_completion_extra_enabled
+  tags: bash
+
+- name: shell | Configure pip completion file
+  command: pip completion --bash >> {{ home }}/.bash_completion
+  when: shell_bash_completion_enabled and shell_bash_completion_extra_enabled
+  tags: bash
+
+- name: shell | Install kubectl tools
+  snap:
+    name: kubectl
+    classic: yes
+  become: true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version is version_compare(19.04, '>=') and shell_bash_completion_kubectl_enabled
+  tags: package
+
+- name: shell | Configure kubernetes completion file
+  shell: kubectl completion bash > /etc/bash_completion.d/kubectl
+  when: shell_bash_completion_enabled and shell_bash_completion_kubectl_enabled
+  become: true
+  tags: bash
+
+- name: shell | Fix kubernetes ownership $HOME/.kube/
+  file: path={{ shell_owner_home }}/.kube/ owner={{ shell_owner }} group={{ shell_group }} recurse=yes
+#  become_user: "{{ shell_owner }}"
+  become: true
+
+- name: shell | Install azure-cli completion
+  shell: wget https://raw.githubusercontent.com/ogham/exa/master/completions/bash/exa -O /etc/bash_completion.d/exa.bash
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
+  become: true
+
+- name: shell | Install azure-cli completion
+  shell: wget https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion -O /etc/bash_completion.d/az.completion
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
+  become: true
+
+- name: shell | Install docker prompt completion
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
   become: true
 
-- name: shell | Install docker wrapper
+- name: shell | Install docker wrapper completion
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash -O /etc/bash_completion.d/docker-machine-wrapper.bash
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
   become: true
 
-- name: shell | Install docker bash
+- name: shell | Install docker bash completion
   shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash -O /etc/bash_completion.d/docker-machine.bash
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
   become: true
 
-- name: shell | Install scons bash
+- name: shell | Install scons bash completion
   copy: src=scons_completion dest=/etc/bash_completion.d/scons_completion
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
+
+- name: git | Install git bash completion
+  shell: curl -fsSL https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh > {{ home }}/.git-prompt.sh
+  #copy: src=.git-prompt.sh dest={{ home }}/.git-prompt.sh owner={{ shell_owner }} mode=755
+  #when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled and shell_bash_completion_git_enabled
+  tags: git
 
 #cygwin
 - name: shell | Configure .bashrc file
@@ -175,6 +202,7 @@
 
 - name: shell | Copy the .novarc script for openstack
   template: src=.novarc.j2 dest={{ home }}/.novarc mode=0600 owner={{ shell_owner }}
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_openstack_enabled
   changed_when: false
   tags: openstack
 
@@ -182,11 +210,6 @@
   copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_meld_enabled
   become: true
-  tags: git
-
-- name: git | Configure git completion
-  copy: src=.git-prompt.sh dest={{ home }}/.git-prompt.sh owner={{ shell_owner }} mode=755
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_completion_enabled
   tags: git
 
 - name: git | Copy the .netrc script for git credentials
@@ -373,4 +396,3 @@
   changed_when: false
   ignore_errors: "{{ ansible_check_mode }}"
   become: true
-

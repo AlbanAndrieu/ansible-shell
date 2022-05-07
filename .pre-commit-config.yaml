@@ -26,6 +26,7 @@ repos:
       - id: check-json
         exclude: ^.vscode/
       - id: check-xml
+        exclude: files/startpage.xml/
       - id: check-yaml
         exclude: >
           (?x)^(

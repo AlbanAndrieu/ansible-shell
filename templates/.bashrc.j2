@@ -42,12 +42,12 @@ shopt -s checkwinsize
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+  debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+  xterm-color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -68,34 +68,32 @@ fi
 
 #GIT specific
 source ~/.git-prompt.sh
-#source /etc/bash_completion.d/docker-machine-prompt.bash
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\] \w]\[\e[1;36m\] $(__git_ps1 " (%s)") \$\[\e[1;37m\] '
-#    PS1='${debian_chroot:+($debian_chroot)}\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\] \w]\[\e[1;36m\] $(__docker_machine_ps1 " [%s]")'
+ #PS1='${debian_chroot:+($debian_chroot)}\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\] \w]\[\e[1;36m\] $(__git_ps1 " (%s)") \$\[\e[1;37m\] '
+  PS1='${debian_chroot:+($debian_chroot)}\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\]:\w]\[\e[1;36m\]'
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
 if [ -d "${HOME}/.linuxbrew/bin" -o -d "${HOME}/.git-radar" -o -f "/home/linuxbrew/.linuxbrew/bin/git-radar" ]; then
-    PS1="$PS1\$(git-radar --bash --fetch 2>&1)"
+  PS1="$PS1\$(git-radar --bash --fetch 2>&1)"
 else
-    PS1=$PS1'$(__git_ps1 "(%s)")'
+   PS1=$PS1'$(__git_ps1 "(%s)")'
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1="$PS1 \$ \[\e[1;37m\]"
-#     PS1="$PS1 $(__docker_machine_ps1 " [%s]")\$ \[\e[1;37m\]"
+  PS1="$PS1 🦊 \$ \[\e[1;37m\]"
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
+  PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+  ;;
 *)
-    ;;
+  ;;
 esac
 
 # Alias definitions.
@@ -104,37 +102,28 @@ esac
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  fi
 fi
 
 # Add hand made color for better display
 if [ -f ~/step-0-color.sh ]; then
-    . ~/step-0-color.sh
+  . ~/step-0-color.sh
 fi
-
-#echo "Mounting Virtual box"
-#echo "sudo -s"
-#echo "sudo mount -t vboxsf workspace /workspace"
-#echo "sudo mount -t vboxsf thirdparty /thirdparty"
-#echo "sudo mount -t vboxsf target /target"
-#echo "sudo mount -t vboxsf repo /repo"
-#echo "sudo mount -t vboxsf jboss /jboss"
 
 ##
 # XXXXXXXXXXXXXXXXXXXXX
 ##
-
-export ARCH=linux
-export MACHINE=x86Linux
-
-echo ${ARCH} ${MACHINE}
 
 export PROJECT_USER={{PROJECT_USER}}
 export PROJECT_VERSION={{PROJECT_VERSION}}
@@ -143,11 +132,10 @@ export PROJECT_HOME={{PROJECT_HOME}}
 # Do not use hudson workspace
 export WORKSPACE_ENV={{WORKSPACE_ENV}}
 
-export PROJECT_THIRDPARTY_PATH={{PROJECT_THIRDPARTY_PATH}}
-echo PROJECT_THIRDPARTY_PATH : ${PROJECT_THIRDPARTY_PATH}
+#export PROJECT_THIRDPARTY_PATH={{PROJECT_THIRDPARTY_PATH}}
+#echo PROJECT_THIRDPARTY_PATH : ${PROJECT_THIRDPARTY_PATH}
 
 #If you want to use new GCC by default, make sure that your PATH contains /usr/local/bin before /bin and /usr/bin.
-#ADD ${HOME}/.git-radar/ for when we are inside docker conainters
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 # set PATH so it includes user's private bin if it exists
 #if [ -d "$HOME/bin" ] ; then
@@ -160,15 +148,14 @@ alias 00='. ${PROJECT_HOME}/${PROJECT_USER}00/env/home/dev.env.sh'
 alias {{DEFAULT_ENV_LOADED}}='. ${WORKSPACE_ENV}/home/dev.env.sh'
 
 if [ -f ${WORKSPACE_ENV}/home/dev.env.sh ]; then
-    echo ${WORKSPACE_ENV}/home/dev.env.sh
-    . ${WORKSPACE_ENV}/home/dev.env.sh
+  echo ${WORKSPACE_ENV}/home/dev.env.sh
+  . ${WORKSPACE_ENV}/home/dev.env.sh
 fi
 
 echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."
-#export SCONS=/usr/bin/scons
-#export TAR=/bin/gtar
-export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
-#export PATH=$PATH:${HOME}/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/bin/
+source /opt/ansible/env38/bin/activate  # commented out by conda initialize
 
-unset ARCH
+complete -C /usr/bin/terraform terraform
+
+#. torsocks on

@@ -55,7 +55,7 @@ script:
   - sudo adduser --quiet --disabled-password --shell /bin/bash --uid ${JENKINS_UID} --gid ${DOCKER_GID} --home ${JENKINS_HOME} --gecos "Jenkins" jenkins
   # Set password for the jenkins user (you may want to alter this).
 #  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
-  
+
   # Check syntax
   - ansible-playbook -i ./hosts --syntax-check shell.yml -e "python_versions=[2.7, 3.5]" -e "docker_gid=${DOCKER_GID}" -e "jenkins_id=${JENKINS_UID}"
 

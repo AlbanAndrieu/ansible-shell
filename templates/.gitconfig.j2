@@ -9,6 +9,11 @@
 {% if machine.shell_git_name is defined %}
 	name = {{ machine.shell_git_name }}
 {% endif %}
+{% if machine.shell_git_signingkey is defined %}
+	signingkey = {{ machine.shell_git_signingkey }}
+{% endif %}
+[pull]
+	rebase = true
 [core]
 {% if shell_git_autocrlf is defined %}
     autocrlf = "{{ shell_git_autocrlf }}"
@@ -19,8 +24,11 @@
 {% if machine.shell_git_editor is defined %}
 	editor = {{ machine.shell_git_editor }}
 {% endif %}
+	excludesfile = {{ home }}/.gitignore
+	whitespace = trailing-space,-space-before-tab,indent-with-non-tab,cr-at-eol
 [credential]
-	helper = cache --timeout=86400
+#	helper = cache --timeout=86400
+	helper = store
 [alias]
 	co = checkout
 	br = branch
@@ -31,14 +39,18 @@
 	lo = log --graph
 	unstage = reset HEAD --
 	last = log -1 HEAD
+[fetch]
+	prune = true
 [help]
-	autocorrect = 1
+	autocorrect = 8
 [color]
 	ui = auto
-#[branch "master"]
-#	rebase = true
-#[branch]
-#	autosetuprebase = always
+[branch "main"]
+	rebase = true
+[branch "master"]
+	rebase = true
+[branch]
+	autosetuprebase = always
 [diff "xls"]
     binary = true
     textconv = /usr/bin/py_xls2txt
@@ -53,10 +65,10 @@
     binary = true
     textconv = /usr/bin/docx2txt
 [diff "odt"]
-    binary = true    
+    binary = true
     textconv = odt2txt
 [diff "ppt"]
-    binary = true    
+    binary = true
     textconv = /usr/bin/catppt
 [diff "zip"]
     textconv = unzip -c -a
@@ -66,14 +78,14 @@
 [mergetool "meld"]
     # Choose one of these 2 lines (not both!) explained below.
     #cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
-    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"    
+    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
 [diff]
-#	external = /usr/local/bin/git-diff.sh    
+#	external = /usr/local/bin/git-diff.sh
     tool = meld
 [difftool]
     prompt = false
 [difftool "meld"]
-    cmd = meld "$LOCAL" "$REMOTE"	
+    cmd = meld "$LOCAL" "$REMOTE"
 {% endif %}
 {% if shell_git_maildomain is defined %}
 [maven-scm]
@@ -84,4 +96,18 @@
 {% if shell_git_ssl is defined %}
     sslverify = "{{ shell_git_ssl }}"
 {% endif %}
+[init]
+	templateDir = {{ home }}/.git-template
+	defaultBranch = master
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[rerere]
+	enabled = true
+[push]
+	default = simple
+[commit]
+	gpgsign = true
 {% endfor %}

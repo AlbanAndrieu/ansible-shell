@@ -59,3 +59,14 @@
   template: src=hosts.equiv.j2 dest=/etc/hosts.equiv
   when: shell_rlogin_enabled
   tags: rlogin
+
+- name: shell | Configure gpg-agent.conf (gpg) file
+  copy: src=gpg-agent.conf dest={{ home }}/.gnupg/gpg-agent.conf owner={{ shell_owner }} group={{ shell_group }} mode=644
+  ignore_errors: true
+  when: shell_gpg_enabled
+  tags: gpg
+
+- name: shell | Configure config (ssh) file
+  template: src=config.j2 dest={{ home }}/.ssh/config
+  when: shell_ssh_enabled
+  tags: ssh
