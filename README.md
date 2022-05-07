@@ -99,7 +99,7 @@ docker_image_name: "nabla/ansible-shell"
 
 Run the following command :
 
-`ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-sudo-pass | tee setup.log`
+`ansible-playbook -i hosts -c local -v shell.yml -vvvv --ask-become-pass | tee setup.log`
 
 ### Testing
 ```shell

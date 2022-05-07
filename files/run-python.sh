@@ -118,7 +118,7 @@ echo -e "${green} brew install cairo libxml2 libffi ${NC}"
 
 echo -e "${green} Fix permission rights ${NC}"
 # shellcheck disable=SC2001
-echo -e "${green} chown -R jenkins:docker /opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g') ${NC}"
+echo -e "${green} chown -R ansible:docker /opt/ansible/env$(echo $PYTHON_MAJOR_VERSION | sed 's/\.//g') ${NC}"
 
 if [ -f "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_MAJOR_VERSION}.txt" ]; then
   echo -e "${cyan} =========== ${NC}"
@@ -141,8 +141,8 @@ if [ -f "${WORKING_DIR}/../playbooks/files/python/requirements-current-${PYTHON_
   if [ ${RC} -ne 0 ]; then
     echo ""
     echo -e "${red} ${head_skull} Sorry,  python requirements installation failed ${NC}"
-    echo -e "${yellow} ${head_skull} WARNING : As we are using jenkins user. It might fail on purpose ${NC}"
-    echo -e "${yellow} ${head_skull} because I did not want jenkins user to allow such changes ${NC}"
+    echo -e "${yellow} ${head_skull} WARNING : As we are using ansible user. It might fail on purpose ${NC}"
+    echo -e "${yellow} ${head_skull} because I did not want ansible user to allow such changes ${NC}"
     exit 1
   else
     echo -e "${green} The python requirements installation completed successfully. ${NC}"

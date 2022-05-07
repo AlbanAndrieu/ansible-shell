@@ -9,3 +9,4 @@
 - src: https://github.com/geerlingguy/ansible-role-ntp.git
   name: geerlingguy.ntp
   version: master
+

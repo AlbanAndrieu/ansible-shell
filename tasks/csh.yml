@@ -16,12 +16,12 @@
   template: src=dev.env.csh.j2 dest={{shell_env_directory}}/dev.env.csh
   tags: configure
 
-#Cygwin
 - name: shell | Configure .cshrc file
   template: src=.cshrc-cygwin.j2 dest={{home}}/.cshrc
   when: shell_cygwin_enabled
-  tags: configure
-#  tags: cygwin
+  tags: 
+    - configure
+    - cygwin
 
 - name: shell | Configure .cshrc file
   template: src=.cshrc.j2 dest={{home}}/.cshrc

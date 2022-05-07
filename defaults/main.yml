@@ -1,29 +1,31 @@
+---
 shell_enabled: yes                       # Enable module
 shell_bash_enabled: yes                  # Enable bash shell
 shell_csh_enabled: no                    # Enable csh shell
-shell_ksh_enabled: yes                   # Enable ksh shell
+shell_ksh_enabled: no                    # Enable ksh shell
 shell_cygwin_enabled: no                 # Enable cygwin
 shell_brew_enabled: yes                  # Enable brew install
 
 #do not activate locate with docker
-shell_locate_enabled: no                 # Enable locate search feature
-shell_history_enabled: yes               # Enable history bash tweek
-shell_nano_enabled: yes                  # Enable nano syntax color
-shell_vim_enabled: yes                   # Enable vim syntax color
-shell_maven_enabled: no                  # Enable maven syntax color
-shell_log4j_enabled: yes                 # Enable log4j
-shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
-shell_gpg_enabled: yes                   # Enable gpg tweak
-shell_ssh_enabled: yes                   # Enable ssh tweak
-shell_synapse_enabled: no                # Enable synapse config
-shell_git_meld_enabled: no               # Enable git meld (shell_git_configure_enabled must be enabled too)
-shell_git_configure_enabled: yes         # Enable git configuration
-shell_git_netrc_enabled: no              # Enable git netrc configuration
+shell_locate_enabled: no                    # Enable locate search feature
+shell_history_enabled: yes                  # Enable history bash tweek
+shell_nano_enabled: yes                     # Enable nano syntax color
+shell_vim_enabled: yes                      # Enable vim syntax color
+shell_maven_enabled: no                     # Enable maven syntax color
+shell_log4j_enabled: no                     # Enable log4j
+shell_rlogin_enabled: yes                   # Enable rsh rlogin rexecd
+shell_gpg_enabled: yes                      # Enable gpg tweak
+shell_ssh_enabled: yes                      # Enable ssh tweak
+shell_synapse_enabled: no                   # Enable synapse config
+shell_git_meld_enabled: no                  # Enable git meld (shell_git_configure_enabled must be enabled too)
+shell_git_configure_enabled: yes            # Enable git configuration
+shell_git_netrc_enabled: no                 # Enable git netrc configuration
 shell_bash_completion_enabled: yes
 shell_bash_completion_extra_enabled: no
 shell_bash_completion_kubectl_enabled: yes
-shell_bash_completion_git_enabled: no        # Enable git completion
-shell_openstack_enabled: yes
+shell_bash_completion_git_enabled: no       # Enable git completion
+shell_docker_machine_prompt_enabled: no     # Enable docker machine prompt
+shell_novarc_enabled: yes                   # Enable openstack novarc
 
 #user: 'albandri' #please override me
 user: "{{ lookup('env','USER') }}"

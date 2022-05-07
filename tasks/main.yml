@@ -28,16 +28,6 @@
   when: shell_ksh_enabled
   tags: [ksh]
 
-- name: newrelic | Configure newrelic.yml file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
-  template:
-    src: newrelic.yml.j2
-    dest: '{{ home }}/newrelic.yml'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
-    mode: 0755
-  tags: newrelic
-
 - name: Change whole home folder ownership
   file: path={{ home }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }}
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')

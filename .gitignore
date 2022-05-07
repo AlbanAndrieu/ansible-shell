@@ -1,3 +1,12 @@
+
+node_modules/
+.project
+.settings/
+docker-dockerfilelint.json
+docker-hadolint.json
+pylint-junit-result.xml
+docker-dive.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

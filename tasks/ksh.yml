@@ -6,4 +6,3 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
     - ksh
-#    - todo

@@ -66,7 +66,7 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-#GIT specific
+# GIT specific
 source ~/.git-prompt.sh
 
 if [ "$color_prompt" = yes ]; then
@@ -120,6 +120,8 @@ fi
 if [ -f ~/step-0-color.sh ]; then
   . ~/step-0-color.sh
 fi
+
+#export GIT_RADAR_COLOR_BRANCH='\033[0;36m'
 
 ##
 # XXXXXXXXXXXXXXXXXXXXX

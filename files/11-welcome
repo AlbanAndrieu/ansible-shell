@@ -12,12 +12,6 @@ echo ""
 echo "	Nabla Docker integration machine"
 echo "	================================"
 echo -n "	Daily docker update status ... "
-#if [ $(tail -1 /home/$USER/update-docker-images.logs) = "SUCCESS" ]
-#then
-#	echo -e "\033[1;32mOK\033[0m"
-#else
-#	echo -e "\033[0;31mKO\033[0m"
-#fi
 echo -n "	Currently running containers ... "
 docker ps -q | wc -l
 docker ps -a --format '\t{{.Names}}\t\t{{.Status}}'
