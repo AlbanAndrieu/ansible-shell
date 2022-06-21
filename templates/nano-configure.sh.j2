@@ -2,4 +2,5 @@
 # {{ ansible_managed }}
 
 cd {{home}}/nanorc && ./install.sh && cd {{ home }}/
-echo 'include ~/.nano/syntax/ALL.nanorc' >> .nanorc
+echo 'include ~/nanorc/*.nanorc' >> .nanorc
+#echo 'include ~/.nano/syntax/ALL.nanorc' >> .nanorc

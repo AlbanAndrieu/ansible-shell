@@ -1,0 +1,266 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Replace the "❯" symbol in the prompt with "➜"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+
+# Move the directory to the second line
+#format = "$all$directory$character"
+
+# Use custom format
+#format = """
+#[┌───────────────────>](bold green)
+#[│](bold green)$all$directory$character
+#[└─>](bold green) """
+
+# bracketed-segments.toml
+
+[aws]
+format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
+symbol = "  "
+
+[buf]
+symbol = " "
+
+[c]
+format = '\[[$symbol($version(-$name))]($style)\]'
+symbol = " "
+
+[cmake]
+format = '\[[$symbol($version)]($style)\]'
+
+[cmd_duration]
+format = '\[[⏱ $duration]($style)\]'
+
+[cobol]
+format = '\[[$symbol($version)]($style)\]'
+
+[conda]
+format = '\[[$symbol$environment]($style)\]'
+symbol = " "
+
+[container]
+format = "[$symbol \\[$name\\]]($style) "
+
+[crystal]
+format = '\[[$symbol($version)]($style)\]'
+
+[dart]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[directory]
+truncation_length = 8
+truncation_symbol = "…/"
+truncate_to_repo = false
+read_only = " "
+disabled = false
+
+[deno]
+format = '\[[$symbol($version)]($style)\]'
+
+[docker_context]
+#format = "via [🐋 $context](blue bold)"
+format = '\[[$symbol$context]($style)\]'
+symbol = " "
+only_with_files = true
+
+[dotnet]
+format = '\[[$symbol($version)(🎯 $tfm)]($style)\]'
+
+[elixir]
+format = '\[[$symbol($version \(OTP $otp_version\))]($style)\]'
+symbol = " "
+
+[elm]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[erlang]
+format = '\[[$symbol($version)]($style)\]'
+
+[gcloud]
+format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
+
+[git_branch]
+format = '\[[$symbol$branch]($style)\]'
+#symbol = "🌱 "
+#ignore_branches = ["master", "main"]
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = "🔖 "
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+cherry_pick = "[🍒 PICKING](bold red)"
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style))'
+
+[golang]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[haskell]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[helm]
+format = '\[[$symbol($version)]($style)\]'
+
+[hg_branch]
+format = '\[[$symbol$branch]($style)\]'
+symbol = " "
+
+[hostname]
+ssh_only = false
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
+trim_at = ".companyname.com"
+disabled = true
+
+[java]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[julia]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[kotlin]
+format = '\[[$symbol($version)]($style)\]'
+
+[kubernetes]
+format = '\[[$symbol$context( \($namespace\))]($style)\]'
+
+[lua]
+format = '\[[$symbol($version)]($style)\]'
+
+[memory_usage]
+disabled = false
+format = '\[$symbol[$ram( | $swap)]($style)\]'
+symbol = " "
+
+[nim]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[nix_shell]
+format = '\[[$symbol$state( \($name\))]($style)\]'
+symbol = " "
+
+[nodejs]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[ocaml]
+format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
+
+[openstack]
+format = '\[[$symbol$cloud(\($project\))]($style)\]'
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = false
+format = '\[[$symbol$version]($style)\]'
+
+[perl]
+format = '\[[$symbol($version)]($style)\]'
+
+[php]
+format = '\[[$symbol($version)]($style)\]'
+
+[pulumi]
+format = '\[[$symbol$stack]($style)\]'
+
+[purescript]
+format = '\[[$symbol($version)]($style)\]'
+
+[python]
+format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
+#format = '\[[${symbol}${pyenv_prefix}(${version})]($style)\]'
+symbol = " "
+
+[red]
+format = '\[[$symbol($version)]($style)\]'
+
+[ruby]
+format = '\[[$symbol($version)]($style)\]'
+
+[rust]
+format = '\[[$symbol($version)]($style)\]'
+symbol = " "
+
+[scala]
+format = '\[[$symbol($version)]($style)\]'
+
+[spack]
+format = '\[[$symbol$environment]($style)\]'
+symbol = "🅢 "
+
+[status]
+style = "bg:blue"
+#symbol = "🔴"
+sigint_symbol = ""
+#success_symbol = "🟢"
+#format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
+format = '[\[$symbol$signal_name$maybe_int\]]($style) '
+map_symbol = true
+disabled = false
+
+[sudo]
+format = '\[[as $symbol]($style)\]'
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = true
+
+[swift]
+format = '\[[$symbol($version)]($style)\]'
+
+[terraform]
+format = '\[[$symbol$version\($workspace\)]($style)\]'
+#format = "[🏎💨 $version$workspace]($style) "
+
+[time]
+disabled = false
+format = '🕙[\[ $time \]]($style) '
+time_format = "%T"
+#utc_time_offset = "-5"
+time_range = "18:00:00-09:00:00"
+
+[username]
+style_user = "white bold"
+style_root = "black bold"
+#format = "user: [$user]($style) "
+format = '\[[$user]($style)\]'
+#disabled = false
+#show_always = true
+
+[vagrant]
+format = '\[[$symbol($version)]($style)\]'
+
+[vlang]
+format = '\[[$symbol($version)]($style)\]'
+
+[zig]
+format = '\[[$symbol($version)]($style)\]'
+
+[jobs]
+symbol = "+ "
+number_threshold = 4
+symbol_threshold = 0
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+#disabled = false
+
+# nerd-font-symbols.toml

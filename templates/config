@@ -1,4 +1,0 @@
-host gra*
-user ubuntu
-identityfile ~/.ssh/terraform_rsa
-AddKeysToAgent yes

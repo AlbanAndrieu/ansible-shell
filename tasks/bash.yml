@@ -62,6 +62,11 @@
   copy: src=.login dest={{ home }}/.login
   tags: bash
 
+# See https://starship.rs/
+- name: shell | Configure starship file
+  copy: src=starship.toml dest={{ home }}/.config/starship.toml mode=755
+  tags: bash
+
 - import_tasks: brew.yml
   when: shell_brew_enabled
   tags: [brew]
@@ -95,7 +100,7 @@
 
 - name: shell | Install git prompt git-radar
   git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled and shell_git_radar_enabled
   become: true
 
 - name: shell | Install git prompt git-radar
@@ -103,7 +108,7 @@
     name: ['michaeldfallen/formula/git-radar']
     state: present
     update_homebrew: yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled and shell_git_radar_enabled
   become: true
   become_user: "{{ shell_owner }}"
   ignore_errors: true

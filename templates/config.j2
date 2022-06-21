@@ -1,20 +1,21 @@
 #KexAlgorithms +diffie-hellman-group1-sha1
 
 host gra1bastion
-user aandrieu
-identityfile ~/.ssh/ed25519
+  user aandrieu
+  identityfile ~/.ssh/id_ed25519.pub
 #ssh -t aandrieu@gra1bastion -- aandrieu@grauat01
 #bssh aandrieu@grauat01
 
 #host grauat01
 host gra*
-user ubuntu
-identityfile ~/.ssh/terraform_rsa
+  user ubuntu
+  identityfile ~/.ssh/terraform_rsa
+#  AddKeysToAgent yes
 
 # warsaw monitoring
 host waw*
-user ubuntu
-identityfile ~/.ssh/terraform_rsa
+  user ubuntu
+  identityfile ~/.ssh/terraform_rsa
 
 #host 10.30.0.*
 #user ubuntu
@@ -25,7 +26,7 @@ Host gitlab.com
   User git
   Port 443
   PreferredAuthentications publickey
-  IdentityFile ~/.ssh/ed25519
+  IdentityFile ~/.ssh/id_ed25519.pub
 
 Host github.com
   UpdateHostKeys yes
@@ -35,4 +36,4 @@ Host github.com
 
 Host git-codecommit.*.amazonaws.com
   User APKA3NAVKYMWXPG7Z4ND
-  IdentityFile ~/.ssh/id_rsa.pub
+  IdentityFile ~/.ssh/aws/id_rsa.pub

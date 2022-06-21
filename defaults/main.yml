@@ -20,6 +20,7 @@ shell_synapse_enabled: no                   # Enable synapse config
 shell_git_meld_enabled: no                  # Enable git meld (shell_git_configure_enabled must be enabled too)
 shell_git_configure_enabled: yes            # Enable git configuration
 shell_git_netrc_enabled: no                 # Enable git netrc configuration
+shell_git_radar_enabled: no                 # Enable git radar configuration
 shell_bash_completion_enabled: yes
 shell_bash_completion_extra_enabled: no
 shell_bash_completion_kubectl_enabled: yes
