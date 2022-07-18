@@ -1,5 +1,7 @@
 ---
 exclude_paths:
+  - .github/
+  - .gitlab/
   - ./report/
   - ./requirements.yml
   - ./.travis.yml
@@ -11,14 +13,18 @@ exclude_paths:
 # rulesdir:
 #   - ./rule/directory/
 skip_list:
-  - '602'  # See https://github.com/ansible/ansible-lint/issues/457
-  - '204'
-  - '503'
+  - "602"  # See https://github.com/ansible/ansible-lint/issues/457
+  - "204"
+  - "503"
 #   - skip_this_tag
 #   - and_this_one_too
 #   - skip_this_id
 # tags:
 #   - run_this_tag
+warn_list:  # or 'skip_list' to silence them completely
+  - yaml  # Violations reported by yamllint
 use_default_rules: true
 # verbosity: 1
-# offline: true
+
+# Offline mode disables installation of requirements.yml
+offline: true
