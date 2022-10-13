@@ -10,7 +10,7 @@
 #    - ksh
 
 - name: shell | Create env directory
-#  file: path={{ shell_env_directory }} state=directory
+  #  file: path={{ shell_env_directory }} state=directory
   file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
 
 - name: shell | Configure step-0-color.sh file
@@ -70,7 +70,6 @@
 - import_tasks: brew.yml
   when: shell_brew_enabled
   tags: [brew]
-
 - name: shell | Install git prompt git-radar requirements
   apt: pkg={{ item }} state=present
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
@@ -90,9 +89,9 @@
 
 - name: shell | Install git prompt git-radar
   homebrew:
-    name: ['randomize-lines']
+    name: [randomize-lines]
     state: present
-    update_homebrew: yes
+    update_homebrew: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: true
   become_user: "{{ shell_owner }}"
@@ -100,15 +99,17 @@
 
 - name: shell | Install git prompt git-radar
   git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled and shell_git_radar_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+    and shell_git_radar_enabled
   become: true
 
 - name: shell | Install git prompt git-radar
   homebrew:
-    name: ['michaeldfallen/formula/git-radar']
+    name: [michaeldfallen/formula/git-radar]
     state: present
-    update_homebrew: yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled and shell_git_radar_enabled
+    update_homebrew: true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+    and shell_git_radar_enabled
   become: true
   become_user: "{{ shell_owner }}"
   ignore_errors: true
@@ -132,7 +133,7 @@
 - name: shell | Install kubectl tools
   snap:
     name: kubectl
-    classic: yes
+    classic: true
   become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version is version_compare(19.04, '>=') and shell_bash_completion_kubectl_enabled
   tags: package
@@ -145,7 +146,7 @@
 
 - name: shell | Fix kubernetes ownership $HOME/.kube/
   file: path={{ shell_owner_home }}/.kube/ owner={{ shell_owner }} group={{ shell_group }} recurse=yes
-#  become_user: "{{ shell_owner }}"
+  #  become_user: "{{ shell_owner }}"
   become: true
 
 - name: shell | Install azure-cli completion
@@ -199,7 +200,7 @@
   tempfile:
     state: directory
     suffix: staging
-#    path: "{{ lookup('env', 'HOME') }}"
+  #    path: "{{ lookup('env', 'HOME') }}"
   register: tempdir
   connection: local
   changed_when: false
@@ -217,9 +218,9 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
   template:
     src: newrelic.yml.j2
-    dest: '{{ home }}/newrelic.yml'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
+    dest: "{{ home }}/newrelic.yml"
+    owner: "{{ shell_owner }}"
+    #    group: '{{ shell_group }}'
     mode: 0755
   tags: newrelic
 
@@ -238,8 +239,8 @@
 - name: git | Configure git
   template:
     src: .gitconfig.j2
-    dest: '{{ home }}/.gitconfig'
-    owner: '{{ shell_owner }}'
+    dest: "{{ home }}/.gitconfig"
+    owner: "{{ shell_owner }}"
     mode: 0700
   when: shell_git_configure_enabled
   changed_when: false
@@ -280,15 +281,15 @@
 - name: vim | Configure vim-configure.sh file
   template:
     src: vim-configure.sh.j2
-    dest: '{{ shell_dir_tmp }}/vim-configure.sh'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
+    dest: "{{ shell_dir_tmp }}/vim-configure.sh"
+    owner: "{{ shell_owner }}"
+    #    group: '{{ shell_group }}'
     mode: 0755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 
 - name: vim | Update  ~/.vim
-  shell: '{{ shell_dir_tmp }}/vim-configure.sh'
+  shell: "{{ shell_dir_tmp }}/vim-configure.sh"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
   become: true
@@ -297,23 +298,23 @@
   git: repo={{ shell_nano_color_repository }} dest={{ home }}/nanorc accept_hostkey=yes update=no
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   tags: nano
-#  become_user: "{{ shell_owner }}"
+  #  become_user: "{{ shell_owner }}"
   become: true
 
 - name: nano | Configure nano-configure.sh file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
   template:
     src: nano-configure.sh.j2
-    dest: '{{ shell_dir_tmp }}/nano-configure.sh'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
+    dest: "{{ shell_dir_tmp }}/nano-configure.sh"
+    owner: "{{ shell_owner }}"
+    #    group: '{{ shell_group }}'
     mode: 0755
   tags: nano
 
 - name: nano | Update  ~/.nanorc
-  shell: '{{ shell_dir_tmp }}/nano-configure.sh'
+  shell: "{{ shell_dir_tmp }}/nano-configure.sh"
   args:
-    chdir: ~
+    chdir:
     creates: .nanorc
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   become: true
@@ -323,16 +324,16 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled and shell_cygwin_enabled == false
   template:
     src: inputrc-configure.sh.j2
-    dest: '{{ shell_dir_tmp }}/inputrc-configure.sh'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
+    dest: "{{ shell_dir_tmp }}/inputrc-configure.sh"
+    owner: "{{ shell_owner }}"
+    #    group: '{{ shell_group }}'
     mode: 0755
   tags: history
 
 - name: inputrc | Update  ~/.inputrc
-  shell: '{{ shell_dir_tmp }}/inputrc-configure.sh > {{ home }}/.inputrc'
+  shell: "{{ shell_dir_tmp }}/inputrc-configure.sh > {{ home }}/.inputrc"
   args:
-    chdir: ~
+    chdir:
     creates: .inputrc
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
@@ -341,9 +342,9 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
   template:
     src: maven-configure.sh.j2
-    dest: '{{ shell_dir_tmp }}/maven-configure.sh'
-    owner: '{{ shell_owner }}'
-#    group: '{{ shell_group }}'
+    dest: "{{ shell_dir_tmp }}/maven-configure.sh"
+    owner: "{{ shell_owner }}"
+    #    group: '{{ shell_group }}'
     mode: 0755
   become: true
   tags: maven
@@ -361,7 +362,7 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: package
   with_items:
-   - locate
+    - locate
   become: true
 
 - name: locate | Update locate database
@@ -376,7 +377,7 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   tags: package
   with_items:
-   - synapse
+    - synapse
 
 - name: synapse | Create synapse directory
   file: path={{ shell_synapse_directory }} state=directory mode=0700 owner={{ shell_owner }}
@@ -396,9 +397,9 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
   template:
     src: config.json.j2
-    dest: '{{ shell_synapse_directory }}/config.json'
-    owner: '{{ shell_owner }}'
-    group: '{{ shell_group }}'
+    dest: "{{ shell_synapse_directory }}/config.json"
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
     mode: 0755
   tags: synapse
 

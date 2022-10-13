@@ -3,31 +3,27 @@
 
 - name: Include OS-specific default variables.
   #include_vars: "{{ ansible_os_family }}.yml"
-  include_vars: "default.yml"
+  include_vars: default.yml
 
 - name: Include OS-specific version variables.
-  include_vars: "version.yml"
+  include_vars: version.yml
 
 - name: Include OS-specific custom variables.
-  include_vars: "custom-{{ ansible_distribution }}.yml"
+  include_vars: custom-{{ ansible_distribution }}.yml
   #include_vars: "{{ ansible_distribution }}.yml"
 
 - import_tasks: shell.yml
   when: shell_enabled
   tags: [shell]
-
 - import_tasks: bash.yml
   when: shell_bash_enabled
   tags: [bash]
-
 - import_tasks: csh.yml
   when: shell_csh_enabled
   tags: [csh]
-
 - import_tasks: ksh.yml
   when: shell_ksh_enabled
   tags: [ksh]
-
 - name: Change whole home folder ownership
   file: path={{ home }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }}
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')

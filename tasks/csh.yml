@@ -9,7 +9,7 @@
 #    - todo
 
 - name: shell | Create env directory
-#  file: path={{ shell_env_directory }} state=directory
+  #  file: path={{ shell_env_directory }} state=directory
   file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
 
 - name: shell | Configure dev.env.csh file
@@ -19,7 +19,7 @@
 - name: shell | Configure .cshrc file
   template: src=.cshrc-cygwin.j2 dest={{home}}/.cshrc
   when: shell_cygwin_enabled
-  tags: 
+  tags:
     - configure
     - cygwin
 
