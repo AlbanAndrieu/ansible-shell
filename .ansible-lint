@@ -6,6 +6,7 @@ exclude_paths:
   - ./requirements.yml
   - ./.travis.yml
   - ./playbooks/group_vars/all/vault.yml
+  - ./vars/version.yml
   - ./docker/
   - ./roles/
 # parseable: true
