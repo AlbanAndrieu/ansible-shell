@@ -4,7 +4,10 @@
 # for examples
 
 # If not running interactively, don't do anything
-[ -z "$PS1" ] && return
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -23,7 +26,7 @@ HISTFILESIZE=2000
 HISTTIMEFORMAT="%F %T "
 
 #for setting history ignore list
-HISTIGNORE="cd:cdr:ls:ll:man:exit"
+HISTIGNORE="&:vault*:pwd:clear:cd:cdr:ls:ll:man:history:exit"
 
 #for history to work the same on each open terminal
 shopt -s histappend
@@ -41,13 +44,13 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-  debian_chroot=$(cat /etc/debian_chroot)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-  xterm-color) color_prompt=yes;;
+    xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -79,7 +82,7 @@ fi
 if [ -d "${HOME}/.linuxbrew/bin" -o -d "${HOME}/.git-radar" -o -f "/home/linuxbrew/.linuxbrew/bin/git-radar" ]; then
   PS1="$PS1\$(git-radar --bash --fetch 2>&1)"
 else
-   PS1=$PS1'$(__git_ps1 "(%s)")'
+  PS1=$PS1'$(__git_ps1 "(%s)")'
 fi
 
 if [ "$color_prompt" = yes ]; then
@@ -95,6 +98,15 @@ xterm*|rxvt*)
 *)
   ;;
 esac
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -158,6 +170,20 @@ echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."
 
 source /opt/ansible/env38/bin/activate  # commented out by conda initialize
 
+# https://symfony.com/doc/5.4/configuration/front_controllers_and_kernel.html#debug-mode
+# set it to 1 to enable the debug mode
+APP_DEBUG=0
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
 complete -C /usr/bin/terraform terraform
+complete -C /usr/bin/nomad nomad
+
+#complete -C /media/albanandrieu/data/jm/infra/hashistack-cluster/.direnv/bin/terraform terraform
+complete -C /home/linuxbrew/.linuxbrew/Cellar/mc/RELEASE.2023-01-11T03-14-16Z_1/bin/mc mc
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 #. torsocks on
