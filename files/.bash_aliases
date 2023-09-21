@@ -238,4 +238,6 @@ alias setWorkspace="source ${WORKSPACE_ENV}/scripts/setWorkspace.sh"
 #alias kubectl=kubectlxx
 #alias k=kubectlxx
 
+#alias jmvpn="sudo openvpn3 session-start --config ~/openvpn.profile"
+alias jmvpn="sudo tailscale up --login-server https://vpn.jusmundi.com:943 --accept-routes --accept-dns"
 alias bssh="ssh -t gra1bastion --"
