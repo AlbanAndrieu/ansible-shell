@@ -11,8 +11,6 @@ esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-#HISTCONTROL=ignoredups
-#HISTCONTROL=ignorespace
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
@@ -73,10 +71,9 @@ fi
 source ~/.git-prompt.sh
 
 if [ "$color_prompt" = yes ]; then
- #PS1='${debian_chroot:+($debian_chroot)}\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\] \w]\[\e[1;36m\] $(__git_ps1 " (%s)") \$\[\e[1;37m\] '
-  PS1='${debian_chroot:+($debian_chroot)}\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\]:\w]\[\e[1;36m\]'
+    PS1='\[\e[1;32m\][\u\[\e[m\]@\[\e[1;33m\]\h\[\e[1;34m\]:\w]\[\e[1;36m\]'
 else
-  PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
 if [ -d "${HOME}/.linuxbrew/bin" -o -d "${HOME}/.git-radar" -o -f "/home/linuxbrew/.linuxbrew/bin/git-radar" ]; then
@@ -86,7 +83,7 @@ else
 fi
 
 if [ "$color_prompt" = yes ]; then
-  PS1="$PS1 🦊 \$ \[\e[1;37m\]"
+    PS1="$PS1 🦊 \$ \[\e[1;37m\]"
 fi
 unset color_prompt force_color_prompt
 
@@ -99,14 +96,20 @@ xterm*|rxvt*)
   ;;
 esac
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -133,8 +136,6 @@ if [ -f ~/step-0-color.sh ]; then
   . ~/step-0-color.sh
 fi
 
-#export GIT_RADAR_COLOR_BRANCH='\033[0;36m'
-
 ##
 # XXXXXXXXXXXXXXXXXXXXX
 ##
@@ -146,16 +147,6 @@ export PROJECT_HOME={{PROJECT_HOME}}
 # Do not use hudson workspace
 export WORKSPACE_ENV={{WORKSPACE_ENV}}
 
-#export PROJECT_THIRDPARTY_PATH={{PROJECT_THIRDPARTY_PATH}}
-#echo PROJECT_THIRDPARTY_PATH : ${PROJECT_THIRDPARTY_PATH}
-
-#If you want to use new GCC by default, make sure that your PATH contains /usr/local/bin before /bin and /usr/bin.
-PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
-# set PATH so it includes user's private bin if it exists
-#if [ -d "$HOME/bin" ] ; then
-#    PATH="$HOME/bin:$PATH"
-#fi
-
 #echo "SHELL : ${SHELL}"
 
 alias 00='. ${PROJECT_HOME}/${PROJECT_USER}00/env/home/dev.env.sh'
@@ -166,24 +157,14 @@ if [ -f ${WORKSPACE_ENV}/home/dev.env.sh ]; then
   . ${WORKSPACE_ENV}/home/dev.env.sh
 fi
 
-echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."
+# echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."
 
-source /opt/ansible/env38/bin/activate  # commented out by conda initialize
+# source /opt/ansible/env38/bin/activate  # commented out by conda initialize
 
 # https://symfony.com/doc/5.4/configuration/front_controllers_and_kernel.html#debug-mode
 # set it to 1 to enable the debug mode
 APP_DEBUG=0
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-complete -C /usr/bin/terraform terraform
-complete -C /usr/bin/nomad nomad
-
-#complete -C /media/albanandrieu/data/jm/infra/hashistack-cluster/.direnv/bin/terraform terraform
-complete -C /home/linuxbrew/.linuxbrew/Cellar/mc/RELEASE.2023-01-11T03-14-16Z_1/bin/mc mc
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 #. torsocks on
+
+source ~/.local/share/omakub/defaults/bash/rc
