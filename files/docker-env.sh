@@ -59,7 +59,7 @@ if [ -n "${DOCKER_FILE}" ]; then
 else
   # shellcheck disable=SC2154
   echo -e "${yellow} ${double_arrow} Undefined parameter ${head_skull} : DOCKER_FILE, use the default one ${NC}"
-  export DOCKER_FILE="../docker/ubuntu20/Dockerfile"
+  export DOCKER_FILE="../docker/ubuntu24/Dockerfile"
   #export DOCKER_FILE="Dockerfile"
   echo -e "${magenta} DOCKER_FILE : ${DOCKER_FILE} ${NC}"
 fi

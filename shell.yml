@@ -1,5 +1,5 @@
 ---
-# sudo ansible-playbook -i hosts -c local -v shell.yml -vvvv | tee setup.log
+# sudo ansible-playbook -i hosts -c local -v shell.yml -vvv | tee setup.log
 
 - name: Assert platform is supported
   hosts: all
@@ -19,7 +19,7 @@
     - name: group hosts by distribution
       group_by: key="{{ ansible_distribution }}-{{ ansible_distribution_version }}"
 
-- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-13*:Ubuntu-14*:Ubuntu-12*
+- hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:Ubuntu-24*:Ubuntu-23*:Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   gather_facts: false
   tasks:
     - name: group hosts for supported distributions
@@ -32,11 +32,11 @@
       fail: msg="{{ ansible_distribution }} {{ ansible_distribution_version }}
                  is not a supported OS for a Tower installation.  Supported
                  OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, or
-                 Ubuntu 12.04/12.04/14.04/16.04/17.04/18.04/19.04/20.04/21.04/22.04"
+                 Ubuntu 12.04/12.04/14.04/16.04/17.04/18.04/19.04/20.04/21.04/22.04/23.04/24.04"
     - debug: msg="Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
 
 - name: Bootstrap shell onto server
-  hosts: Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
+  hosts: Ubuntu-24*:Ubuntu-23*:Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
   remote_user: albandrieu
   become: true
 

@@ -2,33 +2,66 @@
 
 {# Set up machine #}
 {% for machine in shell_git %}
-[user]
-{% if machine.shell_git_email is defined %}
-	email = {{ machine.shell_git_email }}
-{% endif %}
-{% if machine.shell_git_name is defined %}
-	name = {{ machine.shell_git_name }}
-{% endif %}
-{% if machine.shell_git_signingkey is defined %}
-	signingkey = {{ machine.shell_git_signingkey }}
-{% endif %}
-[pull]
-	rebase = true
+
+[apply]
+
+    # Detect whitespace errors when applying a patch.
+    whitespace = fix
+
+[branch]
+
+    # Show most recently changed branches first.
+    sort = -committerdate
+    autosetuprebase = always
+    autosetupmerge = always
+
 [core]
+
 {% if shell_git_autocrlf is defined %}
     autocrlf = "{{ shell_git_autocrlf }}"
 {% endif %}
+
+    # Use custom `.gitignore` and `.gitattributes`.
+    excludesfile = ~/.gitignore
+    attributesfile = ~/.gitattributes
+
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error.
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = trailing-space,-space-before-tab,indent-with-non-tab,cr-at-eol
+
+    # Make `git rebase` safer on macOS.
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+
+    # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+    # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+    precomposeunicode = false
+
+    # Speed up commands involving untracked files such as `git status`.
+    # https://git-scm.com/docs/git-update-index#_untracked_cache
+    untrackedCache = true
+
 {% if shell_git_longpaths is defined %}
     longpaths = "{{ shell_git_longpaths }}"
 {% endif %}
+
 {% if machine.shell_git_editor is defined %}
-	editor = {{ machine.shell_git_editor }}
+    editor = {{ machine.shell_git_editor }}
 {% endif %}
-	excludesfile = {{ home }}/.gitignore
-	whitespace = trailing-space,-space-before-tab,indent-with-non-tab,cr-at-eol
-[credential]
-#	helper = cache --timeout=86400
-	helper = store
+
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+
+    # delta detects terminal colors automatically; set one of these to disable auto-detection
+    # dark = true
+    # light = true
+    
 [alias]
 	co = checkout
 	br = branch
@@ -41,37 +74,41 @@
 	last = log -1 HEAD
 [fetch]
 	prune = true
-[help]
-	autocorrect = 8
+
 [color]
+	# Use colors in Git commands that are capable of colored output when
+	# outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
 	ui = auto
+
+[color "branch"]
+
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+
+	meta = yellow bold
+	frag = magenta bold # line info
+	old = red # deletions
+	new = green # additions
+
+[color "status"]
+
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[commit]
+	gpgsign = true
+	
 [branch "main"]
 	rebase = true
 [branch "master"]
 	rebase = true
 [branch]
 	autosetuprebase = always
-[diff "xls"]
-    binary = true
-    textconv = /usr/bin/py_xls2txt
-#    textconv = /usr/bin/xls2csv
-[diff "pdf"]
-    binary = true
-    textconv = /usr/bin/pdf2txt
-[diff "doc"]
-    binary = true
-    textconv = /usr/bin/catdoc
-[diff "docx"]
-    binary = true
-    textconv = /usr/bin/docx2txt
-[diff "odt"]
-    binary = true
-    textconv = odt2txt
-[diff "ppt"]
-    binary = true
-    textconv = /usr/bin/catppt
-[diff "zip"]
-    textconv = unzip -c -a
+
 {% if machine.shell_git_meld_enabled %}
 [merge]
     tool = meld
@@ -79,14 +116,63 @@
     # Choose one of these 2 lines (not both!) explained below.
     #cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
     cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+    
 [diff]
-#	external = /usr/local/bin/git-diff.sh
+    # Detect copies as well as renames.
+    renames = copies
     tool = meld
+
+[diff "bin"]
+
+    # Use `hexdump` to diff binary files.
+    textconv = hexdump -v -C
+
+[diff "xls"]
+
+    binary = true
+    textconv = /usr/bin/py_xls2txt
+#    textconv = /usr/bin/xls2csv
+
+[diff "pdf"]
+    binary = true
+    textconv = /usr/bin/pdf2txt
+
+[diff "doc"]
+    binary = true
+    textconv = /usr/bin/catdoc
+
+[diff "docx"]
+    binary = true
+    textconv = /usr/bin/docx2txt
+
+[diff "odt"]
+    binary = true
+    textconv = odt2txt
+
+[diff "ppt"]
+    binary = true
+    textconv = /usr/bin/catppt
+
+[diff "zip"]
+    textconv = unzip -c -a
+    
 [difftool]
     prompt = false
+
 [difftool "meld"]
+    path = /usr/bin/meld
     cmd = meld "$LOCAL" "$REMOTE"
 {% endif %}
+	
+[help]
+    autocorrect = 8
+	
+[merge]
+
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
+    tool = meld
+	
 {% if shell_git_maildomain is defined %}
 [maven-scm]
   maildomain = "{{ shell_git_maildomain }}"
@@ -96,18 +182,43 @@
 {% if shell_git_ssl is defined %}
     sslverify = "{{ shell_git_ssl }}"
 {% endif %}
-[init]
-	templateDir = {{ home }}/.git-template
-	defaultBranch = master
+
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+
 [rerere]
-	enabled = true
+    enabled = true
+	
 [push]
-	default = simple
-[commit]
-	gpgsign = true
+    # https://git-scm.com/docs/git-config#git-config-pushdefault
+    default = simple
+    # Make `git push` push relevant annotated tags when pushing branches out.
+    followTags = true
+    default = current
+    autoSetupRemote = true
+	
+[user]
+{% if machine.shell_git_email is defined %}
+    email = {{ machine.shell_git_email }}
+{% endif %}
+{% if machine.shell_git_name is defined %}
+    name = {{ machine.shell_git_name }}
+{% endif %}
+{% if machine.shell_git_signingkey is defined %}
+    signingkey = {{ machine.shell_git_signingkey }}
+{% endif %}
+
+[init]
+    templateDir = {{ home }}/.git-template
+    defaultBranch = master
+
+[pull]
+    rebase = true
+
+[credential]
+    helper = store
+
 {% endfor %}
