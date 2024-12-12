@@ -92,10 +92,6 @@ repos:
     hooks:
       - id: yamllint
         args: [--format, parsable, --strict]
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.3  # or other specific tag
-    hooks:
-      - id: yamlfmt
   - repo: https://github.com/doublify/pre-commit-hindent.git
     rev: b3680b6ebf9f7cf29b19307f246adef66756feef
     hooks:
@@ -168,16 +164,28 @@ repos:
     hooks:
       - id: check-github-workflows
       - id: check-gitlab-ci
-#  - repo: https://github.com/Checkmarx/kics
-#    rev: "v1.5.9"
-#    hooks:
-#      #- id: kics
-#      #  exclude: >
-#      #    (?x)^(
-#      #        .direnv$|
-#      #        .*\.terraform.*$|
-#      #        .*\.tfvars$|
-#      #    )$
-#      - id: kics-scan
-#        verbose: true
-#        args: [--ignore-on-exit, "all", --config, "kics-config.json"]
+  - repo: https://github.com/gitguardian/ggshield
+    rev: v1.32.1
+    hooks:
+      - id: ggshield
+        language_version: python3
+        stages: [commit]
+        # args: ['secret', 'scan', 'pre-commit']
+  - repo: https://github.com/oxsecurity/megalinter
+    rev: v8.2.0
+    hooks:
+      - id: megalinter-incremental  # Faster, less thorough
+        stages:
+          - commit
+        args:
+          - mega-linter-runner
+          - --containername
+          - "megalinter-incremental"
+          - --remove-container
+          - --env
+          - "'CLEAR_REPORT_FOLDER=true'"
+          - --env
+          - "'LOG_LEVEL=warning'"
+          - --filesonly
+          - --flavor
+          - "ci_light"
