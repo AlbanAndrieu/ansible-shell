@@ -1,4 +1,38 @@
+IdentitiesOnly=yes
+#PreferredAuthentications keyboard-interactive,password
+# Below is not working with cloudflare warp
+#Compression=yes
+#ForwardX11=yes
+
 #KexAlgorithms +diffie-hellman-group1-sha1
+
+Host *
+  ControlMaster auto
+  ControlPath ~/.ssh/cm-%r@%h:%p
+  ControlPersist 10m
+
+# pfsense
+host 82.66.4.247 home.albandrieu.com
+  user admin
+  port 9922
+  identityfile ~/.ssh/id_ed25519
+
+# freenas
+host 172.17.0.24 nabla freenas
+  user root
+  identityfile ~/.ssh/id_ed25519
+
+host 172.17.0.93 albanandrieu-Latitude-5420 albandrieu-Latitude-5420
+  user albanandrieu
+  identityfile ~/.ssh/id_ed25519
+
+host 172.17.0.57 albandrieu
+  user albandrieu
+  identityfile ~/.ssh/id_ed25519
+
+host albandrieu-Latitude-5420
+  user albanandrieu
+  identityfile ~/.ssh/id_ed25519
 
 host gra1bastion
   user aandrieu
@@ -17,14 +51,11 @@ host waw*
   user ubuntu
   identityfile ~/.ssh/terraform_rsa
 
-#host 10.30.0.*
-#user ubuntu
-#identityfile ~/.ssh/terraform_rsa
-
+# https://docs.gitlab.com/user/gitlab_com/#alternative-ssh-port not workign with glab CI
 Host gitlab.com
-  Hostname altssh.gitlab.com
+  # Hostname altssh.gitlab.com
   User git
-  Port 443
+  # Port 443
   PreferredAuthentications publickey
   IdentityFile ~/.ssh/id_ed25519.pub
 
