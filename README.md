@@ -63,7 +63,7 @@ shell_workspace_env: "{{ shell_project_home }}/{{ shell_owner }}{{ shell_default
 shell_env_directory: "{{ shell_workspace_env }}/home"
 shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
 
-shell_nano_color_repository: "https://github.com/nanorc/nanorc.git"
+shell_nano_color_repository: "https://github.com/scopatz/nanorc.git"
 shell_vim_color_repository: "https://github.com/klen/.vim.git"
 shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
 shell_git_meld_directory: "/usr/local/bin"
