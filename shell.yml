@@ -2,50 +2,24 @@
 # Ubuntu: uv run ansible-playbook -i hosts -c local -v shell.yml --ask-become-pass | tee setup.log
 # macOS:  uv run ansible-playbook -i hosts -c local --limit localhost --check --diff shell.yml (dry-run first)
 
+# Facts are gathered first, without become: the next play's become depends on ansible_os_family
 - name: Assert platform is supported
   hosts: all
-  remote_user: root
   gather_facts: true
-
   tasks:
+    # The role handles Debian/Ubuntu (tested by Molecule) and macOS (tested in check mode)
     - name: Assert platform is supported
       ansible.builtin.assert:
         that:
-          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Darwin']
+          - ansible_os_family in ['Debian', 'Darwin']
           - ansible_architecture in ['x86_64', 'arm64', 'aarch64']
-
-- name: Group hosts by distribution
-  hosts: all
-  gather_facts: true
-  tasks:
-    - name: Group hosts by distribution
-      ansible.builtin.group_by:
-        key: "{{ ansible_distribution }}-{{ ansible_distribution_version }}"
-
-- name: Group hosts for supported distributions
-  hosts: RedHat-7*:RedHat-6*:CentOS-7*:CentOS-6*:MacOSX-*:Ubuntu-26*:Ubuntu-25*:Ubuntu-24*:Ubuntu-23*:Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-15*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  gather_facts: false
-  tasks:
-    - name: Group hosts for supported distributions
-      ansible.builtin.group_by:
-        key: "supported"
-
-- name: Fail for unsupported distributions
-  hosts: "!supported"
-  gather_facts: false
-  tasks:
-    - name: Fail for unsupported distribution
-      ansible.builtin.fail:
-        msg:
-          "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS for this role. Supported
-          OSes include Red Hat Enterprise Linux 6/7, CentOS 6/7, macOS or Ubuntu 12.04 to 26.04"
-    - name: Display distribution version
-      ansible.builtin.debug:
-        msg: "Version {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}"
+        fail_msg:
+          "{{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_architecture }}) is not supported"
 
 - name: Bootstrap shell onto server
-  hosts: MacOSX-*:Ubuntu-26*:Ubuntu-25*:Ubuntu-24*:Ubuntu-23*:Ubuntu-22*:Ubuntu-21*:Ubuntu-20*:Ubuntu-19*:Ubuntu-18*:Ubuntu-17*:Ubuntu-16*:Ubuntu-14*:Ubuntu-13*:Ubuntu-12*
-  remote_user: albandrieu
+  hosts: all
+  gather_facts: false
+  # Connects as the current user, set ansible_user in the inventory for remote hosts
   # Homebrew refuses to run as root and files in $HOME must stay owned by the user on macOS
   become: "{{ ansible_os_family != 'Darwin' }}"
 

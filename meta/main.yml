@@ -12,17 +12,18 @@ galaxy_info:
   namespace: albanandrieu
   company: Nabla
   license: GPLv3
-  min_ansible_version: 2.7.8
+  # ansible-core version required by pyproject.toml
+  min_ansible_version: "2.18"
   platforms:
+    # Tested by Molecule (.github/workflows/ci.yml)
     - name: Ubuntu
       versions:
-        - all
+        - jammy
+        - noble
     - name: Debian
       versions:
         - all
-    - name: EL
-      versions:
-        - all
+    # Tested in check mode on macos-latest
     - name: MacOSX
       versions:
         - all

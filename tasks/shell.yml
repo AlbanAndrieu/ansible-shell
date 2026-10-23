@@ -55,6 +55,20 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
 
+- name: Shell | Remove rlogin trusted hosts (rhosts)
+  ansible.builtin.file:
+    path: "{{ home }}/.rhosts"
+    state: absent
+  tags: package
+
+# Was only deployed on Linux, where the role runs with become
+- name: Shell | Remove rlogin trusted hosts (hosts.equiv)
+  ansible.builtin.file:
+    path: /etc/hosts.equiv
+    state: absent
+  when: ansible_os_family != 'Darwin'
+  tags: package
+
 - name: Shell | Create gnupg directory
   ansible.builtin.file:
     path: "{{ home }}/.gnupg"
