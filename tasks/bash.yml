@@ -89,6 +89,13 @@
     mode: "0644"
   tags: bash
 
+- name: Shell | Create .config directory
+  ansible.builtin.file:
+    path: "{{ home }}/.config"
+    state: directory
+    mode: "0755"
+  tags: bash
+
 # See https://starship.rs/
 - name: Shell | Configure starship file
   ansible.builtin.copy:
@@ -312,7 +319,8 @@
     owner: "{{ shell_owner }}"
     mode: "0600"
     backup: true
-  when: shell_git_configure_enabled
+  # The template renders one section per shell_git entry: an empty list would wipe ~/.gitconfig
+  when: shell_git_configure_enabled and shell_git | length > 0
   tags: git
 
 - name: Git | Configure global git settings
@@ -326,6 +334,8 @@
     - { name: alias.ci, value: commit }
     - { name: alias.st, value: status }
     - { name: color.ui, value: auto }
+  # Already set by .gitconfig.j2, which would be overwritten back and forth otherwise
+  when: not shell_git_configure_enabled or shell_git | length == 0
   tags: git
 
 # See https://docs.ansible.com/ansible/git_config_module.html
@@ -340,6 +350,8 @@
     version: "{{ shell_vim_color_version }}"
     accept_hostkey: true
     update: false
+    # Submodules are fetched by vim-configure.sh, which rewrites their git:// URLs
+    recursive: false
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 

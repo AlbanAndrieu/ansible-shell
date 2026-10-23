@@ -3,7 +3,7 @@
 
 - name: Shell | Display current shell
   ansible.builtin.debug:
-    msg: "SHELL is {{ ansible_env.SHELL }} "
+    msg: "SHELL is {{ ansible_env.SHELL | default('unset') }} "
 
 - name: Shell | Check user
   ansible.builtin.user:
@@ -97,6 +97,14 @@
     mode: "0644"
   when: shell_gpg_enabled
   tags: gpg
+
+- name: Shell | Create ssh directory
+  ansible.builtin.file:
+    path: "{{ home }}/.ssh"
+    state: directory
+    mode: "0700"
+  when: shell_ssh_enabled
+  tags: ssh
 
 - name: Shell | Configure config (ssh) file
   ansible.builtin.template:

@@ -1,0 +1,14 @@
+---
+# Installed by the molecule galaxy dependency step
+roles:
+  - src: "https://github.com/AlbanAndrieu/ansible-role-git"
+    name: "geerlingguy.git"
+    version: master
+
+collections:
+  - name: community.general # homebrew, snap, git_config modules
+    version: ">=10.0.0"
+  - name: community.docker # molecule docker driver
+    version: ">=3.10.2"
+  - name: ansible.posix
+    version: ">=1.4.0"

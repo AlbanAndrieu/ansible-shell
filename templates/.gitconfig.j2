@@ -61,7 +61,7 @@
     # delta detects terminal colors automatically; set one of these to disable auto-detection
     # dark = true
     # light = true
-    
+
 [alias]
 	co = checkout
 	br = branch
@@ -101,7 +101,7 @@
 
 [commit]
 	gpgsign = true
-	
+
 [branch "main"]
 	rebase = true
 [branch "master"]
@@ -116,7 +116,7 @@
     # Choose one of these 2 lines (not both!) explained below.
     #cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
     cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
-    
+
 [diff]
     # Detect copies as well as renames.
     renames = copies
@@ -155,7 +155,7 @@
 
 [diff "zip"]
     textconv = unzip -c -a
-    
+
 [difftool]
     prompt = false
 
@@ -163,16 +163,16 @@
     path = /usr/bin/meld
     cmd = meld "$LOCAL" "$REMOTE"
 {% endif %}
-	
+
 [help]
     autocorrect = 8
-	
+
 [merge]
 
     # Include summaries of merged commits in newly created merge commit messages
     log = true
     tool = meld
-	
+
 {% if shell_git_maildomain is defined %}
 [maven-scm]
   maildomain = "{{ shell_git_maildomain }}"
@@ -191,7 +191,7 @@
 
 [rerere]
     enabled = true
-	
+
 [push]
     # https://git-scm.com/docs/git-config#git-config-pushdefault
     default = simple
@@ -199,7 +199,7 @@
     followTags = true
     default = current
     autoSetupRemote = true
-	
+
 [user]
 {% if machine.shell_git_email is defined %}
     email = {{ machine.shell_git_email }}
@@ -220,5 +220,9 @@
 
 [credential]
     helper = store
+
+[maven-scm]
+    maildomain = {{ machine.shell_git_maildomain | default(shell_git_maven_scm_maildomain) }}
+    forceUsername = true
 
 {% endfor %}

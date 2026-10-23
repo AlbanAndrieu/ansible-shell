@@ -89,6 +89,8 @@ repos:
         name: "📁 filesystem/📝 docstring · Validate docstring first"
       - id: name-tests-test
         name: "📁 filesystem/📝 names · Check tests names"
+        # molecule testinfra only collects test_*.py
+        args: [--pytest-test-first]
 
         # --------------------------- 🔍 Code Quality Tools -------------------------- #
       - id: check-json

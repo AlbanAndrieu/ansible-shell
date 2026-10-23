@@ -27,3 +27,15 @@ dev = [
 # Ansible role, not a Python package: only manage the virtualenv.
 package = false
 default-groups = ["dev"]
+
+# Same rules as ~/.ruff.toml, so that CI and local runs agree
+[tool.ruff.lint]
+ignore = ["E501", "E203", "RUF012"]
+select = ["B", "C", "E", "F", "W", "S", "A", "LOG", "RUF", "PLC", "PLE", "PLW", "C90"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.per-file-ignores]
+# pytest/testinfra checks are written with assert
+"**/tests/*" = ["S101"]

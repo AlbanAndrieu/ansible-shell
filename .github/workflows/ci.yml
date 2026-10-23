@@ -27,12 +27,12 @@ jobs:
         with:
           working_directory: "alban.andrieu.workstation"
 
-      - name: Install test dependencies.
-        run: uv sync --frozen
+      # ansible-lint needs the collections and the geerlingguy.git role
+      - name: Install dependencies.
+        run: mise run install
 
-      - name: Lint code.
-        run: |
-          uv run yamllint .
+      - name: Lint code (yamllint, ansible-lint).
+        run: mise run lint
 
   molecule:
     name: Molecule
@@ -42,8 +42,8 @@ jobs:
         include:
           - distro: ubuntu2404
             playbook: converge.yml
-          # - distro: debian12
-          #   playbook: converge.yml
+          - distro: ubuntu2204
+            playbook: converge.yml
 
     steps:
       - name: Check out the codebase.
