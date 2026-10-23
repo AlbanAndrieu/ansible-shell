@@ -3,7 +3,6 @@ shell_enabled: true # Enable module
 shell_bash_enabled: true # Enable bash shell
 shell_csh_enabled: false # Enable csh shell
 shell_ksh_enabled: false # Enable ksh shell
-shell_cygwin_enabled: false # Enable cygwin
 shell_brew_enabled: true # Enable brew install
 
 # do not activate locate with docker
@@ -13,7 +12,6 @@ shell_nano_enabled: true # Enable nano syntax color
 shell_vim_enabled: true # Enable vim syntax color
 shell_maven_enabled: false # Enable maven syntax color
 shell_log4j_enabled: false # Enable log4j
-shell_rlogin_enabled: true # Enable rsh rlogin rexecd
 shell_gpg_enabled: true # Enable gpg tweak
 shell_ssh_enabled: true # Enable ssh tweak
 shell_synapse_enabled: false # Enable synapse config
@@ -60,7 +58,6 @@ shell_home_owned_paths:
   - .nanorc
   - .netrc
   - .novarc
-  - .rhosts
   - .ssh/config
   - .vim
   - ansible-env.sh
@@ -120,11 +117,6 @@ shell_git:
   #   shell_git_autocrlf: input
   #   shell_git_editor: "nano",
   #   shell_git_signingkey: "B12DECD437E9E1C8"
-
-rhosts_hosts:
-  - "albandrieu"
-  - "MAC-CNQHKPHF6Q"
-  - "albandri-laptop-misys"
 
 newrelic_app_name: "Nabla Demo"
 

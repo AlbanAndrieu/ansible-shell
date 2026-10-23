@@ -7,8 +7,7 @@ homebrew_home_check_path: "{{ lookup('env', 'HOME') }}/.linuxbrew"
 homebrew_check_path: "{{ homebrew_home_check_path }}/bin/brew"
 
 shell_env_drive_path: ""
-shell_env_database_arch: x86Linux
-shell_env_maven_local_repo_path: "${env.WORKSPACE}/.m2/repository"
+shell_env_maven_local_repo_path: "${WORKSPACE}/.m2/repository"
 # PROJECT_EXTRACTION: nabla-cpp
 
 # JAVA_HOME: /usr/lib/jvm/java-6-openjdk
@@ -17,29 +16,19 @@ shell_env_maven_local_repo_path: "${env.WORKSPACE}/.m2/repository"
 # JAVA_HOME: "/usr/lib/jvm/java-7-oracle/"
 # JAVA_HOME: "/usr/lib/jvm/java-9-oracle/"
 shell_env_java_home: /usr/lib/jvm/java-1.8.0-openjdk-amd64/
-shell_env_python_dir: "${DRIVE_PATH}/usr/lib/python{{ shell_env_python_major_version }}"
-shell_env_python_exe: "/usr/bin/python{{ shell_env_python_major_version }}"
 shell_env_scons_dir: "/usr/lib/scons/SCons"
 # SCONS_PATH: "${SCONS_DIR}/script"
 shell_env_scons_path: "{{ shell_env_scons_dir }}/Script"
 shell_env_scons_exe: "/usr/bin/scons"
 shell_env_scons_alias: "/usr/bin/python2.7 /opt/ansible/env/bin/scons" # for virtualenv
-shell_env_cmake_home: "/usr/share/cmake-{{ shell_env_cmake_major_version }}"
 # M2_HOME: "/usr/share/maven"
 # M2_HOME: "/usr/local/apache-maven-{{ shell_env_maven_major_version }}"
 shell_env_m2_home: "/opt/maven/apache-maven-{{ shell_env_maven_major_version }}"
 # MAVEN_OPTS: "-Xms256m -Xmx1024m -XX:PermSize=80M -XX:MaxPermSize=256M -XX:+UseConcMarkSweepGC -Dcom.sun.management.jmxremote -Dmaven.color=false"
 shell_env_maven_opts: "-Xms1G -Xmx2G -Dmaven.color.hide.level=false"
 shell_env_java_opts: "-Xms1G -Xmx2G"
-shell_env_ant_home: "/usr/share/ant"
 shell_env_tibco_home: "${DRIVE_PATH}/home/{{ shell_env_unix_username }}/tibco"
 shell_env_tibrv_home: "{{ shell_env_tibco_home }}/tibrv/{{ shell_env_tibrv_version }}"
-shell_env_conky_home: "{{ shell_env_user_path }}/.conky"
-
-# Overrided
-# JBOSS_VERSION: "4.2.2.GA"
-# JBOSS_HOME: "${DRIVE_PATH}/workspace/jboss-{{ shell_env_jboss_version }}"
-shell_env_jboss_home: "${PROJECT_THIRDPARTY_PATH}/jboss-{{ shell_env_jboss_version }}"
 
 ##################################
 ####### USER PARAMETERS
@@ -47,12 +36,6 @@ shell_env_jboss_home: "${PROJECT_THIRDPARTY_PATH}/jboss-{{ shell_env_jboss_versi
 
 shell_env_user_index_id: 24
 
-shell_env_workstation: albandri
-# DO NOT FORCE
-## WORKSTATION_REMOTE: "{{ shell_env_workstation }}"
-shell_env_workstation_remote: ":0.0"
-# WORKSTATION_REMOTE: localhost:10.0
-shell_env_running_services_server: "{{ shell_env_workstation }}"
 shell_env_unix_username: "{{ lookup('env', 'USER') }}"
 
 # EDITOR: nedit
@@ -62,20 +45,5 @@ shell_env_cowsay: "/usr/games"
 shell_env_histsize: "3000"
 
 shell_env_log4j_root_category: "DEBUG, {{ shell_env_log4j_active_appender }}"
-shell_env_logger_root_category: "DEBUG, CONSOLE, SOCKETSERV"
-shell_env_app_server_mode: jboss
-
-# Credentials are read from the environment, never commit them
-shell_env_ec2_keypair: "{{ lookup('env', 'EC2_KEYPAIR') }}"
-shell_env_ec2_url: "https://ec2.us-west-2.amazonaws.com"
-shell_env_ec2_private_key: "{{ lookup('env', 'EC2_PRIVATE_KEY') }}"
-shell_env_ec2_cert: "{{ lookup('env', 'EC2_CERT') }}"
 
 shell_env_docker_registry_user: "{{ lookup('env', 'DOCKER_REGISTRY_USER') }}"
-shell_env_docker_registry_pass: "{{ lookup('env', 'DOCKER_REGISTRY_PASS') }}"
-
-shell_env_github_oauth_client_id: "{{ lookup('env', 'GITHUB_OAUTH_CLIENT_ID') }}"
-shell_env_github_oauth_client_secret: "{{ lookup('env', 'GITHUB_OAUTH_CLIENT_SECRET') }}"
-
-shell_env_github_organization: Banbou
-shell_env_github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"

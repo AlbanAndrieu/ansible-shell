@@ -270,7 +270,6 @@
     dest: "{{ home }}/.bashrc"
     mode: "0644"
     backup: true
-  when: not shell_cygwin_enabled
   tags: bash
 
 - name: Shell | Copy the .novarc script for openstack
@@ -287,8 +286,8 @@
 - name: Newrelic | Configure newrelic.yml file
   # newrelic_license_key is a secret: provide it from the inventory / vault
   when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and not
-    shell_cygwin_enabled and newrelic_license_key is defined
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and
+    newrelic_license_key is defined
   ansible.builtin.template:
     src: newrelic.yml.j2
     dest: "{{ home }}/newrelic.yml"
@@ -397,9 +396,7 @@
   become: true
 
 - name: Nano | Configure nano-configure.sh file
-  when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and not
-    shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   ansible.builtin.template:
     src: nano-configure.sh.j2
     dest: "{{ shell_dir_tmp }}/nano-configure.sh"
@@ -417,9 +414,7 @@
   tags: nano
 
 - name: Inputrc | Configure inputrc-configure.sh file
-  when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled and not
-    shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   ansible.builtin.template:
     src: inputrc-configure.sh.j2
     dest: "{{ shell_dir_tmp }}/inputrc-configure.sh"
@@ -467,9 +462,7 @@
     state: present
     update_cache: true
   become: true
-  when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
-    shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled
   tags: package
 
 - name: Synapse | Create synapse directory
@@ -478,9 +471,7 @@
     state: directory
     mode: "0700"
     owner: "{{ shell_owner }}"
-  when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
-    shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled
 
 - name: Synapse | Copy synapse startpage search into place
   ansible.builtin.copy:
@@ -489,15 +480,11 @@
     owner: "{{ shell_owner }}"
     group: "{{ shell_group }}"
     mode: "0644"
-  when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
-    shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled
   tags: synapse
 
 - name: Synapse | Configure synapse config.json file
-  when:
-    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
-    shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled
   ansible.builtin.template:
     src: config.json.j2
     dest: "{{ shell_synapse_directory }}/config.json"
@@ -507,7 +494,7 @@
   tags: synapse
 
 - name: Banner | Configure banner welcome file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and not shell_cygwin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   ansible.builtin.copy:
     src: 11-welcome
     dest: /etc/update-motd.d/11-welcome

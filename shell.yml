@@ -11,7 +11,7 @@
     - name: Assert platform is supported
       ansible.builtin.assert:
         that:
-          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris', 'Darwin']
+          - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Darwin']
           - ansible_architecture in ['x86_64', 'arm64', 'aarch64']
 
 - name: Group hosts by distribution
@@ -78,6 +78,5 @@
         shell_git_meld_enabled: true
         shell_git_signingkey: "B12DECD437E9E1C8"
         shell_git_editor: "nano"
-    #      shell_rlogin_enabled: no
     shell_maven_enabled: false
     docker_files_enable: false

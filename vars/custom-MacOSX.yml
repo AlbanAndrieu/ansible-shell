@@ -18,14 +18,10 @@ shell_project_home: "{{ home }}/workspace/users"
 shell_bash_completion_dir: "{{ homebrew_prefix }}/etc/bash_completion.d"
 
 shell_env_drive_path: ""
-shell_env_maven_local_repo_path: "${env.WORKSPACE}/.m2/repository"
+shell_env_maven_local_repo_path: "${WORKSPACE}/.m2/repository"
 
 shell_env_java_home: "$(/usr/libexec/java_home 2>/dev/null)"
-shell_env_python_dir: "${HOME}/.local/share/mise/installs/python/latest"
-shell_env_python_exe: "python3"
-shell_env_cmake_home: "{{ homebrew_prefix }}/share/cmake"
 shell_env_m2_home: "{{ homebrew_prefix }}/opt/maven/libexec"
-shell_env_ant_home: "{{ homebrew_prefix }}/opt/ant/libexec"
 
 ##################################
 ####### USER PARAMETERS
@@ -33,9 +29,6 @@ shell_env_ant_home: "{{ homebrew_prefix }}/opt/ant/libexec"
 
 shell_env_user_index_id: 24
 
-shell_env_workstation: localhost
-shell_env_workstation_remote: ":0.0"
-shell_env_running_services_server: "{{ shell_env_workstation }}"
 shell_env_unix_username: "{{ lookup('env', 'USER') }}"
 
 shell_env_editor: nano
@@ -43,22 +36,6 @@ shell_env_cowsay: "{{ homebrew_prefix }}/bin"
 shell_env_histsize: "3000"
 
 shell_env_log4j_root_category: "DEBUG, {{ shell_env_log4j_active_appender }}"
-shell_env_logger_root_category: "DEBUG, CONSOLE, SOCKETSERV"
-shell_env_app_server_mode: jboss
-
-shell_env_database_arch: "{{ 'arm64Darwin' if ansible_architecture == 'arm64' else 'x86Darwin' }}"
-
-shell_env_ec2_keypair: ""
-shell_env_ec2_url: "https://ec2.us-west-2.amazonaws.com"
-shell_env_ec2_private_key: ""
-shell_env_ec2_cert: ""
 
 # Read from the environment instead of being stored in the repository
 shell_env_docker_registry_user: "{{ lookup('env', 'DOCKER_REGISTRY_USER') }}"
-shell_env_docker_registry_pass: "{{ lookup('env', 'DOCKER_REGISTRY_PASS') }}"
-
-shell_env_github_oauth_client_id: "{{ lookup('env', 'GITHUB_OAUTH_CLIENT_ID') }}"
-shell_env_github_oauth_client_secret: "{{ lookup('env', 'GITHUB_OAUTH_CLIENT_SECRET') }}"
-
-shell_env_github_organization: Banbou
-shell_env_github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"

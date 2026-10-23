@@ -68,3 +68,15 @@ def test_motd_banner_owned_by_root(host):
 
     assert f.user == "root"
     assert f.mode == 0o755
+
+
+def test_rlogin_removed(host):
+    assert not host.package("xinetd").is_installed
+
+
+def test_dev_env_is_valid_bash(host):
+    # shell_env_directory for shell_owner root and shell_default_version 30
+    path = "/workspace/users/root30/nabla/env/home/dev.env.sh"
+
+    assert host.file(path).is_file
+    assert host.run(f"bash -n {path}").rc == 0

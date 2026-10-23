@@ -34,7 +34,6 @@ shell_enabled: yes                       # Enable module
 shell_bash_enabled: yes                  # Enable bash shell
 shell_csh_enabled: no                    # Enable csh shell
 shell_ksh_enabled: yes                   # Enable ksh shell
-shell_cygwin_enabled: no                 # Enable cygwin
 
 #do not activate locate with docker
 shell_locate_enabled: no                 # Enable locate search feature
@@ -43,7 +42,6 @@ shell_nano_enabled: yes                  # Enable nano syntax color
 shell_vim_enabled: yes                   # Enable vim syntax color
 shell_maven_enabled: no                 # Enable maven syntax color
 shell_log4j_enabled: yes                 # Enable log4j
-shell_rlogin_enabled: yes                # Enable rsh rlogin rexecd
 shell_synapse_enabled: no                # Enable synapse config
 shell_git_meld_enabled: yes              # Enable git meld (shell_git_configure_enabled must be enabled too)
 shell_git_completion_enabled: yes        # Enable git completion
@@ -80,10 +78,6 @@ shell_git: []
   #   shell_git_ssl: false,
   #   shell_git_meld_enabled: yes,
   #   shell_git_editor: "vim",
-
-rhosts_hosts:
-  - "albandri"
-  - "albandri-laptop-misys"
 
 newrelic_app_name: "Nabla Demo"
 

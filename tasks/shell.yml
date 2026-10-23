@@ -46,37 +46,14 @@
   when: shell_log4j_enabled
   tags: log4j
 
-# rlogin
+# rlogin/rsh support was removed (unencrypted, use ssh): clean up hosts set up by older versions
 - name: Shell | Uninstall xinetd for rlogin rsh rexec
   ansible.builtin.apt:
     name: [xinetd]
     state: absent
     purge: true
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and not shell_rlogin_enabled
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
-
-- name: Shell | Install xinetd for rlogin rsh rexec (Debian only)
-  ansible.builtin.apt:
-    name: [xinetd]
-    state: present
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_rlogin_enabled
-  tags: rlogin
-
-- name: Shell | Configure rhosts (rlogin) file
-  ansible.builtin.template:
-    src: .rhosts.j2
-    dest: "{{ home }}/.rhosts"
-    mode: "0600"
-  when: shell_rlogin_enabled
-  tags: rlogin
-
-- name: Shell | Configure hosts.equiv (rlogin) file
-  ansible.builtin.template:
-    src: hosts.equiv.j2
-    dest: /etc/hosts.equiv
-    mode: "0644"
-  when: shell_rlogin_enabled and ansible_os_family != 'Darwin'
-  tags: rlogin
 
 - name: Shell | Create gnupg directory
   ansible.builtin.file:

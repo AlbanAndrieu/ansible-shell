@@ -19,43 +19,21 @@ shell_env_default_env_loaded: 30
 shell_env_drive_path: ""
 shell_env_project_home: "${DRIVE_PATH}{{ shell_project_home }}"
 shell_env_project_user: "{{ shell_env_unix_username }}"
-shell_env_user_path: "${PROJECT_HOME}/{{ shell_env_project_user }}{{ shell_env_dev_version }}"
 shell_env_workspace_env: "${PROJECT_HOME}/${PROJECT_USER}${PROJECT_VERSION}/{{ shell_workspace_suffix }}"
 
 shell_env_project_version: "{{ shell_env_dev_version }}"
-shell_env_project_major_version: "{{ shell_env_project_version }}"
-shell_env_project_minor_version: "02"
-shell_env_project_patch_version: "01"
 shell_env_project_extraction: nabla-cpp
-shell_env_project_path: "{{ shell_env_user_path }}/{{ shell_env_project_extraction }}"
 shell_env_project_build_type: target
 shell_env_project_target_path: "${WORKSPACE}/${PROJECT_BUILD_TYPE}"
-shell_env_project_deploy_path: "${PROJECT_TARGET_PATH}/deploy"
-shell_env_project_pkg_path: "${PROJECT_TARGET_PATH}/pkg"
-shell_env_project_bin_path: "${PROJECT_TARGET_PATH}/bin/${ARCH}"
-shell_env_project_web_path: "${PROJECT_TARGET_PATH}/{{ shell_env_app_server_mode }}"
-
-shell_env_project_thirdparty_path: "${DRIVE_PATH}/thirdparty"
-
-shell_env_workstation: localhost
-# WORKSTATION_REMOTE: localhost:0.0
-shell_env_workstation_remote: ":0.0"
-# NABLA_HOST: localhost
-shell_env_nabla_host: "home.nabla.mobi"
 
 #################################
 
 shell_env_eclipse_debug_port: "29{{ shell_env_user_index_id }}"
 shell_env_debug_options:
   "-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address={{ shell_env_eclipse_debug_port }},server=y,suspend=n"
-shell_env_jmx_default_debug_port: "9193"
-shell_env_jmx_tomcat_debug_port: "9194"
-shell_env_jmx_jboss_debug_port: "9195"
-shell_env_jmx_jety_debug_port: "9196"
 
 #################################
 
-shell_env_prompt: "'$P$G'"
 shell_env_editor: vi
 shell_env_term: xterm
 shell_env_cowsay:
@@ -64,18 +42,7 @@ shell_env_lang: "en_US.UTF-8"
 shell_env_pager: "most"
 shell_env_histsize: "1000"
 
-shell_env_project_database_path: "${PROJECT_THIRDPARTY_PATH}/database"
-
 # DEFAULT_LOG_PATH: {{ shell_env_project_target_path }}/work/log
-
-# weblogic | jboss | tomcat
-shell_env_app_server_mode: jboss
-
-# tomcat
-shell_env_app_server_admin_port: 8005
-shell_env_app_server_port: 8280
-shell_env_app_server_http_sport: 8443
-shell_env_app_server_ajp_port: 8009
 
 shell_env_log4j_active_appender: "CONSOLE, SOCKETSERV, FILE"
 shell_env_log4j_root_category: "DEBUG, {{ shell_env_log4j_active_appender }}"
@@ -89,13 +56,9 @@ shell_env_log4j_server_pattern: "{{ shell_env_log4j_server_name }} - %d{yyyy/MM/
 # MAVEN_LOCAL_REPO_PATH: ~/.m2/repository
 # MAVEN_LOCAL_REPO_PATH: {{ shell_env_drive_path }}/repo
 shell_env_maven_local_repo_path: "${WORKSPACE}/.m2/repository"
-# M2_SETTINGS: ${WORKSPACE_ENV}/home/.m2/settings.xml
-shell_env_m2_settings: "${PROJECT_DEV}/.m2/settings.xml"
 shell_env_maven_opts: "-Xms1G -Xmx2G -Dmaven.color.hide.level=false"
 shell_env_java_opts: "-Xms1G -Xmx2G"
 shell_env_java_home: "${DRIVE_PATH}/usr/lib/jvm/jdk{{ shell_env_java_major_version }}"
-shell_env_python_dir: "${DRIVE_PATH}/usr/lib/python{{ shell_env_python_major_version }}"
-shell_env_python_exe: "${DRIVE_PATH}/usr/bin/python{{ shell_env_python_major_version }}"
 # setenv SCONS_DIR ${PYTHON_DIR}
 # setenv SCONS_DIR ${PYTHON_DIR}/Lib/site-packages/scons-{{ shell_env_scons_major_version }}
 shell_env_scons_dir: "${DRIVE_PATH}/usr/lib/scons"
@@ -103,36 +66,9 @@ shell_env_scons_path: "${SCONS_DIR}/script"
 # SCONS_PATH: ${SCONS_DIR}/SCons/Script
 shell_env_scons_exe: "${DRIVE_PATH/usr/bin/scons"
 shell_env_scons_alias: "{{ shell_env_scons_exe }}"
-# SCONS_ALIAS: ${SCONS_DIR}/scons.py
-# SCONS_ALIAS: ${SCONS_DIR}/scons/scons.py
-shell_env_cmake_home: "${DRIVE_PATH}/usr/share/cmake-{{ shell_env_cmake_major_version }}"
 shell_env_m2_home: "${DRIVE_PATH}/usr/share/maven3"
-shell_env_ant_home: "${DRIVE_PATH}/usr/share/ant"
-shell_env_diff_cmd: svndiff
-shell_env_qt_dir: "${DRIVE_PATH}/usr/lib/qt3"
-shell_env_tomcat_base: "tomcat9"
-shell_env_tomcat_home: "${DRIVE_PATH}/var/lib/{{ shell_env_tomcat_base }}"
-shell_env_catalina_home: "${DRIVE_PATH}/usr/share/{{ shell_env_tomcat_base }}"
-shell_env_catalina_base: "{{ shell_env_tomcat_home }}"
 shell_env_eclipse_home: "${DRIVE_PATH}/usr/local/eclipse/eclipse-4"
-shell_env_zaproxy_home: "${DRIVE_PATH}/workspace/divers/zaproxy-read-only/build/zap"
-shell_env_hudson_home: "${DRIVE_PATH}/workspace/hudson"
-shell_env_jenkins_home: "${DRIVE_PATH}/jenkins"
-shell_env_sonar_home: "${DRIVE_PATH}/workspace/sonar"
-shell_env_sonar_runner_home: "${DRIVE_PATH}/workspace/sonar-runner"
-shell_env_chrome_bin: "${DRIVE_PATH}/usr/bin/google-chrome"
 shell_env_tibco_home: "${DRIVE_PATH}/home/{{ shell_env_unix_username }}/tibco"
 shell_env_tibrv_home: "{{ shell_env_tibco_home }}/tibrv/{{ shell_env_tibrv_version }}"
-shell_env_conky_home: ""
-shell_env_jrebel_home: ""
-shell_env_yourkit_home: ""
-shell_env_jmeter_home: "${DRIVE_PATH}/usr/share/jmeter"
 
-shell_env_crowd_install: "${DRIVE_PATH}/workspace/crowd"
-shell_env_crowd_home: "${DRIVE_PATH}/var/crowd-home"
-shell_env_fisheye_home: "${DRIVE_PATH}/workspace/fecru"
-shell_env_fisheye_inst: "${DRIVE_PATH}/workspace/fisheye"
-shell_env_nexus_home: "${DRIVE_PATH}/workspace/nexus"
-shell_env_jboss_home: "${PROJECT_THIRDPARTY_PATH}/jboss-{{ shell_env_jboss_version }}"
 shell_env_md_home: "${DRIVE_PATH}/MagicDraw-UML-16.5"
-shell_env_opengrok_tomcat_base: "{{ shell_env_tomcat_home }}"
