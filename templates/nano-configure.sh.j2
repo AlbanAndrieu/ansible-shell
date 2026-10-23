@@ -1,6 +1,9 @@
 #!/bin/bash
 # {{ ansible_managed }}
+set -euo pipefail
 
-cd {{home}}/nanorc && ./install.sh && cd {{ home }}/
-echo 'include ~/nanorc/*.nanorc' >> .nanorc
-#echo 'include ~/.nano/syntax/ALL.nanorc' >> .nanorc
+# install.sh needs unzip and wget, it adds the ~/.nano includes to ~/.nanorc
+cd {{ home }}/nanorc
+./install.sh
+
+grep -qxF 'include ~/nanorc/*.nanorc' {{ home }}/.nanorc || echo 'include ~/nanorc/*.nanorc' >> {{ home }}/.nanorc
