@@ -9,6 +9,8 @@ ME            = $(shell whoami)
 
 # Executables: local only
 DOCKER        = docker
+UV_RUN        = uv run
+PLAYBOOK      = $(UV_RUN) ansible-playbook -i hosts -c local --limit localhost
 
 # Misc
 .DEFAULT_GOAL = build
@@ -28,11 +30,21 @@ all: clean build
 clean:
 	@echo "=> Cleaning image..."
 
+## —— Install 📦 ———————————————————————————————————————————————————————————————
+.PHONY: install
+install: ## Install tools (mise), python dependencies (uv) and ansible requirements
+	mise install
+	mise run install
+
 ## —— Ansible 🐝 ————————————————————————————————————————————————————————————————
+.PHONY: check-ansible
+check-ansible: ## Dry-run the playbook on localhost (no change applied)
+	$(PLAYBOOK) --check --diff shell.yml
+
 .PHONY: build-ansible
 build-ansible: ## Build workstation with ansible
 	@echo "=> Building ansible..."
-	./setup.sh
+	$(PLAYBOOK) --diff shell.yml
 
 ## —— Build 🚀 —————————————————————————————————————————————————————————————————
 .PHONY: build
@@ -55,10 +67,11 @@ run: down up
 fmt: ## Run formating
 	@echo "=> Executing formating..."
 	shfmt -i 2 -ci -w *.sh || true
-	ansible-lint --write ./
+	$(UV_RUN) ansible-lint --write ./
 
 ## —— Tests Ansible 🧪🔗 —————————————————————————————————————————————————————————————————
 .PHONY: test
 test: ## Run all tests
 	@echo "=> Testing ansible..."
-	ansible-lint ./
+	$(UV_RUN) yamllint .
+	$(UV_RUN) ansible-lint ./

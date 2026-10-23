@@ -3,33 +3,33 @@
 ####### ENV PARAMETERS
 ##################################
 
-DRIVE_PATH: "C:\\"
-DATABASE_ARCH: "winnt"
-MAVEN_LOCAL_REPO_PATH: "{{DRIVE_PATH}}\\repo"
-PROJECT_EXTRACTION: cpp
+shell_env_drive_path: "C:\\"
+shell_env_database_arch: "winnt"
+shell_env_maven_local_repo_path: "{{ shell_env_drive_path }}\\repo"
+shell_env_project_extraction: cpp
 
-DIFF_CMD: "xxdiff"
-QT_DIR: "/lib/qt3/TODO"
-CATALINA_HOME: "${JBOSS_HOME}\\server\\default"
-# ECLIPSE_HOME: "${DRIVE_PATH}\\eclipse-{{ECLIPSE_VERSION}}"
-MD_HOME: "C:\\MagicDraw-UML-16.5"
-CHROME_BIN: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+shell_env_diff_cmd: "xxdiff"
+shell_env_qt_dir: "/lib/qt3/TODO"
+shell_env_catalina_home: "${JBOSS_HOME}\\server\\default"
+# ECLIPSE_HOME: "${DRIVE_PATH}\\eclipse-{{ shell_env_eclipse_version }}"
+shell_env_md_home: "C:\\MagicDraw-UML-16.5"
+shell_env_chrome_bin: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
 
-TIBCO_HOME: "C:\\Tibco"
-TIBRV_HOME: "C:\\Tibco\\Tibrv"
+shell_env_tibco_home: "C:\\Tibco"
+shell_env_tibrv_home: "C:\\Tibco\\Tibrv"
 
 ##################################
 ####### USER PARAMETERS
 ##################################
 
-USER_INDEX_ID: 24
+shell_env_user_index_id: 24
 
-WORKSTATION: albandri
-RUNNING_SERVICES_SERVER: "{{WORKSTATION}}"
-UNIX_USERNAME: aandrieu
+shell_env_workstation: albandri
+shell_env_running_services_server: "{{ shell_env_workstation }}"
+shell_env_unix_username: aandrieu
 
-EDITOR: nedit
+shell_env_editor: nedit
 
-LOG4J_ROOT_CATEGORY: "DEBUG, {{LOG4J_ACTIVE_APPENDER}}"
-LOGGER_ROOT_CATEGORY: "DEBUG, CONSOLE, SOCKETSERV"
-APP_SERVER_MODE: jboss
+shell_env_log4j_root_category: "DEBUG, {{ shell_env_log4j_active_appender }}"
+shell_env_logger_root_category: "DEBUG, CONSOLE, SOCKETSERV"
+shell_env_app_server_mode: jboss

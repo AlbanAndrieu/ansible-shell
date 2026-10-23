@@ -4,197 +4,194 @@
 ##################################
 
 #
-#GUI
+# GUI
 #
-GUI_VERSION: "2.0-SNAPSHOT"
+shell_env_gui_version: "2.0-SNAPSHOT"
 
 #
-#JBOSS
+# JBOSS
 #
-#JBOSS_VERSION: 4.2.2.GA
-JBOSS_VERSION: as-7.1.1.Final
+# JBOSS_VERSION: 4.2.2.GA
+shell_env_jboss_version: as-7.1.1.Final
 
 #
-#BEES
+# BEES
 #
-BEES_VERSION: 1.1
+shell_env_bees_version: 1.1
 
 #
-#ECLIPSE
+# ECLIPSE
 #
-ECLIPSE_VERSION: 3.7
-
-###
-#CMAKE
-#CMAKE_MAJOR_VERSION: 2.8
-CMAKE_MAJOR_VERSION: 2.6.4
+shell_env_eclipse_version: 3.7
 
 ###
-#PYTHON
-PYTHON_MAJOR_VERSION: 3.6
+# CMAKE
+# CMAKE_MAJOR_VERSION: 2.8
+shell_env_cmake_major_version: 2.6.4
 
 ###
-#SCONS
-#SCONS_MAJOR_VERSION: 2.1.0
-SCONS_MAJOR_VERSION: 2.2.0
+# PYTHON
+shell_env_python_major_version: 3.6
+
+###
+# SCONS
+# SCONS_MAJOR_VERSION: 2.1.0
+shell_env_scons_major_version: 2.2.0
 
 ###
 #
 # LOGBACK
 #
-LOGBACK_VERSION: 0.9.26
+shell_env_logback_version: 0.9.26
 
 ###
 #
 # SLF4J
 #
-SLF4J_VERSION: 1.6.1
+shell_env_slf4j_version: 1.6.1
 
 ###
 #
-#LOG4CXX
+# LOG4CXX
 #
-LOG4CXX_VERSION: 0.10.0
+shell_env_log4cxx_version: 0.10.0
 
 ###
 #
 # LOG4J
 #
-LOG4J_VERSION: 1.2.16
+shell_env_log4j_version: 1.2.16
 
 ###
 #
 # GROOVY
 #
-GROOVY_VERSION: 1.7.8
+shell_env_groovy_version: 1.7.8
 
 ###
 #
-#APR_UTIL_VERSION
+# APR_UTIL_VERSION
 #
-APR_UTIL_VERSION: 1.3.7
-
-###
-#
-#APR_VERSION
-#
-APR_VERSION: 1.3.5
+shell_env_apr_util_version: 1.3.7
 
 ###
 #
-#BOOST
+# APR_VERSION
 #
-BOOST_VERSION: 1.41.0
+shell_env_apr_version: 1.3.5
 
 ###
 #
-#GCC
+# BOOST
 #
-GCC_VERSION: 3.4.4
-#GCC_VERSION: 4.3.4
+shell_env_boost_version: 1.41.0
 
-ORB_NAME_LINUX: tao
-#TAO
+###
 #
-TAO_VERSION: 1_5a
-
-###
-#CPPUNIT
+# GCC
 #
-CPPUNIT_VERSION: 1.12.0
+shell_env_gcc_version: 3.4.4
+# GCC_VERSION: 4.3.4
 
-###
-#GETTEXT
+shell_env_orb_name_linux: tao
+# TAO
 #
-#GETTEXT_VERSION: 0.14.5
-GETTEXT_VERSION: 0.17
+shell_env_tao_version: 1_5a
 
 ###
-#XERCES
+# CPPUNIT
 #
-#XERCES_VERSION: 3_0_1
-XERCES_VERSION: 2.8.0
-XERCES_IMPL_VERSION: 2.9.1
+shell_env_cppunit_version: 1.12.0
 
 ###
-#SAXON
+# GETTEXT
 #
-SAXON_VERSION: 8.7
+# GETTEXT_VERSION: 0.14.5
+shell_env_gettext_version: 0.17
 
 ###
-#TIBRV
+# XERCES
 #
-#TIBCO_VERSION: 7.2.x
-TIBCO_VERSION: 8.4
-TIBRV_VERSION: "{{TIBCO_VERSION}}"
+# XERCES_VERSION: 3_0_1
+shell_env_xerces_version: 2.8.0
+shell_env_xerces_impl_version: 2.9.1
 
 ###
-#JMS
+# SAXON
 #
-JMS_VERSION: 4.4.3
+shell_env_saxon_version: 8.7
 
 ###
-#SYBASE
+# TIBRV
 #
-SYBASE_VERSION: 12.5
-#SYBASE_VERSION: 15.0.2
-SYBASE_SERVER_VERSION: 12.51
-#SYBASE_SERVER_VERSION: 15.0
-SYBASE_ESD_VERSION: 17
-#SYBASE_ESD_VERSION: 19
-SYBASE_OSD_VERSION: 15
-SYBASE_OCS: "OCS-{{SYBASE_OSD_VERSION}}_0"
+# TIBCO_VERSION: 7.2.x
+shell_env_tibco_version: 8.4
+shell_env_tibrv_version: "{{ shell_env_tibco_version }}"
 
 ###
-#JCONNECT
-JCONNECT_VERSION: 6.0.5.26312
-
-###
-#ORACLE
+# JMS
 #
-ORACLE_VERSION: 10.2.0
-
-#QT
-QT_VERSION: 3.3.7
+shell_env_jms_version: 4.4.3
 
 ###
-#JAVA_MAJOR_VERSION
-JAVA_VERSION: jdk1.6.0_33
-#JAVA_VERSION: jdk1.7.0_05
-#JAVA_MAJOR_VERSION: 1.6
-#JAVA_MAJOR_VERSION: 1.7
-JAVA_MAJOR_VERSION: 1.8
+# SYBASE
+#
+shell_env_sybase_version: 12.5
+# SYBASE_VERSION: 15.0.2
+shell_env_sybase_server_version: 12.51
+# SYBASE_SERVER_VERSION: 15.0
+shell_env_sybase_esd_version: 17
+# SYBASE_ESD_VERSION: 19
+shell_env_sybase_osd_version: 15
+shell_env_sybase_ocs: "OCS-{{ shell_env_sybase_osd_version }}_0"
 
 ###
-#ANT_MAJOR_VERSION
-ANT_MAJOR_VERSION: 1.8.0
+# JCONNECT
+shell_env_jconnect_version: 6.0.5.26312
 
 ###
-#MAVEN_MAJOR_VERSION
-#MAVEN_MAJOR_VERSION: 3.0.4
-#MAVEN_MAJOR_VERSION: 3.2.1
-MAVEN_MAJOR_VERSION: 3.3.9
+# ORACLE
+#
+shell_env_oracle_version: 10.2.0
+
+# QT
+shell_env_qt_version: 3.3.7
 
 ###
-#GRAPHVIZ_MAJOR_VERSION
-GRAPHVIZ_MAJOR_VERSION: 2.26.3
+# JAVA_MAJOR_VERSION
+shell_env_java_version: jdk1.6.0_33
+# JAVA_VERSION: jdk1.7.0_05
+# JAVA_MAJOR_VERSION: 1.6
+# JAVA_MAJOR_VERSION: 1.7
+shell_env_java_major_version: 1.8
 
 ###
-#LUMBERMILL_MAJOR_VERSION
-LUMBERMILL_MAJOR_VERSION: 2.0-b3
+# ANT_MAJOR_VERSION
+shell_env_ant_major_version: 1.8.0
 
 ###
-#ANTLR
-ANTLR_VERSION: 2.7.6rc1
+# MAVEN_MAJOR_VERSION
+# MAVEN_MAJOR_VERSION: 3.0.4
+# MAVEN_MAJOR_VERSION: 3.2.1
+shell_env_maven_major_version: 3.3.9
 
 ###
-#FOP
-FOP_VERSION: 0.93
-
-#QT
-QT_VERSION: 3.3.7
+# GRAPHVIZ_MAJOR_VERSION
+shell_env_graphviz_major_version: 2.26.3
 
 ###
-#XML2
-XML2_VERSION: 2.7.2
-#XML2_VERSION: 2.7.4
+# LUMBERMILL_MAJOR_VERSION
+shell_env_lumbermill_major_version: 2.0-b3
+
+###
+# ANTLR
+shell_env_antlr_version: 2.7.6rc1
+
+###
+# FOP
+shell_env_fop_version: 0.93
+
+###
+# XML2
+shell_env_xml2_version: 2.7.2
+# XML2_VERSION: 2.7.4

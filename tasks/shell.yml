@@ -1,72 +1,108 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- debug: msg="SHELL is {{ ansible_env.SHELL }} "
+- name: Shell | Display current shell
+  ansible.builtin.debug:
+    msg: "SHELL is {{ ansible_env.SHELL }} "
 
-- name: shell | Check user
-  user: name={{ shell_owner }} state=present
+- name: Shell | Check user
+  ansible.builtin.user:
+    name: "{{ shell_owner }}"
+    state: present
+  # user module needs root on macOS (dscl)
+  when: ansible_os_family != 'Darwin'
 
-- name: shell | Check user home directory
-  stat: path={{ shell_owner_home }}
+- name: Shell | Check user home directory
+  ansible.builtin.stat:
+    path: "{{ shell_owner_home }}"
   register: home_present
 
-- debug: msg=" shell | Path exists and is a directory"
-  when: home_present.stat.isdir is defined and home_present.stat.isdir == true
+- name: Shell | Display home directory status
+  ansible.builtin.debug:
+    msg: " shell | Path exists and is a directory"
+  when: home_present.stat.isdir is defined and home_present.stat.isdir
 
-- name: shell | Configure log4j.lcf file
-  template: src=log4j.lcf.j2 dest={{ home }}/log4j.lcf
-  ignore_errors: true
+- name: Shell | Configure log4j.lcf file
+  ansible.builtin.template:
+    src: log4j.lcf.j2
+    dest: "{{ home }}/log4j.lcf"
+    mode: "0644"
   when: shell_log4j_enabled
   tags: log4j
 
-- name: shell | Configure log4j.properties file
-  template: src=log4j.properties.j2 dest={{ home }}/log4j.properties
-  ignore_errors: true
+- name: Shell | Configure log4j.properties file
+  ansible.builtin.template:
+    src: log4j.properties.j2
+    dest: "{{ home }}/log4j.properties"
+    mode: "0644"
   when: shell_log4j_enabled
   tags: log4j
 
-- name: shell | Configure log4j.xml file
-  template: src=log4j.xml.j2 dest={{ home }}/log4j.xml
-  ignore_errors: true
+- name: Shell | Configure log4j.xml file
+  ansible.builtin.template:
+    src: log4j.xml.j2
+    dest: "{{ home }}/log4j.xml"
+    mode: "0644"
   when: shell_log4j_enabled
   tags: log4j
 
 # rlogin
-- name: shell | Uninstall xinetd for rlogin rsh rexec
-  apt: >
-    pkg={{ item }}
-    state=absent
-    purge=yes
-    force=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_rlogin_enabled == false
+- name: Shell | Uninstall xinetd for rlogin rsh rexec
+  ansible.builtin.apt:
+    name: [xinetd]
+    state: absent
+    purge: true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and not shell_rlogin_enabled
   tags: package
-  with_items:
-    - xinetd
 
-- name: shell | Install xinetd for rlogin rsh rexec (Debian only)
-  apt: pkg={{ item }} state=present
+- name: Shell | Install xinetd for rlogin rsh rexec (Debian only)
+  ansible.builtin.apt:
+    name: [xinetd]
+    state: present
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_rlogin_enabled
-  with_items:
-    - xinetd
   tags: rlogin
 
-- name: shell | Configure rhosts (rlogin) file
-  template: src=.rhosts.j2 dest={{ home }}/.rhosts
+- name: Shell | Configure rhosts (rlogin) file
+  ansible.builtin.template:
+    src: .rhosts.j2
+    dest: "{{ home }}/.rhosts"
+    mode: "0600"
   when: shell_rlogin_enabled
   tags: rlogin
 
-- name: shell | Configure hosts.equiv (rlogin) file
-  template: src=hosts.equiv.j2 dest=/etc/hosts.equiv
-  when: shell_rlogin_enabled
+- name: Shell | Configure hosts.equiv (rlogin) file
+  ansible.builtin.template:
+    src: hosts.equiv.j2
+    dest: /etc/hosts.equiv
+    mode: "0644"
+  when: shell_rlogin_enabled and ansible_os_family != 'Darwin'
   tags: rlogin
 
-- name: shell | Configure gpg-agent.conf (gpg) file
-  copy: src=gpg-agent.conf dest={{ home }}/.gnupg/gpg-agent.conf owner={{ shell_owner }} group={{ shell_group }} mode=644
-  ignore_errors: true
+- name: Shell | Create gnupg directory
+  ansible.builtin.file:
+    path: "{{ home }}/.gnupg"
+    state: directory
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
+    mode: "0700"
   when: shell_gpg_enabled
   tags: gpg
 
-- name: shell | Configure config (ssh) file
-  template: src=config.j2 dest={{ home }}/.ssh/config
+- name: Shell | Configure gpg-agent.conf (gpg) file
+  ansible.builtin.copy:
+    src: gpg-agent.conf
+    dest: "{{ home }}/.gnupg/gpg-agent.conf"
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
+    mode: "0644"
+  when: shell_gpg_enabled
+  tags: gpg
+
+- name: Shell | Configure config (ssh) file
+  ansible.builtin.template:
+    src: config.j2
+    dest: "{{ home }}/.ssh/config"
+    mode: "0600"
+    backup: true
   when: shell_ssh_enabled
   tags: ssh

@@ -17,7 +17,7 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE={{ HISTSIZE }}
+HISTSIZE={{ shell_env_histsize }}
 HISTFILESIZE=2000
 
 #for setting history format
@@ -76,6 +76,16 @@ else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
+# Homebrew (/opt/homebrew on Apple Silicon, /usr/local on Intel, ~/.linuxbrew on Linux)
+if [ -x "{{ homebrew_check_path }}" ]; then
+  eval "$("{{ homebrew_check_path }}" shellenv)"
+fi
+
+# mise (python, node, uv...) See https://mise.jdx.dev/
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
+fi
+
 if [ -d "${HOME}/.linuxbrew/bin" -o -d "${HOME}/.git-radar" -o -f "/home/linuxbrew/.linuxbrew/bin/git-radar" ]; then
   PS1="$PS1\$(git-radar --bash --fetch 2>&1)"
 else
@@ -106,6 +116,10 @@ if [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+elif [ "$(uname -s)" = "Darwin" ]; then
+    # BSD ls on macOS has no --color option
+    export CLICOLOR=1
+    alias grep='grep --color=auto'
 fi
 
 # colored GCC warnings and errors
@@ -128,6 +142,9 @@ if ! shopt -oq posix; then
     . /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  elif [ -n "${HOMEBREW_PREFIX:-}" ] && [ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]; then
+    # brew install bash-completion@2 (macOS)
+    . "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
   fi
 fi
 
@@ -140,24 +157,24 @@ fi
 # XXXXXXXXXXXXXXXXXXXXX
 ##
 
-export PROJECT_USER={{PROJECT_USER}}
-export PROJECT_VERSION={{PROJECT_VERSION}}
-export DRIVE_PATH={{DRIVE_PATH}}
-export PROJECT_HOME={{PROJECT_HOME}}
+export PROJECT_USER={{shell_env_project_user}}
+export PROJECT_VERSION={{shell_env_project_version}}
+export DRIVE_PATH={{shell_env_drive_path}}
+export PROJECT_HOME={{shell_env_project_home}}
 # Do not use hudson workspace
-export WORKSPACE_ENV={{WORKSPACE_ENV}}
+export WORKSPACE_ENV={{shell_env_workspace_env}}
 
 #echo "SHELL : ${SHELL}"
 
 alias 00='. ${PROJECT_HOME}/${PROJECT_USER}00/env/home/dev.env.sh'
-alias {{DEFAULT_ENV_LOADED}}='. ${WORKSPACE_ENV}/home/dev.env.sh'
+alias {{shell_env_default_env_loaded}}='. ${WORKSPACE_ENV}/home/dev.env.sh'
 
 if [ -f ${WORKSPACE_ENV}/home/dev.env.sh ]; then
   echo ${WORKSPACE_ENV}/home/dev.env.sh
   . ${WORKSPACE_ENV}/home/dev.env.sh
 fi
 
-# echo "Set your environment with {{DEFAULT_ENV_LOADED}} alias."
+# echo "Set your environment with {{shell_env_default_env_loaded}} alias."
 
 # source /opt/ansible/env38/bin/activate  # commented out by conda initialize
 

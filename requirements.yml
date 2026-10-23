@@ -2,10 +2,6 @@
 # from galaxy
 # ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
-- src: 'https://github.com/AlbanAndrieu/ansible-role-git'
-  name: 'geerlingguy.git'
-  version: master
-
-- src: https://github.com/geerlingguy/ansible-role-ntp.git
-  name: geerlingguy.ntp
+- src: "https://github.com/AlbanAndrieu/ansible-role-git"
+  name: "geerlingguy.git"
   version: master

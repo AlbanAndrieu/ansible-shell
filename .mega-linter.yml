@@ -2,10 +2,10 @@
 # Configuration file for MegaLinter
 # See all available variables at https://oxsecurity.github.io/megalinter/configuration/ and in linters documentation
 
-APPLY_FIXES: all  # all, none, or list of linter keys
-DEFAULT_BRANCH: master  # Usually master or main
+APPLY_FIXES: all # all, none, or list of linter keys
+DEFAULT_BRANCH: master # Usually master or main
 ENABLE: TERRAFORM,BASH
-ENABLE_LINTERS:  # If you use ENABLE_LINTERS variable, all other linters will be disabled by default
+ENABLE_LINTERS: # If you use ENABLE_LINTERS variable, all other linters will be disabled by default
   - REPOSITORY_SECRETLINT
   - REPOSITORY_GITLEAKS
   - TERRAFORM_TERRASCAN
@@ -48,15 +48,18 @@ MARKDOWN_FILTER_REGEX_EXCLUDE: (license\.md)
 MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
 SPELL_MISSPELL_FILTER_REGEX_EXCLUDE: (\.automation/generated|docs/descriptors)
 DOCKERFILE_HADOLINT_ARGUMENTS:
-  --ignore DL3003 --ignore DL3007 --ignore DL3013 --ignore DL3016 --ignore DL3018 --ignore DL3028 --ignore DL4001 --ignore DL4006 --ignore
-  SC2015 --ignore SC2016 --ignore SC2039 --ignore SC2086 --ignore SC1091
+  --ignore DL3003 --ignore DL3007 --ignore DL3013 --ignore DL3016 --ignore DL3018 --ignore DL3028 --ignore DL4001
+  --ignore DL4006 --ignore SC2015 --ignore SC2016 --ignore SC2039 --ignore SC2086 --ignore SC1091
 # DISABLE_ERRORS: true  # Uncomment if you want MegaLinter to detect errors but not block CI to pass
 REPOSITORY_DEVSKIM_DISABLE_ERRORS: true
 REPOSITORY_DEVSKIM_DISABLE_ERRORS_IF_LESS_THAN: 10
 # See https://github.com/oxsecurity/megalinter/issues/1993
 REPOSITORY_DEVSKIM_ARGUMENTS: --severity critical,important --skip-git-ignored-files # --ignore-globs **/.git/**,**/bin/**,.mypy_cache/**,**/tests/**,**/README.md
 REPOSITORY_TRIVY_DISABLE_ERRORS: false
-REPOSITORY_TRIVY_ARGUMENTS: --security-checks vuln,config,secret --vuln-type os,library --ignore-unfixed --ignorefile .trivyignore.yaml --skip-dirs .direnv --skip-dirs .venv --skip-dirs megalinter-reports --skip-files pip.conf --skip-files Pipfile --skip-files /usr/bin/nomad --skip-files terraform/nomad/jobs/4-2-keycloak.nomad
+REPOSITORY_TRIVY_ARGUMENTS:
+  --security-checks vuln,config,secret --vuln-type os,library --ignore-unfixed --ignorefile .trivyignore.yaml
+  --skip-dirs .direnv --skip-dirs .venv --skip-dirs megalinter-reports --skip-files pip.conf --skip-files Pipfile
+  --skip-files /usr/bin/nomad --skip-files terraform/nomad/jobs/4-2-keycloak.nomad
 REPOSITORY_TRIVY_DISABLE_ERRORS_IF_LESS_THAN: 3
 REPOSITORY_CHECKOV_DISABLE_ERRORS_IF_LESS_THAN: 1
 TERRAFORM_TERRASCAN_ARGUMENTS: -i terraform -t docker -t github -d terraform # -f myfile.tf
@@ -75,17 +78,14 @@ PYTHON_BANDIT_DISABLE_ERRORS: true
 # PYTHON_PYLINT_DISABLE_ERRORS: true
 # PYTHON_PYRIGHT_DISABLE_ERRORS: true
 YAML_V8R_FILE_NAMES_REGEX:
-  [
-    '.codeclimate.yml',
-    '.dive.yaml',
-    '.gitlab-ci.yml',
-    '.mega-linter.yml',
-    '.checkov.yml',
-    'terraform/nomad/jobs/files/alertmanager/alertmanager.yml',
-    'terraform/nomad/jobs/files/prometheus/prom-nomad-rules.yml',
-  ]
-EXCLUDED_DIRECTORIES:
-  ['.github', '.gitlab-ci', 'node_modules', '.venv', '.direnv', '.mypy_cache']
+  - ".codeclimate.yml"
+  - ".dive.yaml"
+  - ".gitlab-ci.yml"
+  - ".mega-linter.yml"
+  - ".checkov.yml"
+  - "terraform/nomad/jobs/files/alertmanager/alertmanager.yml"
+  - "terraform/nomad/jobs/files/prometheus/prom-nomad-rules.yml"
+EXCLUDED_DIRECTORIES: [".github", ".gitlab-ci", "node_modules", ".venv", ".direnv", ".mypy_cache"]
 SHOW_ELAPSED_TIME: true
 JSON_REPORTER: true
 SARIF_REPORTER: true
@@ -101,11 +101,11 @@ PRE_COMMANDS:
     cwd: root
   - command: |-
       echo $(ls -lah .gitignore | sed 's/\s\+/ /g' | cut -d ' ' -f3,4 | sed 's/ /\:/') > perms.txt
-    cwd: 'workspace'
+    cwd: "workspace"
 POST_COMMANDS:
   - command: echo "This is Mega-Linter POST_COMMAND on own Mega-Linter ! :)"
     cwd: workspace
   - command: |-
       find . -user root -group root -exec chown $(cat perms.txt) {} \;
       rm perms.txt
-    cwd: 'workspace'
+    cwd: "workspace"

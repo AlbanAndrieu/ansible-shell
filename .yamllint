@@ -5,7 +5,7 @@ extends: relaxed
 rules:
   # to match ansible-lint --write
   braces:
-    min-spaces-inside: 1
+    min-spaces-inside: 0
     max-spaces-inside: 1
     level: error
   brackets:
@@ -20,10 +20,14 @@ rules:
   # truthy: disable
   # NOTE(retr0h): Templates no longer fail this lint rule.
   #               Uncomment if running old Molecule templates.
+  # Settings required by ansible-lint --fix, see https://docs.ansible.com/projects/lint/rules/yaml/
   truthy:
-    allowed-values: ['true', 'false', 'on']
-  # https://github.com/adrienverge/yamllint/issues/141
-  # comments-indentation: disable
+    allowed-values: ["true", "false"]
+    check-keys: false # GitHub workflows use the "on" key
+  comments-indentation: false
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
 ignore: |-
   .direnv/
   .venv/

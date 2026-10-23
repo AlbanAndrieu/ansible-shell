@@ -1,0 +1,4 @@
+---
+# Used by the commitlint pre-commit hook (commit-msg stage)
+extends:
+  - "@commitlint/config-conventional"

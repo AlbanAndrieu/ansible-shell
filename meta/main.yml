@@ -1,7 +1,9 @@
 ---
-#dependencies: []
+# dependencies: []
 dependencies:
-  - { role: geerlingguy.git }
+  # git is provided by Xcode Command Line Tools or Homebrew on macOS
+  - role: geerlingguy.git
+    when: ansible_os_family != 'Darwin'
 
 galaxy_info:
   author: Alban Andrieu

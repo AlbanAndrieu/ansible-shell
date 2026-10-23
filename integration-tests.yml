@@ -3,13 +3,20 @@
 # integration-tests.yml
 #
 
-- hosts: all
-  sudo: True
+- name: Integration tests
+  hosts: all
+  become: true
   tasks:
     # Tests
     - name: Check git
-      command: which git
+      ansible.builtin.command: which git
       register: git_path
-    - debug: msg="Git was installed in {{git_path.stdout}}"
-    - fail: msg="Git not found, tests failed."
-      when: git_path.stdout != "{{git_path}}/git"
+      changed_when: false
+      failed_when: false
+    - name: Display git path
+      ansible.builtin.debug:
+        msg: "Git was installed in {{ git_path.stdout }}"
+    - name: Fail when git is missing
+      ansible.builtin.fail:
+        msg: "Git not found, tests failed."
+      when: git_path.rc != 0

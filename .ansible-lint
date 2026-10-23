@@ -1,38 +1,25 @@
 ---
+# Paths are relative to the project root (ansible-lint >= 25 no longer matches a leading "./")
 exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
   - .gitlab/
-  - ./report/
-  - ./requirements.yml
-  - ./.travis.yml
-  - ./playbooks/group_vars/all/vault.yml
-  - ./vars/version.yml
-  - ./docker/
-  - ./roles/
-  - ./collections/*
-  - ./ansible_collections/*
-  - ./megalinter-reports/*
+  - .venv/
+  - report/
+  - requirements.yml
+  - docker/
+  - roles/ # galaxy roles installed from requirements.yml
+  - collections/
+  - ansible_collections/
+  - megalinter-reports/
 # parseable: true
 # quiet: true
 # rulesdir:
 #  - ./rule/directory/
-skip_list:
-  - '602'  # See https://github.com/ansible/ansible-lint/issues/457
-  - '204'
-  - '503'
-  - '208'  # File permissions not mentioned
-  - filenotfounderror
-  - 'fqcn-builtins'
-#   - skip_this_tag
-#   - and_this_one_too
-#   - skip_this_id
 # tags:
 #   - run_this_tag
-warn_list:  # or 'skip_list' to silence them completely
-  - yaml  # Violations reported by yamllint
-  - var-spacing  # Jinja2 variables and filters should have spaces before and after.
-  # - syntax-check[specific]
+warn_list: # or 'skip_list' to silence them completely
+  - yaml # Violations reported by yamllint
 use_default_rules: true
 # verbosity: 1
 

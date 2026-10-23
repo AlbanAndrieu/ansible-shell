@@ -1,6 +1,6 @@
 ---
 name: CI
-'on':
+"on":
   pull_request:
   push:
     branches:
@@ -10,10 +10,9 @@ name: CI
 
 defaults:
   run:
-    working-directory: 'alban.andrieu.workstation'
+    working-directory: "alban.andrieu.workstation"
 
 jobs:
-
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -21,25 +20,19 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v4
         with:
-          path: 'alban.andrieu.workstation'
+          path: "alban.andrieu.workstation"
 
-      - name: Set up Python 3.
-        uses: actions/setup-python@v5
+      - name: Install tools with mise (python, uv).
+        uses: jdx/mise-action@v5
         with:
-          python-version: '3.x'
-          cache: 'pip'
-          # cache-dependency-path: '**/requirements-dev.txt'
-          check-latest: true
+          working_directory: "alban.andrieu.workstation"
 
-      # - name: Install dependencies
-      #   run: pip install -r requirements-dev.txt
-        
       - name: Install test dependencies.
-        run: pip3 install yamllint
+        run: uv sync --frozen
 
       - name: Lint code.
         run: |
-          yamllint .
+          uv run yamllint .
 
   molecule:
     name: Molecule
@@ -56,23 +49,43 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v4
         with:
-          path: 'alban.andrieu.workstation'
+          path: "alban.andrieu.workstation"
 
-      - name: Set up Python 3.
-        uses: actions/setup-python@v5
+      - name: Install tools with mise (python, uv).
+        uses: jdx/mise-action@v5
         with:
-          python-version: '3.x'
-          cache: 'pip'
-          # cache-dependency-path: '**/requirements-dev.txt'
-          check-latest: true
-          
+          working_directory: "alban.andrieu.workstation"
+
       - name: Install test dependencies.
-        run: pip3 install ansible molecule molecule-plugins[docker] docker
+        run: uv sync --frozen
 
       - name: Run Molecule tests.
-        run: molecule test
+        run: uv run molecule test
         env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ${{ matrix.distro }}
           MOLECULE_PLAYBOOK: ${{ matrix.playbook }}
+
+  macos:
+    name: macOS (check mode)
+    runs-on: macos-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+        with:
+          path: "alban.andrieu.workstation"
+
+      - name: Install tools with mise (python, uv).
+        uses: jdx/mise-action@v5
+        with:
+          working_directory: "alban.andrieu.workstation"
+
+      - name: Install dependencies.
+        run: mise run install
+
+      - name: Dry-run the playbook on localhost.
+        run: mise run check
+        env:
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"

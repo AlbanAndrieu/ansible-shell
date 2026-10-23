@@ -1,0 +1,31 @@
+# Tooling for this repository, installed with: mise install
+# See https://mise.jdx.dev/
+[tools]
+python = "3.13"
+uv = "latest"
+node = "24"
+shellcheck = "latest"
+shfmt = "latest"
+
+[env]
+# Let uv use the python provided by mise instead of downloading its own.
+UV_PYTHON_DOWNLOADS = "never"
+# Create/activate .venv automatically (populated by uv sync, see pyproject.toml).
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.install]
+description = "Install tools, python dependencies, ansible requirements and git hooks"
+run = [
+  "uv sync --frozen",
+  "uv run ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors",
+  "uv run ansible-galaxy collection install -r collections.yml",
+  "uv run pre-commit install",
+]
+
+[tasks.lint]
+description = "Lint the role"
+run = ["uv run yamllint .", "uv run ansible-lint ./"]
+
+[tasks.check]
+description = "Dry-run the playbook on localhost (no change applied)"
+run = "uv run ansible-playbook -i hosts -c local --limit localhost --check --diff shell.yml"

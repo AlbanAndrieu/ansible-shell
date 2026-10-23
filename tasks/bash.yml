@@ -1,416 +1,493 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- name: shell | Install bash shell (Debian only)
-  apt: pkg={{ item }} state=present
+- name: Shell | Install bash shell (Debian only)
+  ansible.builtin.apt:
+    name: [bash]
+    state: present
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  with_items:
-    - bash
-#    - csh
-#    - ksh
 
-- name: shell | Create env directory
-  #  file: path={{ shell_env_directory }} state=directory
-  file: path={{ shell_env_directory }} state=directory mode=0700 owner={{ shell_owner }}
+- name: Shell | Create env directory
+  ansible.builtin.file:
+    path: "{{ shell_env_directory }}"
+    state: directory
+    mode: "0700"
+    owner: "{{ shell_owner }}"
 
-- name: shell | Configure step-0-color.sh file
-  copy: src=step-0-color.sh dest={{ home }}/step-0-color.sh mode=755
+- name: Shell | Configure step-0-color.sh file
+  ansible.builtin.copy:
+    src: step-0-color.sh
+    dest: "{{ home }}/step-0-color.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure step-1-os.sh file
-  copy: src=step-1-os.sh dest={{ home }}/step-1-os.sh mode=755
+- name: Shell | Configure step-1-os.sh file
+  ansible.builtin.copy:
+    src: step-1-os.sh
+    dest: "{{ home }}/step-1-os.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure run-python.sh file
-  copy: src=run-python.sh dest={{ home }}/run-python.sh mode=755
+- name: Shell | Configure run-python.sh file
+  ansible.builtin.copy:
+    src: run-python.sh
+    dest: "{{ home }}/run-python.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure run-ansible-setup.sh.sh file
-  copy: src=run-ansible-setup.sh.sh dest={{ home }}/run-ansible-setup.sh.sh mode=755
+- name: Shell | Configure run-ansible-setup.sh file
+  ansible.builtin.copy:
+    src: run-ansible-setup.sh
+    dest: "{{ home }}/run-ansible-setup.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure run-ansible.sh file
-  copy: src=run-ansible.sh dest={{ home }}/run-ansible.sh mode=755
+- name: Shell | Configure run-ansible.sh file
+  ansible.builtin.copy:
+    src: run-ansible.sh
+    dest: "{{ home }}/run-ansible.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure ansible-env.sh file
-  copy: src=ansible-env.sh dest={{ home }}/ansible-env.sh mode=755
+- name: Shell | Configure ansible-env.sh file
+  ansible.builtin.copy:
+    src: ansible-env.sh
+    dest: "{{ home }}/ansible-env.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure docker-env.sh file
-  copy: src=docker-env.sh dest={{ home }}/docker-env.sh mode=755
+- name: Shell | Configure docker-env.sh file
+  ansible.builtin.copy:
+    src: docker-env.sh
+    dest: "{{ home }}/docker-env.sh"
+    mode: "0755"
   tags: bash
 
-- name: shell | Configure dev.env.sh file
-  template: src=dev.env.sh.j2 dest={{ shell_env_directory }}/dev.env.sh
+- name: Shell | Configure dev.env.sh file
+  ansible.builtin.template:
+    src: dev.env.sh.j2
+    dest: "{{ shell_env_directory }}/dev.env.sh"
+    mode: "0644"
   tags: bash
 
-- name: shell | Configure .bash_profile file
-  copy: src=.bash_profile dest={{ home }}/.bash_profile
+- name: Shell | Configure .bash_profile file
+  ansible.builtin.copy:
+    src: .bash_profile
+    dest: "{{ home }}/.bash_profile"
+    mode: "0644"
+    backup: true
   tags: bash
 
-#No more needed for maven color
-#- name: shell | Configure .bash_aliases file
-#  copy: src=.bash_aliases dest={{ home }}/.bash_aliases
-#  tags: bash
+# TODO
+# sudo chown -R albandri:docker .dbus/
+# chmod 700 .config/
 
-#TODO
-#sudo chown -R albandri:docker .dbus/
-#chmod 700 .config/
-
-- name: shell | Configure .login file
-  copy: src=.login dest={{ home }}/.login
+- name: Shell | Configure .login file
+  ansible.builtin.copy:
+    src: .login
+    dest: "{{ home }}/.login"
+    mode: "0644"
   tags: bash
 
 # See https://starship.rs/
-- name: shell | Configure starship file
-  copy: src=starship.toml dest={{ home }}/.config/starship.toml mode=755
+- name: Shell | Configure starship file
+  ansible.builtin.copy:
+    src: starship.toml
+    dest: "{{ home }}/.config/starship.toml"
+    mode: "0644"
   tags: bash
 
-- import_tasks: brew.yml
+- name: Brew | Install homebrew and packages
+  ansible.builtin.import_tasks: brew.yml
   when: shell_brew_enabled
   tags: [brew]
-- name: shell | Install git prompt git-radar requirements
-  apt: pkg={{ item }} state=present
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-  with_items:
-    - build-essential
-    - curl
-    - git
-    - m4
-    - ruby
-    - texinfo
-    - libbz2-dev
-    - libcurl4-openssl-dev
-    - libexpat-dev
-    - libncurses-dev
-    - zlib1g-dev
+
+- name: Shell | Install git prompt git-radar requirements
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - curl
+      - git
+      - m4
+      - ruby
+      - texinfo
+      - libbz2-dev
+      - libcurl4-openssl-dev
+      - libexpat-dev
+      - libncurses-dev
+      - zlib1g-dev
+    state: present
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in
+    ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: true
 
-- name: shell | Install git prompt git-radar
-  homebrew:
+- name: Shell | Install git prompt git-radar homebrew requirements
+  community.general.homebrew:
     name: [randomize-lines]
     state: present
     update_homebrew: true
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in
+    ['12.04', '13.04', '14.04'] and shell_brew_enabled
   become: true
   become_user: "{{ shell_owner }}"
-  ignore_errors: true
+  # Best effort: linuxbrew may not be usable on this host
+  failed_when: false
 
-- name: shell | Install git prompt git-radar
-  git: repo={{ shell_git_radar_repository }} dest="{{ home }}/.git-radar" accept_hostkey=yes update=no
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-    and shell_git_radar_enabled
+- name: Shell | Clone git prompt git-radar
+  ansible.builtin.git:
+    repo: "{{ shell_git_radar_repository }}"
+    dest: "{{ home }}/.git-radar"
+    version: "{{ shell_git_radar_version }}"
+    accept_hostkey: true
+    update: false
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in
+    ['12.04', '13.04', '14.04'] and shell_brew_enabled and shell_git_radar_enabled
   become: true
 
-- name: shell | Install git prompt git-radar
-  homebrew:
+- name: Shell | Install git prompt git-radar formula
+  community.general.homebrew:
     name: [michaeldfallen/formula/git-radar]
     state: present
     update_homebrew: true
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04'] and shell_brew_enabled
-    and shell_git_radar_enabled
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in
+    ['12.04', '13.04', '14.04'] and shell_brew_enabled and shell_git_radar_enabled
   become: true
   become_user: "{{ shell_owner }}"
-  ignore_errors: true
+  # Best effort: linuxbrew may not be usable on this host
+  failed_when: false
 
-- name: shell | Install bash completion
-  apt: pkg={{ item }} state=present
+- name: Shell | Install bash completion
+  ansible.builtin.apt:
+    name: [bash-completion]
+    state: present
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
-  with_items:
-    - bash-completion
 
-- name: shell | Configure .bash_completion file
-  copy: src=.bash_completion dest={{ home }}/.bash_completion
+- name: Shell | Configure .bash_completion file
+  ansible.builtin.copy:
+    src: .bash_completion
+    dest: "{{ home }}/.bash_completion"
+    mode: "0644"
   when: shell_bash_completion_enabled and shell_bash_completion_extra_enabled
   tags: bash
 
-- name: shell | Configure pip completion file
-  command: pip completion --bash >> {{ home }}/.bash_completion
+- name: Shell | Generate pip completion
+  ansible.builtin.command: pip completion --bash
+  register: shell_pip_completion
+  changed_when: false
+  check_mode: false
   when: shell_bash_completion_enabled and shell_bash_completion_extra_enabled
   tags: bash
 
-- name: shell | Install kubectl tools
-  snap:
+- name: Shell | Configure pip completion file
+  ansible.builtin.copy:
+    content: "{{ shell_pip_completion.stdout }}\n"
+    dest: "{{ shell_bash_completion_dir }}/pip"
+    mode: "0644"
+  when: shell_bash_completion_enabled and shell_bash_completion_extra_enabled
+  become: "{{ ansible_os_family != 'Darwin' }}"
+  tags: bash
+
+- name: Shell | Install kubectl tools
+  community.general.snap:
     name: kubectl
     classic: true
   become: true
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version is version_compare(19.04, '>=') and shell_bash_completion_kubectl_enabled
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version is
+    version_compare(19.04, '>=') and shell_bash_completion_kubectl_enabled
   tags: package
 
-- name: shell | Configure kubernetes completion file
-  shell: kubectl completion bash > /etc/bash_completion.d/kubectl
+- name: Shell | Generate kubernetes completion
+  ansible.builtin.command: kubectl completion bash
+  register: shell_kubectl_completion
+  changed_when: false
+  check_mode: false
   when: shell_bash_completion_enabled and shell_bash_completion_kubectl_enabled
-  become: true
   tags: bash
 
-- name: shell | Fix kubernetes ownership $HOME/.kube/
-  file: path={{ shell_owner_home }}/.kube/ owner={{ shell_owner }} group={{ shell_group }} recurse=yes
-  #  become_user: "{{ shell_owner }}"
-  become: true
+- name: Shell | Configure kubernetes completion file
+  ansible.builtin.copy:
+    content: "{{ shell_kubectl_completion.stdout }}\n"
+    dest: "{{ shell_bash_completion_dir }}/kubectl"
+    mode: "0644"
+  when: shell_bash_completion_enabled and shell_bash_completion_kubectl_enabled
+  become: "{{ ansible_os_family != 'Darwin' }}"
+  tags: bash
 
-- name: shell | Install azure-cli completion
-  shell: wget https://raw.githubusercontent.com/ogham/exa/master/completions/bash/exa -O /etc/bash_completion.d/exa.bash
+- name: Shell | Fix kubernetes ownership $HOME/.kube/
+  ansible.builtin.file:
+    path: "{{ shell_owner_home }}/.kube/"
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
+    recurse: true
+  become: "{{ ansible_os_family != 'Darwin' }}"
+
+- name: Shell | Install bash completions
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "/etc/bash_completion.d/{{ item.dest }}"
+    mode: "0644"
+  loop:
+    "{{ shell_bash_completion_urls + (shell_docker_machine_completion_urls if shell_docker_machine_prompt_enabled else
+    []) }}"
+  loop_control:
+    label: "{{ item.dest }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
   become: true
 
-- name: shell | Install azure-cli completion
-  shell: wget https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion -O /etc/bash_completion.d/az.completion
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
-  become: true
-
-- name: shell | Install docker prompt completion
-  shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash -O /etc/bash_completion.d/docker-machine-prompt.bash
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled amd shell_docker_machine_prompt_enabled
-  become: true
-
-- name: shell | Install docker wrapper completion
-  shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash -O /etc/bash_completion.d/docker-machine-wrapper.bash
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled amd shell_docker_machine_prompt_enabled
-  become: true
-
-- name: shell | Install docker bash completion
-  shell: wget https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash -O /etc/bash_completion.d/docker-machine.bash
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled amd shell_docker_machine_prompt_enabled
-  become: true
-
-- name: shell | Install scons bash completion
-  copy: src=scons_completion dest=/etc/bash_completion.d/scons_completion
+- name: Shell | Install scons bash completion
+  ansible.builtin.copy:
+    src: scons_completion
+    dest: /etc/bash_completion.d/scons_completion
+    mode: "0644"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled
 
-- name: git | Install git bash completion
-  shell: curl -fsSL https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh > {{ home }}/.git-prompt.sh
-  #copy: src=.git-prompt.sh dest={{ home }}/.git-prompt.sh owner={{ shell_owner }} mode=755
-  #when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_bash_completion_enabled and shell_bash_completion_git_enabled
+- name: Git | Install git prompt
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+    dest: "{{ home }}/.git-prompt.sh"
+    mode: "0644"
   tags: git
 
-- name: shell | Configure .bashrc file
-  template: src=.bashrc-cygwin.j2 dest={{ home }}/.bashrc
-  when: shell_cygwin_enabled
-  tags:
-    - configure
-    - cygwin
-
-- name: shell | Configure .bashrc file
-  template: src=.bashrc.j2 dest={{ home }}/.bashrc
-  when: shell_cygwin_enabled == false
+- name: Shell | Configure .bashrc file
+  ansible.builtin.template:
+    src: .bashrc.j2
+    dest: "{{ home }}/.bashrc"
+    mode: "0644"
+    backup: true
+  when: not shell_cygwin_enabled
   tags: bash
 
-- name: shell | Create temporary directory
-  tempfile:
-    state: directory
-    suffix: staging
-  #    path: "{{ lookup('env', 'HOME') }}"
-  register: tempdir
-  connection: local
-  changed_when: false
-  become: true
-
-- name: shell | Copy the .novarc script for openstack
-  template: src=.novarc.j2 dest={{ home }}/.novarc mode=0600 owner={{ shell_owner }}
-  changed_when: false
+- name: Shell | Copy the .novarc script for openstack
+  ansible.builtin.template:
+    src: .novarc.j2
+    dest: "{{ home }}/.novarc"
+    mode: "0600"
+    owner: "{{ shell_owner }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_novarc_enabled
   tags:
     - openstack
     - novarc
 
-- name: newrelic | Configure newrelic.yml file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
-  template:
+- name: Newrelic | Configure newrelic.yml file
+  # newrelic_license_key is a secret: provide it from the inventory / vault
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and not
+    shell_cygwin_enabled and newrelic_license_key is defined
+  ansible.builtin.template:
     src: newrelic.yml.j2
     dest: "{{ home }}/newrelic.yml"
     owner: "{{ shell_owner }}"
-    #    group: '{{ shell_group }}'
-    mode: 0755
+    mode: "0600"
   tags: newrelic
 
-- name: git | Configure git meld diff
-  copy: src=git-diff.sh dest={{ shell_git_meld_directory }}/git-diff.sh owner={{ shell_owner }} group={{ shell_group }} mode=755
+- name: Git | Configure git meld diff
+  ansible.builtin.copy:
+    src: git-diff.sh
+    dest: "{{ shell_git_meld_directory }}/git-diff.sh"
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
+    mode: "0755"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_git_meld_enabled
   become: true
   tags: git
 
-- name: git | Copy the .netrc script for git credentials
-  template: src=.netrc.j2 dest={{ home }}/.netrc mode=0600 owner={{ shell_owner }}
+- name: Git | Copy the .netrc script for git credentials
+  ansible.builtin.template:
+    src: .netrc.j2
+    dest: "{{ home }}/.netrc"
+    mode: "0600"
+    owner: "{{ shell_owner }}"
   when: shell_git_netrc_enabled
-  changed_when: false
   tags: git
 
-- name: git | Configure git
-  template:
+- name: Git | Configure git
+  ansible.builtin.template:
     src: .gitconfig.j2
     dest: "{{ home }}/.gitconfig"
     owner: "{{ shell_owner }}"
-    mode: 0700
+    mode: "0600"
+    backup: true
   when: shell_git_configure_enabled
-  changed_when: false
   tags: git
 
-#- git_config: name=user.email scope=global value="{{ shell_git[0].shell_git_email }}"
-#- git_config: name=user.name scope=global value="{{ shell_git[0].shell_git_name }}"
-#- git_config: name=http.sslVerify scope=global value="{{ shell_git[0].shell_git_ssl }}"
-- git_config: name=maven-scm.maildomain scope=global value="albandrieu.com"
-- git_config: name=maven-scm.forceUsername scope=global value="true"
+- name: Git | Configure global git settings
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  loop:
+    - { name: maven-scm.maildomain, value: "{{ shell_git_maven_scm_maildomain }}" }
+    - { name: maven-scm.forceUsername, value: "true" }
+    - { name: alias.ci, value: commit }
+    - { name: alias.st, value: status }
+    - { name: color.ui, value: auto }
+  tags: git
 
-- git_config: name=alias.ci scope=global value=commit
-- git_config: name=alias.st scope=global value=status
-- git_config: name=color.ui scope=global value=auto
+# See https://docs.ansible.com/ansible/git_config_module.html
+- name: Git | Read all values from git config
+  community.general.git_config_info:
+    scope: global
 
-#See https://docs.ansible.com/ansible/git_config_module.html
-- name: git | Read all values from git config
-  git_config: list_all=yes scope=global
-
-#- name: Install enhanced vim with command-t plugin
-#  yum: name={{item}} state=present
-#  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
-#  with_items:
-#    - vim-enhanced
-#    - vim-command-t
-#
-#- name: Clone dotvim repo
-#  git: dest={{ home }}/.vim repo=git@github.com:sheldonh/dotvim.git update=no
-#
-#- name: Link dotvim config to vimrc
-#  file: path={{ home }}/.vimrc src={{ home }}/.vim/vimrc state=link
-
-- name: vim | Copy the vim code from repository
-  git: repo={{ shell_vim_color_repository }} dest={{ home }}/.vim accept_hostkey=yes update=no
+- name: Vim | Copy the vim code from repository
+  ansible.builtin.git:
+    repo: "{{ shell_vim_color_repository }}"
+    dest: "{{ home }}/.vim"
+    version: "{{ shell_vim_color_version }}"
+    accept_hostkey: true
+    update: false
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 
-- name: vim | Configure vim-configure.sh file
-  template:
+- name: Vim | Configure vim-configure.sh file
+  ansible.builtin.template:
     src: vim-configure.sh.j2
     dest: "{{ shell_dir_tmp }}/vim-configure.sh"
     owner: "{{ shell_owner }}"
-    #    group: '{{ shell_group }}'
-    mode: 0755
+    mode: "0755"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
 
-- name: vim | Update  ~/.vim
-  shell: "{{ shell_dir_tmp }}/vim-configure.sh"
+- name: Vim | Update  ~/.vim
+  ansible.builtin.command: "{{ shell_dir_tmp }}/vim-configure.sh"
+  register: shell_vim_configure
+  # git submodule update prints the submodules it checked out
+  changed_when: "'checked out' in shell_vim_configure.stdout"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_vim_enabled
   tags: vim
   become: true
 
-- name: nano | Copy the nano code from repository
-  git: repo={{ shell_nano_color_repository }} dest={{ home }}/nanorc accept_hostkey=yes update=no
+- name: Nano | Copy the nano code from repository
+  ansible.builtin.git:
+    repo: "{{ shell_nano_color_repository }}"
+    dest: "{{ home }}/nanorc"
+    version: "{{ shell_nano_color_version }}"
+    accept_hostkey: true
+    update: false
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   tags: nano
-  #  become_user: "{{ shell_owner }}"
   become: true
 
-- name: nano | Configure nano-configure.sh file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and shell_cygwin_enabled == false
-  template:
+- name: Nano | Configure nano-configure.sh file
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled and not
+    shell_cygwin_enabled
+  ansible.builtin.template:
     src: nano-configure.sh.j2
     dest: "{{ shell_dir_tmp }}/nano-configure.sh"
     owner: "{{ shell_owner }}"
-    #    group: '{{ shell_group }}'
-    mode: 0755
+    mode: "0755"
   tags: nano
 
-- name: nano | Update  ~/.nanorc
-  shell: "{{ shell_dir_tmp }}/nano-configure.sh"
+- name: Nano | Update  ~/.nanorc
+  ansible.builtin.command: "{{ shell_dir_tmp }}/nano-configure.sh"
   args:
-    chdir:
-    creates: .nanorc
+    chdir: "{{ home }}"
+    creates: "{{ home }}/.nanorc"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_nano_enabled
   become: true
   tags: nano
 
-- name: inputrc | Configure inputrc-configure.sh file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled and shell_cygwin_enabled == false
-  template:
+- name: Inputrc | Configure inputrc-configure.sh file
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled and not
+    shell_cygwin_enabled
+  ansible.builtin.template:
     src: inputrc-configure.sh.j2
     dest: "{{ shell_dir_tmp }}/inputrc-configure.sh"
     owner: "{{ shell_owner }}"
-    #    group: '{{ shell_group }}'
-    mode: 0755
+    mode: "0755"
   tags: history
 
-- name: inputrc | Update  ~/.inputrc
-  shell: "{{ shell_dir_tmp }}/inputrc-configure.sh > {{ home }}/.inputrc"
+- name: Inputrc | Update  ~/.inputrc
+  ansible.builtin.shell: "{{ shell_dir_tmp }}/inputrc-configure.sh > {{ home }}/.inputrc"
   args:
-    chdir:
-    creates: .inputrc
+    creates: "{{ home }}/.inputrc"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_history_enabled
   tags: history
 
-- name: maven | Configure maven-configure.sh file
+- name: Maven | Configure maven-configure.sh file
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
-  template:
+  ansible.builtin.template:
     src: maven-configure.sh.j2
     dest: "{{ shell_dir_tmp }}/maven-configure.sh"
     owner: "{{ shell_owner }}"
-    #    group: '{{ shell_group }}'
-    mode: 0755
+    mode: "0755"
   become: true
   tags: maven
 
-#- name: maven | Color maven command
-#  shell: '{{ shell_dir_tmp }}/maven-configure.sh > .bash_aliases'
-#  args:
-#    chdir: ~
-#    creates: .bash_aliases
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_maven_enabled
-#  tags: maven
-
-- name: locate | Install locate search tools
-  apt: pkg={{ item }} state=present update_cache=yes
+- name: Locate | Install locate search tools
+  ansible.builtin.apt:
+    name: [locate]
+    state: present
+    update_cache: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: package
-  with_items:
-    - locate
   become: true
 
-- name: locate | Update locate database
-  command: updatedb
+- name: Locate | Update locate database
+  ansible.builtin.command: updatedb
+  # Refreshes the index only, no configuration is changed
+  changed_when: false
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_locate_enabled
   tags: locate
   become: true
 
-- name: synapse | Install synapse search tools
-  apt: pkg={{ item }} state=present update_cache=yes
+- name: Synapse | Install synapse search tools
+  ansible.builtin.apt:
+    name: [synapse]
+    state: present
+    update_cache: true
   become: true
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
+    shell_cygwin_enabled
   tags: package
-  with_items:
-    - synapse
 
-- name: synapse | Create synapse directory
-  file: path={{ shell_synapse_directory }} state=directory mode=0700 owner={{ shell_owner }}
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
+- name: Synapse | Create synapse directory
+  ansible.builtin.file:
+    path: "{{ shell_synapse_directory }}"
+    state: directory
+    mode: "0700"
+    owner: "{{ shell_owner }}"
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
+    shell_cygwin_enabled
 
-- name: synapse | Copy synapse startpage search into place
-  copy: src=startpage.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
+- name: Synapse | Copy synapse startpage search into place
+  ansible.builtin.copy:
+    src: startpage.xml
+    dest: "{{ shell_synapse_directory }}"
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
+    mode: "0644"
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
+    shell_cygwin_enabled
   tags: synapse
 
-#- name: synapse | Copy duckduckgo startpage search into place
-#  copy: src=duckduckgo.xml dest={{ shell_synapse_directory }} owner={{ shell_owner }} group={{ shell_group }} mode=644
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
-#  tags: synapse
-
-- name: synapse | Configure synapse config.json file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and shell_cygwin_enabled == false
-  template:
+- name: Synapse | Configure synapse config.json file
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_synapse_enabled and not
+    shell_cygwin_enabled
+  ansible.builtin.template:
     src: config.json.j2
     dest: "{{ shell_synapse_directory }}/config.json"
     owner: "{{ shell_owner }}"
     group: "{{ shell_group }}"
-    mode: 0755
+    mode: "0644"
   tags: synapse
 
-- name: banner | Configure banner welcome file
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and shell_cygwin_enabled == false
-  copy: src=11-welcome dest=/etc/update-motd.d/11-welcome owner={{ shell_owner }} group={{ shell_group }} mode=0755
+- name: Banner | Configure banner welcome file
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and not shell_cygwin_enabled
+  ansible.builtin.copy:
+    src: 11-welcome
+    dest: /etc/update-motd.d/11-welcome
+    owner: root
+    group: root
+    mode: "0755"
   tags: banner
-
-- name: shell | Cleanup temporary directory
-  file: name={{ tempdir.stdout }} state=absent
-  tags: shell_setup
-  changed_when: false
-  ignore_errors: "{{ ansible_check_mode }}"
-  become: true

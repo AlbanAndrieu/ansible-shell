@@ -1,19 +1,19 @@
 ---
-ansigenome_info:  # noqa 701
-  galaxy_id: ''
-  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/shell/'
-  galaxy_user: 'alban.andrieu'
-  galaxy_name: 'shell'
-  galaxy_docker_name: 'ansible-shell'
+ansigenome_info: # noqa 701
+  galaxy_id: ""
+  galaxy_url: "https://galaxy.ansible.com/alban.andrieu/shell/"
+  galaxy_user: "alban.andrieu"
+  galaxy_name: "shell"
+  galaxy_docker_name: "ansible-shell"
 
   travis: true
 
   authors:
-    - name: 'Alban Andrieu'
-      url: 'fr.linkedin.com/in/nabla/'
-      email: 'alban.andrieu@free.fr'
-      twitter: 'AlbanAndrieu'
-      github: 'AlbanAndrieu'
+    - name: "Alban Andrieu"
+      url: "fr.linkedin.com/in/nabla/"
+      email: "alban.andrieu@free.fr"
+      twitter: "AlbanAndrieu"
+      github: "AlbanAndrieu"
 
   description: A role for installing shell
   company: Nabla
@@ -37,7 +37,6 @@ ansigenome_info:  # noqa 701
   synopsis: |
     This ``Personal`` role allows you to install and configure [Shell](http://fr.wikipedia.org/wiki/Shell_Unix)
     which can be used to setup your global environement variables on hosts.
-
 
   usage: |
     Run the following command :

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
 <!-- {{ ansible_managed }} -->
@@ -10,14 +10,14 @@
           Append error messages to a local error log
          ============================================ -->
     <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="{{LOG4J_SERVER_FILE}}"/>
+        <param name="File" value="{{shell_env_log4j_server_file}}"/>
         <!-- Added HHmm so that new file with minute timestamp is created on each MDA run -->
         <param name="DatePattern" value="MMdd-HH"/>
         <param name="Threshold" value="DEBUG"/>
         <param name="Append" value="false"/>
         <layout class="org.apache.log4j.PatternLayout">
             <!-- The default pattern: Date Priority [Category] Message\n -->
-            <param name="ConversionPattern" value="{{LOG4J_SERVER_PATTERN}}"/>
+            <param name="ConversionPattern" value="{{shell_env_log4j_server_pattern}}"/>
         </layout>
     </appender>
 
@@ -29,7 +29,7 @@
         <param name="Target" value="System.out"/>
         <layout class="org.apache.log4j.PatternLayout">
             <!-- The default pattern: Date Priority [Category] Message\n -->
-            <param name="ConversionPattern" value="{{LOG4J_SERVER_PATTERN}}"/>
+            <param name="ConversionPattern" value="{{shell_env_log4j_server_pattern}}"/>
         </layout>
     </appender>
 
@@ -37,13 +37,13 @@
           Append messages to a socket
          ================================ -->
    <appender name="SOCKETSERV" class="org.apache.log4j.net.SocketAppender">
-      <param name="Port" value="{{LOG4J_SERVER_PORT}}"/>
-      <param name="RemoteHost" value="{{LOG4J_SERVER_HOST}}"/>
+      <param name="Port" value="{{shell_env_log4j_server_port}}"/>
+      <param name="RemoteHost" value="{{shell_env_log4j_server_host}}"/>
       <param name="ReconnectionDelay" value="100000"/>
       <param name="Threshold" value="DEBUG"/>
       <layout class="org.apache.log4j.PatternLayout">
          <!-- The default pattern: Date Priority [Category] Message\n -->
-         <param name="ConversionPattern" value="{{LOG4J_SERVER_PATTERN}}"/>
+         <param name="ConversionPattern" value="{{shell_env_log4j_server_pattern}}"/>
       </layout>
    </appender>
 

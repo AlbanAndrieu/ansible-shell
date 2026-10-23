@@ -1,123 +1,126 @@
 ---
-- name: brew | Install dependencies for brew requirement
-  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
-  with_items:
-    - curl
-    - file
-    - git
+- name: Brew | Install dependencies for brew requirement
+  ansible.builtin.package:
+    name: [curl, file, git]
+    state: "{{ util_pkg_state | default('present') }}"
+  # ansible_pkg_mgr is homebrew itself on macOS
+  when: ansible_os_family != 'Darwin'
   become: true
 
-- name: brew | Install apt dependencies for brew requirement
-  apt:
-    pkg: [build-essential, python-setuptools, ruby]
-    state: "{{ util_pkg_state|default('present') }}"
+- name: Brew | Install apt dependencies for brew requirement
+  ansible.builtin.apt:
+    name: [build-essential, python3-setuptools, ruby]
+    state: "{{ util_pkg_state | default('present') }}"
     update_cache: true
-  # - linuxbrew-wrapper
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   become: true
 
-- name: brew | Install yum dependencies for brew requirement
-  yum:
-    pkg: [irb, python-setuptools, ruby]
-    state: "{{ util_pkg_state|default('present') }}"
+- name: Brew | Install yum dependencies for brew requirement
+  ansible.builtin.dnf:
+    name: [irb, python3-setuptools, ruby]
+    state: "{{ util_pkg_state | default('present') }}"
     update_cache: true
-  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  when:
+    (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution ==
+    'RedHat')
   become: true
-  # TODO fix on CentOS 7
-  ignore_errors: true
+  # TODO fix on CentOS 7: best effort until then
+  failed_when: false
 
-- name: brew | Uninstall homebrew on Ubuntu
-  apt: pkg={{ item }} state=absent
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04']
-  with_items:
-    - linuxbrew-wrapper
+- name: Brew | Uninstall homebrew on Ubuntu
+  ansible.builtin.apt:
+    name: [linuxbrew-wrapper]
+    state: absent
+  when:
+    (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in
+    ['12.04', '13.04', '14.04']
   become: true
 
-- name: brew | Check Homebrew is installed
-  stat:
+- name: Brew | Check Homebrew is installed
+  ansible.builtin.stat:
     path: "{{ homebrew_check_path }}"
   register: homebrew_check
 
-- name: brew | Fail if homebrew is not installed and install_homebrew_if_missing is false
-  fail:
+- name: Brew | Fail if homebrew is not installed and install_homebrew_if_missing is false
+  ansible.builtin.fail:
     msg: Homebrew is missing...Install from http://brew.sh/
   when: >
-    not homebrew_check.stat.exists and
-    not install_homebrew_if_missing
+    not homebrew_check.stat.exists and not install_homebrew_if_missing
 
-- name: brew | Installing homebrew to custom directory
-  git: repo={{ homebrew_repository }} dest="{{ home }}/.linuxbrew" accept_hostkey=yes update=no
-  #  shell: "git clone {{ homebrew_repository }} {{ home }}/.linuxbrew"
+- name: Brew | Installing homebrew to custom directory
+  ansible.builtin.git:
+    repo: "{{ homebrew_repository }}"
+    dest: "{{ home }}/.linuxbrew"
+    version: "{{ homebrew_version }}"
+    accept_hostkey: true
+    update: false
   when: >
-    not homebrew_check.stat.exists and
-    install_homebrew_if_missing
-  #  become_user: "{{ shell_owner }}"
+    not homebrew_check.stat.exists and install_homebrew_if_missing and ansible_os_family != 'Darwin'
   become: true
 
-#BELOW do not work when /home cannot be wrote due to nis user
-#- name: brew | Installing Homebrew
+# BELOW do not work when /home cannot be wrote due to nis user
+# - name: brew | Installing Homebrew
 #  command: '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 #  when: >
 #        not homebrew_check.stat.exists and
 #        install_homebrew_if_missing
 
-- name: brew | Ensuring Homebrew bin is installed
-  stat:
+- name: Brew | Ensuring Homebrew bin is installed
+  ansible.builtin.stat:
     path: "{{ homebrew_check_path }}"
-  register: homebrew_check_path
+  register: homebrew_bin_check
 
-#test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-#test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+# test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+# test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-- name: brew | Fail if Homebrew bin does not exist
-  fail:
+- name: Brew | Fail if Homebrew bin does not exist
+  ansible.builtin.fail:
     msg: Homebrew bin is missing... {{ homebrew_check_path }}
   when: >
-    not homebrew_check_path.stat.exists
+    not homebrew_bin_check.stat.exists
 
-#- name: brew | Check Homebrew
-#  shell: "{{ homebrew_check_path }} list"
-#  when: >
-#        homebrew_check_path.stat.exists
-##  become_user: "{{ shell_owner }}"
-#  become: true
-
-#export PATH=$HOME/homebrew/bin:$PATH
-- name: Change whole home folder ownership
-  file: path={{ homebrew_home_check_path }}/ state=directory recurse=yes owner={{ shell_owner }} group={{ shell_group }}
+# export PATH=$HOME/homebrew/bin:$PATH
+- name: Brew | Change homebrew folder ownership
+  ansible.builtin.file:
+    path: "{{ homebrew_home_check_path }}/"
+    state: directory
+    recurse: true
+    owner: "{{ shell_owner }}"
+    group: "{{ shell_group }}"
+  # Homebrew installer already manages ownership of its prefix on macOS
+  when: ansible_os_family != 'Darwin'
   become: true
 
-- name: brew | Install brew requirements
-  homebrew:
+- name: Brew | Install brew requirements
+  community.general.homebrew:
     name: [cairo, libxml2, libffi, randomize-lines]
+    path: "{{ homebrew_check_path | dirname }}"
     state: present
     update_homebrew: true
-  become: true
+  become: "{{ ansible_os_family != 'Darwin' }}"
   become_user: "{{ shell_owner }}"
-  ignore_errors: true
+  # Best effort: a broken formula must not stop the shell setup
+  failed_when: false
 
-- name: brew | Installing Homebrew Packages
-  #  shell: "{{ homebrew_check_path }} install {{ item }}"
-  homebrew:
-    name: "{{ item }}"
-    path: "{{ homebrew_check_path }}"
+- name: Brew | Installing Homebrew Packages
+  community.general.homebrew:
+    name: "{{ brew_packages }}"
+    path: "{{ homebrew_check_path | dirname }}"
     state: present
     upgrade_all: "{{ upgrade_homebrew_packages }}"
-  with_items: "{{ brew_packages }}"
-  when: homebrew_check_path.stat.exists
-  become: true
+  when: homebrew_bin_check.stat.exists
+  become: "{{ ansible_os_family != 'Darwin' }}"
   become_user: "{{ shell_owner }}"
-  ignore_errors: true
+  # Best effort: a broken formula must not stop the shell setup
+  failed_when: false
 
-#brew update && brew upgrade; brew cleanup
-- name: brew | Homebrew Cleaning
-  shell: "{{ homebrew_check_path }} cleanup"
-  with_items: "{{ brew_packages }}"
-  when: homebrew_check_path.stat.exists
-  become: true
-  ignore_errors: true
-
-#- name: brew | Updating Homebrew
-#  homebrew:
-#    update_homebrew: true
-#  when: homebrew_check.stat.exists
+# brew update && brew upgrade; brew cleanup
+- name: Brew | Homebrew Cleaning
+  ansible.builtin.command: "{{ homebrew_check_path }} cleanup"
+  register: shell_brew_cleanup
+  # brew cleanup prints the files it removed, nothing when there is nothing to do
+  changed_when: shell_brew_cleanup.stdout | length > 0
+  failed_when: false
+  when: homebrew_bin_check.stat.exists
+  become: "{{ ansible_os_family != 'Darwin' }}"
+  become_user: "{{ shell_owner }}"

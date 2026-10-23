@@ -2,7 +2,8 @@
 - name: Converge
   hosts: all
 
-  roles:
-    - role: ../  # role: albanandrieu.shell
-      verbose: true
-#  no_log: false
+  tasks:
+    # The role directory name differs between local clones and CI checkouts
+    - name: Include the role under test
+      ansible.builtin.include_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"

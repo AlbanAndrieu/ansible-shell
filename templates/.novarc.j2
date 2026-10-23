@@ -1,23 +1,21 @@
 #!/bin/bash
+# OpenStack credentials: values come from shell_openstack_* (see defaults/main.yml),
+# the environment of the current shell wins over the values set at install time.
 
 export OS_NO_CACHE=1
 # With the addition of Keystone we have standardized on the term **tenant**
 # as the entity that owns the resources.
-export OS_TENANT_ID=b669e825f80344c0baabb441958a6cd6
-export OS_TENANT_NAME="3144102460081843"
+export OS_TENANT_ID="${OS_TENANT_ID:-{{ shell_openstack_tenant_id }}}"
+export OS_TENANT_NAME="${OS_TENANT_NAME:-{{ shell_openstack_tenant_name }}}"
 
-export OS_USERNAME="EQRyyudjH9gM"
-#export OS_PASSWORD=""
+export OS_USERNAME="${OS_USERNAME:-{{ shell_openstack_username }}}"
+# OS_PASSWORD must be exported by the user, it is never written here
 
-export OS_SERVICE_TOKEN=ADMIN
-#export OS_AUTH_URL="http://localhost:5000/v2.0/"
-export OS_AUTH_URL=https://auth.cloud.ovh.net/v3/
+export OS_AUTH_URL="${OS_AUTH_URL:-{{ shell_openstack_auth_url }}}"
 export OS_IDENTITY_API_VERSION=3
-
-#export SERVICE_ENDPOINT="http://localhost:35357/v2.0"
 
 export OS_USER_DOMAIN_NAME=${OS_USER_DOMAIN_NAME:-"Default"}
 export OS_PROJECT_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
 export OS_DOMAIN_NAME=${OS_PROJECT_DOMAIN_NAME:-"Default"}
 
-export OS_REGION_NAME="GRA1"
+export OS_REGION_NAME="${OS_REGION_NAME:-{{ shell_openstack_region_name }}}"

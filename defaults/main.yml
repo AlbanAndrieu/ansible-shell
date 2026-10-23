@@ -1,55 +1,112 @@
 ---
-shell_enabled: yes                       # Enable module
-shell_bash_enabled: yes                  # Enable bash shell
-shell_csh_enabled: no                    # Enable csh shell
-shell_ksh_enabled: no                    # Enable ksh shell
-shell_cygwin_enabled: no                 # Enable cygwin
-shell_brew_enabled: yes                  # Enable brew install
+shell_enabled: true # Enable module
+shell_bash_enabled: true # Enable bash shell
+shell_csh_enabled: false # Enable csh shell
+shell_ksh_enabled: false # Enable ksh shell
+shell_cygwin_enabled: false # Enable cygwin
+shell_brew_enabled: true # Enable brew install
 
-#do not activate locate with docker
-shell_locate_enabled: no                    # Enable locate search feature
-shell_history_enabled: yes                  # Enable history bash tweek
-shell_nano_enabled: yes                     # Enable nano syntax color
-shell_vim_enabled: yes                      # Enable vim syntax color
-shell_maven_enabled: no                     # Enable maven syntax color
-shell_log4j_enabled: no                     # Enable log4j
-shell_rlogin_enabled: yes                   # Enable rsh rlogin rexecd
-shell_gpg_enabled: yes                      # Enable gpg tweak
-shell_ssh_enabled: yes                      # Enable ssh tweak
-shell_synapse_enabled: no                   # Enable synapse config
-shell_git_meld_enabled: no                  # Enable git meld (shell_git_configure_enabled must be enabled too)
-shell_git_configure_enabled: yes            # Enable git configuration
-shell_git_netrc_enabled: no                 # Enable git netrc configuration
-shell_git_radar_enabled: no                 # Enable git radar configuration
-shell_bash_completion_enabled: yes
-shell_bash_completion_extra_enabled: no
-shell_bash_completion_kubectl_enabled: yes
-shell_bash_completion_git_enabled: no       # Enable git completion
-shell_docker_machine_prompt_enabled: no     # Enable docker machine prompt
-shell_novarc_enabled: yes                   # Enable openstack novarc
+# do not activate locate with docker
+shell_locate_enabled: false # Enable locate search feature
+shell_history_enabled: true # Enable history bash tweek
+shell_nano_enabled: true # Enable nano syntax color
+shell_vim_enabled: true # Enable vim syntax color
+shell_maven_enabled: false # Enable maven syntax color
+shell_log4j_enabled: false # Enable log4j
+shell_rlogin_enabled: true # Enable rsh rlogin rexecd
+shell_gpg_enabled: true # Enable gpg tweak
+shell_ssh_enabled: true # Enable ssh tweak
+shell_synapse_enabled: false # Enable synapse config
+shell_git_meld_enabled: false # Enable git meld (shell_git_configure_enabled must be enabled too)
+shell_git_configure_enabled: true # Enable git configuration
+shell_git_netrc_enabled: false # Enable git netrc configuration
+shell_git_radar_enabled: false # Enable git radar configuration
+shell_bash_completion_enabled: true
+shell_bash_completion_extra_enabled: false
+shell_bash_completion_kubectl_enabled: true
+shell_bash_completion_git_enabled: false # Enable git completion
+shell_bash_completion_dir: "/etc/bash_completion.d"
+shell_docker_machine_prompt_enabled: false # Enable docker machine prompt
+shell_novarc_enabled: true # Enable openstack novarc
 
-#user: 'albandri' #please override me
-user: "{{ lookup('env','USER') }}"
+# user: 'albandri' #please override me
+user: "{{ lookup('env', 'USER') }}"
 shell_owner: "{{ user }}"
 shell_group: "{{ shell_owner }}"
-#home: '~' #please override me
-home: "{{ lookup('env','HOME') }}"
+# home: '~' #please override me
+home: "{{ lookup('env', 'HOME') }}"
 shell_owner_home: "{{ home }}"
 shell_default_version: "30"
 shell_project_home: "/workspace/users"
 shell_workspace_suffix: "nabla/env"
-shell_workspace_env: "{{ shell_project_home }}/{{ shell_owner }}{{ shell_default_version }}/{{ shell_workspace_suffix }}"
+shell_workspace_env:
+  "{{ shell_project_home }}/{{ shell_owner }}{{ shell_default_version }}/{{ shell_workspace_suffix }}"
 shell_env_directory: "{{ shell_workspace_env }}/home"
-shell_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
-#shell_dir_tmp: "{{ tempdir.stdout }}"
+shell_dir_tmp: "/tmp"
+
+# Files and directories (relative to home) written by the role, chowned back to shell_owner on Linux
+shell_home_owned_paths:
+  - .bash_completion
+  - .bash_profile
+  - .bashrc
+  - .config/starship.toml
+  - .config/synapse
+  - .git-prompt.sh
+  - .git-radar
+  - .gitconfig
+  - .gnupg/gpg-agent.conf
+  - .inputrc
+  - .login
+  - .nanorc
+  - .netrc
+  - .novarc
+  - .rhosts
+  - .ssh/config
+  - .vim
+  - ansible-env.sh
+  - docker-env.sh
+  - log4j.lcf
+  - log4j.properties
+  - log4j.xml
+  - nanorc
+  - newrelic.yml
+  - run-ansible-setup.sh
+  - run-ansible.sh
+  - run-python.sh
+  - step-0-color.sh
+  - step-1-os.sh
+
+# OpenStack credentials for ~/.novarc: read from the environment, never commit them
+shell_openstack_auth_url: "https://auth.cloud.ovh.net/v3/"
+shell_openstack_region_name: "GRA1"
+shell_openstack_tenant_id: "{{ lookup('env', 'OS_TENANT_ID') }}"
+shell_openstack_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+shell_openstack_username: "{{ lookup('env', 'OS_USERNAME') }}"
 
 shell_git_radar_repository: "https://github.com/michaeldfallen/git-radar.git"
+shell_git_radar_version: "master"
 shell_nano_color_repository: "https://github.com/scopatz/nanorc.git"
+shell_nano_color_version: "master"
 shell_vim_color_repository: "https://github.com/klen/.vim.git"
+shell_vim_color_version: "master"
 shell_synapse_directory: "{{ shell_owner_home }}/.config/synapse"
 shell_git_meld_directory: "/usr/local/bin"
+shell_git_maven_scm_maildomain: "albandrieu.com"
 
-shell_git: []
+# Bash completions downloaded into /etc/bash_completion.d (Debian/Ubuntu)
+shell_bash_completion_urls:
+  - { url: "https://raw.githubusercontent.com/ogham/exa/master/completions/bash/exa", dest: exa.bash }
+  - { url: "https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion", dest: az.completion }
+shell_docker_machine_completion_urls:
+  - url: "https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-prompt.bash"
+    dest: docker-machine-prompt.bash
+  - url: "https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine-wrapper.bash"
+    dest: docker-machine-wrapper.bash
+  - url: "https://raw.githubusercontent.com/docker/machine/master/contrib/completion/bash/docker-machine.bash"
+    dest: docker-machine.bash
+
+shell_git:
+  []
   # Additional properties: 'shell_git_machine, shell_git_login, shell_git_email, shell_git_password, shell_git_name, shell_git_path, shell_git_ssl, shell_git_meld_enabled, shell_git_editor'
   # - shell_git_machine: 'localhost',
   #   shell_git_login: '{{ user }}',
@@ -66,14 +123,13 @@ shell_git: []
 
 rhosts_hosts:
   - "albandrieu"
-  - "albandrieu-dell-5420"
+  - "MAC-CNQHKPHF6Q"
   - "albandri-laptop-misys"
 
-newrelic_license_key: "de35bf5d191ebb208d359b2cd24a60616a02b1f3"
 newrelic_app_name: "Nabla Demo"
 
 brew_packages:
-  - 'randomize-lines' # for git-radar
+  - "randomize-lines" # for git-radar
 #  - 'autoconf'
 #  - 'bash-completion'
 #  - 'boot2docker'
@@ -112,9 +168,10 @@ install_homebrew_if_missing: true
 upgrade_homebrew_packages: false
 
 homebrew_repository: "https://github.com/Homebrew/brew"
+homebrew_version: "main"
 
 docker_files_generated_directory: "./"
-docker_files_enable: no
+docker_files_enable: false
 docker_volume_directory: "{{ shell_env_directory }}"
 docker_working_directory: "/home/vagrant"
 docker_image_name: "nabla/ansible-shell"
